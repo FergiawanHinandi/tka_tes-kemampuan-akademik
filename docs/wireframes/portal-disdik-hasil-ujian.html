@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hasil Ujian - Portal Disdik</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #0d9488;
+            --primary-dark: #0f766e;
+            --primary-light: #14b8a6;
+            --secondary: #06b6d4;
+            --accent: #8b5cf6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .stat-card {
+            transition: all 0.3s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+        .comparison-table {
+            overflow-x: auto;
+        }
+        .score-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        .score-excellent {
+            background-color: #dcfce7;
+            color: #166534;
+        }
+        .score-good {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+        .score-average {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+        .score-poor {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+        .subject-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        .subject-math {
+            background-color: #f0fdfa;
+            color: #0f766e;
+        }
+        .subject-indo {
+            background-color: #f0f9ff;
+            color: #0369a1;
+        }
+        .subject-science {
+            background-color: #faf5ff;
+            color: #7c3aed;
+        }
+        .subject-social {
+            background-color: #fff7ed;
+            color: #c2410c;
+        }
+        .subject-english {
+            background-color: #f0fdf4;
+            color: #15803d;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Header -->
+    <header class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
+                        <span class="text-teal-600 font-bold text-xl">TKA</span>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold">Portal Disdik</h1>
+                        <p class="text-teal-100 text-sm">Dinas Pendidikan - Monitoring Ujian</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button class="glass-effect px-4 py-2 rounded-lg hover:bg-white hover:bg-opacity-20 transition-colors">
+                        <span class="text-sm">📍 Provinsi Jawa Barat</span>
+                    </button>
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 bg-white rounded-full flex items-center justify-center">
+                            <span class="text-teal-600 font-semibold">DR</span>
+                        </div>
+                        <div class="hidden md:block">
+                            <p class="text-sm font-medium">Dr. Rahmawati</p>
+                            <p class="text-teal-100 text-xs">Admin Disdik</p>
+                        </div>
+                    </div>
+                    <button class="glass-effect px-3 py-2 rounded-lg hover:bg-white hover:bg-opacity-20 transition-colors">
+                        ⚙️
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm border-b">
+        <div class="container mx-auto px-6">
+            <div class="flex space-x-8">
+                <a href="#" class="text-gray-600 hover:text-teal-600 py-4 px-2 font-medium">Dashboard</a>
+                <a href="#" class="text-gray-600 hover:text-teal-600 py-4 px-2 font-medium">Daftar Sekolah</a>
+                <a href="#" class="border-b-2 border-teal-600 text-teal-600 py-4 px-2 font-medium">Hasil Ujian</a>
+                <a href="#" class="text-gray-600 hover:text-teal-600 py-4 px-2 font-medium">Laporan</a>
+                <a href="#" class="text-gray-600 hover:text-teal-600 py-4 px-2 font-medium">Profil</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-8">
+        <!-- Page Header -->
+        <div class="mb-8">
+            <h2 class="text-3xl font-bold text-gray-800 mb-2">Hasil Ujian</h2>
+            <p class="text-gray-600">Analisis dan perbandingan hasil ujian siswa per sekolah, mata pelajaran, dan jenjang</p>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Jenis Ujian</label>
+                    <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent">
+                        <option>Semua Ujian</option>
+                        <option>Ujian Akhir Semester</option>
+                        <option>Ujian Tengah Semester</option>
+                        <option>Ujian Nasional</option>
+                        <option>Ujian Sekolah</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Jenjang Sekolah</label>
+                    <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent">
+                        <option>Semua Jenjang</option>
+                        <option>SD</option>
+                        <option>SMP</option>
+                        <option>SMA</option>
+                        <option>SMK</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Mata Pelajaran</label>
+                    <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent">
+                        <option>Semua Mata Pelajaran</option>
+                        <option>Matematika</option>
+                        <option>Bahasa Indonesia</option>
+                        <option>IPA</option>
+                        <option>IPS</option>
+                        <option>Bahasa Inggris</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Periode</label>
+                    <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent">
+                        <option>2024/2025</option>
+                        <option>2023/2024</option>
+                        <option>2022/2023</option>
+                    </select>
+                </div>
+                <div class="flex items-end">
+                    <button class="w-full bg-teal-600 text-white px-4 py-2 rounded-lg hover:bg-teal-700 transition-colors">
+                        🔍 Filter Data
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary Statistics -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="stat-card bg-white rounded-xl shadow-sm p-6 border-l-4 border-teal-600">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-600 text-sm font-medium">Total Siswa</p>
+                        <p class="text-3xl font-bold text-gray-800">45,892</p>
+                        <p class="text-green-600 text-xs mt-1">+2,341 dari periode lalu</p>
+                    </div>
+                    <div class="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center">
+                        <span class="text-teal-600 text-xl">👥</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card bg-white rounded-xl shadow-sm p-6 border-l-4 border-blue-600">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-600 text-sm font-medium">Rata-rata Nilai</p>
+                        <p class="text-3xl font-bold text-gray-800">78.5</p>
+                        <p class="text-green-600 text-xs mt-1">+1.2 poin dari periode lalu</p>
+                    </div>
+                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                        <span class="text-blue-600 text-xl">📊</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card bg-white rounded-xl shadow-sm p-6 border-l-4 border-green-600">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-600 text-sm font-medium">Kelulusan</p>
+                        <p class="text-3xl font-bold text-gray-800">92.3%</p>
+                        <p class="text-green-600 text-xs mt-1">+3.1% dari periode lalu</p>
+                    </div>
+                    <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                        <span class="text-green-600 text-xl">✅</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card bg-white rounded-xl shadow-sm p-6 border-l-4 border-purple-600">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-600 text-sm font-medium">Siswa Berprestasi</p>
+                        <p class="text-3xl font-bold text-gray-800">1,247</p>
+                        <p class="text-green-600 text-xs mt-1">+156 dari periode lalu</p>
+                    </div>
+                    <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                        <span class="text-purple-600 text-xl">⭐</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <!-- Score Distribution Chart -->
+            <div class="bg-white rounded-xl shadow-sm p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-lg font-semibold text-gray-800">Distribusi Nilai</h3>
+                    <select class="text-sm border border-gray-300 rounded px-3 py-1">
+                        <option>Matematika</option>
+                        <option>Bahasa Indonesia</option>
+                        <option>IPA</option>
+                        <option>IPS</option>
+                    </select>
+                </div>
+                <div class="chart-container">
+                    <canvas id="scoreDistributionChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Subject Performance Chart -->
+            <div class="bg-white rounded-xl shadow-sm p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-lg font-semibold text-gray-800">Performa per Mata Pelajaran</h3>
+                    <select class="text-sm border border-gray-300 rounded px-3 py-1">
+                        <option>Semua Jenjang</option>
+                        <option>SD</option>
+                        <option>SMP</option>
+                        <option>SMA</option>
+                    </select>
+                </div>
+                <div class="chart-container">
+                    <canvas id="subjectPerformanceChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- School Comparison Table -->
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-lg font-semibold text-gray-800">Perbandingan Antar Sekolah</h3>
+                <div class="flex space-x-2">
+                    <select class="text-sm border border-gray-300 rounded px-3 py-1">
+                        <option>Jenjang: SD</option>
+                        <option>Jenjang: SMP</option>
+                        <option>Jenjang: SMA</option>
+                        <option>Jenjang: SMK</option>
+                    </select>
+                    <select class="text-sm border border-gray-300 rounded px-3 py-1">
+                        <option>Mata Pelajaran: Matematika</option>
+                        <option>Mata Pelajaran: Bahasa Indonesia</option>
+                        <option>Mata Pelajaran: IPA</option>
+                        <option>Mata Pelajaran: IPS</option>
+                    </select>
+                    <button class="bg-teal-600 text-white px-4 py-2 rounded-lg hover:bg-teal-700 transition-colors text-sm">
+                        📤 Export
+                    </button>
+                </div>
+            </div>
+
+            <div class="comparison-table">
+                <table class="w-full">
+                    <thead>
+                        <tr class="border-b border-gray-200 bg-gray-50">
+                            <th class="text-left py-3 px-4 font-semibold text-gray-700">Peringkat</th>
+                            <th class="text-left py-3 px-4 font-semibold text-gray-700">Nama Sekolah</th>
+                            <th class="text-left py-3 px-4 font-semibold text-gray-700">Jenjang</th>
+                            <th class="text-left py-3 px-4 font-semibold text-gray-700">Kota/Kab</th>
+                            <th class="text-left py-3 px-4 font-semibold text-gray-700">Rata-rata</th>
+                            <th class="text-left py-3 px-4 font-semibold text-gray-700">Tertinggi</th>
+                            <th class="text-left py-3 px-4 font-semibold text-gray-700">Terendah</th>
+                            <th class="text-left py-3 px-4 font-semibold text-gray-700">Kelulusan</th>
+                            <th class="text-left py-3 px-4 font-semibold text-gray-700">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-b border-gray-100 hover:bg-gray-50">
+                            <td class="py-3 px-4">
+                                <span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full font-semibold">1</span>
+                            </td>
+                            <td class="py-3 px-4 font-medium">SDN Cibeunying 1</td>
+                            <td class="py-3 px-4"><span class="bg-teal-100 text-teal-800 text-xs px-2 py-1 rounded">SD</span></td>
+                            <td class="py-3 px-4">Bandung</td>
+                            <td class="py-3 px-4 font-semibold text-green-600">89.2</td>
+                            <td class="py-3 px-4 text-green-600">98</td>
+                            <td class="py-3 px-4 text-red-600">72</td>
+                            <td class="py-3 px-4">
+                                <span class="score-badge score-excellent">98.7%</span>
+                            </td>
+                            <td class="py-3 px-4">
+                                <button class="text-teal-600 hover:text-teal-700 text-sm font-medium">Detail</button>
+                            </td>
+                        </tr>
+                        <tr class="border-b border-gray-100 hover:bg-gray-50">
+                            <td class="py-3 px-4">
+                                <span class="bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded-full font-semibold">2</span>
+                            </td>
+                            <td class="py-3 px-4 font-medium">SDN Sukajadi 2</td>
+                            <td class="py-3 px-4"><span class="bg-teal-100 text-teal-800 text-xs px-2 py-1 rounded">SD</span></td>
+                            <td class="py-3 px-4">Bandung</td>
+                            <td class="py-3 px-4 font-semibold text-green-600">87.8</td>
+                            <td class="py-3 px-4 text-green-600">96</td>
+                            <td class="py-3 px-4 text-red-600">68</td>
+                            <td class="py-3 px-4">
+                                <span class="score-badge score-excellent">97.2%</span>
+                            </td>
+                            <td class="py-3 px-4">
+                                <button class="text-teal-600 hover:text-teal-700 text-sm font-medium">Detail</button>
+                            </td>
+                        </tr>
+                        <tr class="border-b border-gray-100 hover:bg-gray-50">
+                            <td class="py-3 px-4">
+                                <span class="bg-orange-100 text-orange-800 text-xs px-2 py-1 rounded-full font-semibold">3</span>
+                            </td>
+                            <td class="py-3 px-4 font-medium">SMPN 1 Cimahi</td>
+                            <td class="py-3 px-4"><span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">SMP</span></td>
+                            <td class="py-3 px-4">Cimahi</td>
+                            <td class="py-3 px-4 font-semibold text-green-600">86.5</td>
+                            <td class="py-3 px-4 text-green-600">94</td>
+                            <td class="py-3 px-4 text-red-600">65</td>
+                            <td class="py-3 px-4">
+                                <span class="score-badge score-good">94.8%</span>
+                            </td>
+                            <td class="py-3 px-4">
+                                <button class="text-teal-600 hover:text-teal-700 text-sm font-medium">Detail</button>
+                            </td>
+                        </tr>
+                        <tr class="border-b border-gray-100 hover:bg-gray-50">
+                            <td class="py-3 px-4">
+                                <span class="text-gray-600 text-xs px-2 py-1 rounded-full font-semibold">4</span>
+                            </td>
+                            <td class="py-3 px-4 font-medium">SDN Kopo 3</td>
+                            <td class="py-3 px-4"><span class="bg-teal-100 text-teal-800 text-xs px-2 py-1 rounded">SD</span></td>
+                            <td class="py-3 px-4">Bandung</td>
+                            <td class="py-3 px-4 font-semibold text-green-600">85.9</td>
+                            <td class="py-3 px-4 text-green-600">92</td>
+                            <td class="py-3 px-4 text-red-600">64</td>
+                            <td class="py-3 px-4">
+                                <span class="score-badge score-good">93.1%</span>
+                            </td>
+                            <td class="py-3 px-4">
+                                <button class="text-teal-600 hover:text-teal-700 text-sm font-medium">Detail</button>
+                            </td>
+                        </tr>
+                        <tr class="border-b border-gray-100 hover:bg-gray-50">
+                            <td class="py-3 px-4">
+                                <span class="text-gray-600 text-xs px-2 py-1 rounded-full font-semibold">5</span>
+                            </td>
+                            <td class="py-3 px-4 font-medium">SMAN 1 Cirebon</td>
+                            <td class="py-3 px-4"><span class="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">SMA</span></td>
+                            <td class="py-3 px-4">Cirebon</td>
+                            <td class="py-3 px-4 font-semibold text-green-600">84.7</td>
+                            <td class="py-3 px-4 text-green-600">91</td>
+                            <td class="py-3 px-4 text-red-600">62</td>
+                            <td class="py-3 px-4">
+                                <span class="score-badge score-good">91.8%</span>
+                            </td>
+                            <td class="py-3 px-4">
+                                <button class="text-teal-600 hover:text-teal-700 text-sm font-medium">Detail</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="mt-6 flex justify-between items-center">
+                <p class="text-sm text-gray-600">Menampilkan 5 dari 1,722 sekolah</p>
+                <div class="flex space-x-2">
+                    <button class="px-3 py-1 border border-gray-300 rounded text-sm hover:bg-gray-50">Sebelumnya</button>
+                    <button class="px-3 py-1 bg-teal-600 text-white rounded text-sm">1</button>
+                    <button class="px-3 py-1 border border-gray-300 rounded text-sm hover:bg-gray-50">2</button>
+                    <button class="px-3 py-1 border border-gray-300 rounded text-sm hover:bg-gray-50">3</button>
+                    <button class="px-3 py-1 border border-gray-300 rounded text-sm hover:bg-gray-50">Selanjutnya</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Subject-wise Performance -->
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-lg font-semibold text-gray-800">Performa per Mata Pelajaran</h3>
+                <div class="flex space-x-2">
+                    <select class="text-sm border border-gray-300 rounded px-3 py-1">
+                        <option>Jenjang: SD</option>
+                        <option>Jenjang: SMP</option>
+                        <option>Jenjang: SMA</option>
+                    </select>
+                    <button class="bg-teal-600 text-white px-4 py-2 rounded-lg hover:bg-teal-700 transition-colors text-sm">
+                        📊 Lihat Detail
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Math Performance -->
+                <div class="border border-gray-200 rounded-lg p-4">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center space-x-2">
+                            <span class="subject-badge subject-math">Matematika</span>
+                            <span class="score-badge score-good">78.5</span>
+                        </div>
+                        <span class="text-green-600 text-sm font-medium">↗ +2.1</span>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">Rata-rata Nasional:</span>
+                            <span class="font-medium">75.2</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">Tertinggi:</span>
+                            <span class="font-medium text-green-600">98.5</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">Terendah:</span>
+                            <span class="font-medium text-red-600">45.2</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">Standar Deviasi:</span>
+                            <span class="font-medium">12.3</span>
+                        </div>
+                    </div>
+                    <div class="mt-3 pt-3 border-t border-gray-100">
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-teal-600 h-2 rounded-full" style="width: 78.5%"></div>
+                        </div>
+                        <p class="text-xs text-gray-600 mt-1">78.5% dari target nasional</p>
+                    </div>
+                </div>
+
+                <!-- Indonesian Language Performance -->
+                <div class="border border-gray-200 rounded-lg p-4">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center space-x-2">
+                            <span class="subject-badge subject-indo">Bahasa Indonesia</span>
+                            <span class="score-badge score-excellent">82.3</span>
+                        </div>
+                        <span class="text-green-600 text-sm font-medium">↗ +1.8</span>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">Rata-rata Nasional:</span>
+                            <span class="font-medium">80.1</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">Tertinggi:</span>
+                            <span class="font-medium text-green-600">99.2</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">Terendah:</span>
+                            <span class="font-medium text-red-600">52.8</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">Standar Deviasi:</span>
+                            <span class="font-medium">10.7</span>
+                        </div>
+                    </div>
+                    <div class="mt-3 pt-3 border-t border-gray-100">
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-blue-600 h-2 rounded-full" style="width: 82.3%"></div>
+                        </div>
+                        <p class="text-xs text-gray-600 mt-1">82.3% dari target nasional</p>
+                    </div>
+                </div>
+
+                <!-- Science Performance -->
+                <div class="border border-gray-200 rounded-lg p-4">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center space-x-2">
+                            <span class="subject-badge subject-science">IPA</span>
+                            <span class="score-badge score-average">73.8</span>
+                        </div>
+                        <span class="text-red-600 text-sm font-medium">↘ -0.9</span>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">Rata-rata Nasional:</span>
+                            <span class="font-medium">76.5</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">Tertinggi:</span>
+                            <span class="font-medium text-green-600">96.8</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">Terendah:</span>
+                            <span class="font-medium text-red-600">38.4</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">Standar Deviasi:</span>
+                            <span class="font-medium">15.2</span>
+                        </div>
+                    </div>
+                    <div class="mt-3 pt-3 border-t border-gray-100">
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-yellow-600 h-2 rounded-full" style="width: 73.8%"></div>
+                        </div>
+                        <p class="text-xs text-gray-600 mt-1">73.8% dari target nasional</p>
+                    </div>
+                </div>
+
+                <!-- Social Studies Performance -->
+                <div class="border border-gray-200 rounded-lg p-4">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center space-x-2">
+                            <span class="subject-badge subject-social">IPS</span>
+                            <span class="score-badge score-good">79.1</span>
+                        </div>
+                        <span class="text-green-600 text-sm font-medium">↗ +1.3</span>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">Rata-rata Nasional:</span>
+                            <span class="font-medium">77.8</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">Tertinggi:</span>
+                            <span class="font-medium text-green-600">95.4</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">Terendah:</span>
+                            <span class="font-medium text-red-600">48.7</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">Standar Deviasi:</span>
+                            <span class="font-medium">11.8</span>
+                        </div>
+                    </div>
+                    <div class="mt-3 pt-3 border-t border-gray-100">
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-orange-600 h-2 rounded-full" style="width: 79.1%"></div>
+                        </div>
+                        <p class="text-xs text-gray-600 mt-1">79.1% dari target nasional</p>
+                    </div>
+                </div>
+
+                <!-- English Performance -->
+                <div class="border border-gray-200 rounded-lg p-4">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center space-x-2">
+                            <span class="subject-badge subject-english">Bahasa Inggris</span>
+                            <span class="score-badge score-good">76.8</span>
+                        </div>
+                        <span class="text-green-600 text-sm font-medium">↗ +2.5</span>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">Rata-rata Nasional:</span>
+                            <span class="font-medium">74.2</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">Tertinggi:</span>
+                            <span class="font-medium text-green-600">97.8</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">Terendah:</span>
+                            <span class="font-medium text-red-600">41.3</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">Standar Deviasi:</span>
+                            <span class="font-medium">13.9</span>
+                        </div>
+                    </div>
+                    <div class="mt-3 pt-3 border-t border-gray-100">
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-green-600 h-2 rounded-full" style="width: 76.8%"></div>
+                        </div>
+                        <p class="text-xs text-gray-600 mt-1">76.8% dari target nasional</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Performers -->
+        <div class="bg-white rounded-xl shadow-sm p-6">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-lg font-semibold text-gray-800">Siswa Berprestasi</h3>
+                <div class="flex space-x-2">
+                    <select class="text-sm border border-gray-300 rounded px-3 py-1">
+                        <option>Semua Jenjang</option>
+                        <option>SD</option>
+                        <option>SMP</option>
+                        <option>SMA</option>
+                    </select>
+                    <select class="text-sm border border-gray-300 rounded px-3 py-1">
+                        <option>Semua Mata Pelajaran</option>
+                        <option>Matematika</option>
+                        <option>Bahasa Indonesia</option>
+                        <option>IPA</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Top Student 1 -->
+                <div class="border border-gray-200 rounded-lg p-4">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center">
+                                <span class="text-yellow-600 font-bold">1</span>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-gray-800">Andi Pratama</p>
+                                <p class="text-sm text-gray-600">SDN Cibeunying 1</p>
+                            </div>
+                        </div>
+                        <span class="score-badge score-excellent">98.5</span>
+                    </div>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Matematika:</span>
+                            <span class="font-medium text-green-600">98</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Bahasa Indonesia:</span>
+                            <span class="font-medium text-green-600">99</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">IPA:</span>
+                            <span class="font-medium text-green-600">97</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">IPS:</span>
+                            <span class="font-medium text-green-600">100</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Top Student 2 -->
+                <div class="border border-gray-200 rounded-lg p-4">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
+                                <span class="text-gray-600 font-bold">2</span>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-gray-800">Siti Nurhaliza</p>
+                                <p class="text-sm text-gray-600">SDN Sukajadi 2</p>
+                            </div>
+                        </div>
+                        <span class="score-badge score-excellent">97.8</span>
+                    </div>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Matematika:</span>
+                            <span class="font-medium text-green-600">96</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Bahasa Indonesia:</span>
+                            <span class="font-medium text-green-600">98</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">IPA:</span>
+                            <span class="font-medium text-green-600">99</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">IPS:</span>
+                            <span class="font-medium text-green-600">98</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Top Student 3 -->
+                <div class="border border-gray-200 rounded-lg p-4">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
+                                <span class="text-orange-600 font-bold">3</span>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-gray-800">Budi Santoso</p>
+                                <p class="text-sm text-gray-600">SMPN 1 Cimahi</p>
+                            </div>
+                        </div>
+                        <span class="score-badge score-excellent">96.2</span>
+                    </div>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Matematika:</span>
+                            <span class="font-medium text-green-600">94</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Bahasa Indonesia:</span>
+                            <span class="font-medium text-green-600">97</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">IPA:</span>
+                            <span class="font-medium text-green-600">98</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">IPS:</span>
+                            <span class="font-medium text-green-600">96</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 mt-12">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <p class="text-sm">&copy; 2024 Portal Disdik - Tes Kemampuan Akademik</p>
+                </div>
+                <div class="flex space-x-6 text-sm">
+                    <a href="#" class="hover:text-teal-400">Bantuan</a>
+                    <a href="#" class="hover:text-teal-400">Kebijakan Privasi</a>
+                    <a href="#" class="hover:text-teal-400">Kontak</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Score Distribution Chart
+        const ctx1 = document.getElementById('scoreDistributionChart').getContext('2d');
+        new Chart(ctx1, {
+            type: 'doughnut',
+            data: {
+                labels: ['Sangat Baik (90-100)', 'Baik (80-89)', 'Cukup (70-79)', 'Kurang (<70)'],
+                datasets: [{
+                    data: [28.5, 35.2, 24.8, 11.5],
+                    backgroundColor: ['#10b981', '#3b82f6', '#f59e0b', '#ef4444'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 20,
+                            usePointStyle: true
+                        }
+                    }
+                }
+            }
+        });
+
+        // Subject Performance Chart
+        const ctx2 = document.getElementById('subjectPerformanceChart').getContext('2d');
+        new Chart(ctx2, {
+            type: 'radar',
+            data: {
+                labels: ['Matematika', 'Bahasa Indonesia', 'IPA', 'IPS', 'Bahasa Inggris'],
+                datasets: [{
+                    label: 'Rata-rata Wilayah',
+                    data: [78.5, 82.3, 73.8, 79.1, 76.8],
+                    borderColor: '#0d9488',
+                    backgroundColor: 'rgba(13, 148, 136, 0.2)',
+                    pointBackgroundColor: '#0d9488',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: '#0d9488'
+                }, {
+                    label: 'Rata-rata Nasional',
+                    data: [75.2, 80.1, 76.5, 77.8, 74.2],
+                    borderColor: '#06b6d4',
+                    backgroundColor: 'rgba(6, 182, 212, 0.2)',
+                    pointBackgroundColor: '#06b6d4',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: '#06b6d4'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        angleLines: {
+                            display: true
+                        },
+                        suggestedMin: 60,
+                        suggestedMax: 100,
+                        ticks: {
+                            callback: function(value) {
+                                return value + '%';
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

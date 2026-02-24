@@ -1,0 +1,58 @@
+# ============================================================
+# SECURITY & ADVANCED ENDPOINTS
+# ============================================================
+
+# --- IP Management ---
+GET    /security/ip-blacklist
+POST   /security/ip-blacklist
+  # Body: { ipAddress, reason, expiresAt? }
+DELETE /security/ip-blacklist/:id
+
+GET    /security/login-attempts
+  # Query: ?username=xxx&ipAddress=xxx&startDate=xxx
+
+# --- Device Management ---
+GET    /security/devices
+  # List trusted devices user
+PUT    /security/devices/:id/trust
+DELETE /security/devices/:id
+  # Revoke device
+
+# --- 2FA ---
+POST   /auth/2fa/setup
+  # Response: { secret, qrCodeUrl }
+POST   /auth/2fa/verify
+  # Body: { code }
+POST   /auth/2fa/disable
+  # Body: { code, password }
+GET    /auth/2fa/backup-codes
+POST   /auth/2fa/regenerate-backup-codes
+
+# --- Active Sessions ---
+GET    /auth/sessions
+  # List semua sesi aktif user
+DELETE /auth/sessions/:id
+  # Terminate sesi tertentu
+DELETE /auth/sessions/all
+  # Terminate semua sesi (logout everywhere)
+
+# --- System Health ---
+GET    /system/health
+GET    /system/health/detailed
+GET    /system/health/history
+  # Query: ?service=database&hours=24
+
+# --- Data Export (Compliance) ---
+POST   /data-export/request
+  # Body: { dataType, scope }
+GET    /data-export/requests
+GET    /data-export/requests/:id
+GET    /data-export/requests/:id/download
+
+# --- Exam Incidents ---
+POST   /incidents
+  # Body: { sessionId, studentId?, type, severity, description, evidence? }
+GET    /incidents
+  # Query: ?sessionId=xxx&type=CHEATING
+PUT    /incidents/:id
+  # Body: { action, resolvedAt? }

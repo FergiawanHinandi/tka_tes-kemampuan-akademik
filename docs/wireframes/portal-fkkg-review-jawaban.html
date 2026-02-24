@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal FKKG - Review Jawaban</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .sidebar-item:hover {
+            background: linear-gradient(90deg, #3b82f6 0%, #1e40af 100%);
+        }
+        .review-card {
+            transition: all 0.3s ease;
+        }
+        .review-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.2);
+        }
+        .difficulty-badge {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.375rem;
+        }
+        .status-badge {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.375rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <div class="bg-blue-600 rounded-lg w-10 h-10 flex items-center justify-center">
+                    <i class="fas fa-graduation-cap text-white"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold text-gray-800">Portal FKKG</h1>
+                    <p class="text-sm text-gray-600">Forum Komunikasi Guru dan Kepala Sekolah</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button class="text-gray-600 hover:text-blue-600">
+                    <i class="fas fa-bell text-xl"></i>
+                </button>
+                <div class="flex items-center space-x-2">
+                    <div class="bg-blue-100 rounded-full w-8 h-8 flex items-center justify-center">
+                        <i class="fas fa-user text-blue-600"></i>
+                    </div>
+                    <span class="text-gray-700 font-medium">Dr. Suryadi, M.Pd</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white shadow-sm min-h-screen">
+            <nav class="p-4 space-y-2">
+                <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:text-white transition">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:text-white transition">
+                    <i class="fas fa-upload"></i>
+                    <span>Upload Soal</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:text-white transition">
+                    <i class="fas fa-edit"></i>
+                    <span>Editor Soal</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg text-blue-600 bg-blue-50">
+                    <i class="fas fa-eye"></i>
+                    <span class="font-medium">Review Jawaban</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:text-white transition">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Monitoring Ujian</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:text-white transition">
+                    <i class="fas fa-user"></i>
+                    <span>Profil</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-6">
+            <div class="mb-6 flex items-center justify-between">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-800 mb-2">Review Jawaban</h1>
+                    <p class="text-gray-600">Analisis hasil jawaban siswa dan kualitas soal</p>
+                </div>
+                <div class="flex space-x-3">
+                    <select class="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option>Semua Mata Pelajaran</option>
+                        <option>Matematika</option>
+                        <option>Bahasa Indonesia</option>
+                        <option>Bahasa Inggris</option>
+                        <option>Fisika</option>
+                        <option>Kimia</option>
+                    </select>
+                    <select class="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option>Semua Jenjang</option>
+                        <option>SMA - Kelas 10</option>
+                        <option>SMA - Kelas 11</option>
+                        <option>SMA - Kelas 12</option>
+                    </select>
+                    <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                        <i class="fas fa-download mr-2"></i>Export
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm p-2 mb-6">
+                <div class="flex flex-wrap gap-2">
+                    <button class="px-4 py-2 rounded-lg text-sm font-medium bg-blue-600 text-white">
+                        Per Sekolah
+                    </button>
+                    <button class="px-4 py-2 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100">
+                        Per Siswa
+                    </button>
+                    <button class="px-4 py-2 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100">
+                        Koreksi Essay
+                    </button>
+                    <button class="px-4 py-2 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100">
+                        Validasi Jawaban
+                    </button>
+                </div>
+            </div>
+
+            <!-- Statistics Overview -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white rounded-xl p-6 shadow-sm review-card">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <p class="text-gray-600 text-sm">Total Soal Dianalisis</p>
+                            <p class="text-2xl font-bold text-gray-800">1,247</p>
+                        </div>
+                        <div class="bg-blue-100 rounded-full p-3">
+                            <i class="fas fa-question-circle text-blue-600 text-xl"></i>
+                        </div>
+                    </div>
+                    <p class="text-green-600 text-xs">+156 minggu ini</p>
+                </div>
+                <div class="bg-white rounded-xl p-6 shadow-sm review-card">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <p class="text-gray-600 text-sm">Rata-rata Benar</p>
+                            <p class="text-2xl font-bold text-gray-800">68.5%</p>
+                        </div>
+                        <div class="bg-green-100 rounded-full p-3">
+                            <i class="fas fa-check-circle text-green-600 text-xl"></i>
+                        </div>
+                    </div>
+                    <p class="text-blue-600 text-xs">Di atas target 65%</p>
+                </div>
+                <div class="bg-white rounded-xl p-6 shadow-sm review-card">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <p class="text-gray-600 text-sm">Index Kesulitan</p>
+                            <p class="text-2xl font-bold text-gray-800">0.45</p>
+                        </div>
+                        <div class="bg-yellow-100 rounded-full p-3">
+                            <i class="fas fa-chart-line text-yellow-600 text-xl"></i>
+                        </div>
+                    </div>
+                    <p class="text-yellow-600 text-xs">Sedang - Ideal</p>
+                </div>
+                <div class="bg-white rounded-xl p-6 shadow-sm review-card">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <p class="text-gray-600 text-sm">Index Diskriminasi</p>
+                            <p class="text-2xl font-bold text-gray-800">0.32</p>
+                        </div>
+                        <div class="bg-purple-100 rounded-full p-3">
+                            <i class="fas fa-balance-scale text-purple-600 text-xl"></i>
+                        </div>
+                    </div>
+                    <p class="text-purple-600 text-xs">Baik - Efektif</p>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                <!-- Difficulty Distribution Chart -->
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4">Distribusi Kesulitan Soal</h3>
+                    <canvas id="difficultyChart" width="400" height="200"></canvas>
+                </div>
+
+                <!-- Performance by Subject Chart -->
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4">Performa per Mata Pelajaran</h3>
+                    <canvas id="subjectChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+
+            <!-- Question Review Table -->
+            <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+                <h3 class="text-lg font-bold text-gray-800 mb-4">Review Soal Problematic</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="border-b border-gray-200">
+                                <th class="text-left py-3 px-4 font-medium text-gray-700">Kode Soal</th>
+                                <th class="text-left py-3 px-4 font-medium text-gray-700">Mata Pelajaran</th>
+                                <th class="text-left py-3 px-4 font-medium text-gray-700">Kesulitan</th>
+                                <th class="text-left py-3 px-4 font-medium text-gray-700">% Benar</th>
+                                <th class="text-left py-3 px-4 font-medium text-gray-700">Index Diskrim</th>
+                                <th class="text-left py-3 px-4 font-medium text-gray-700">Status</th>
+                                <th class="text-left py-3 px-4 font-medium text-gray-700">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-3 px-4 font-mono text-sm">MTK-12-001</td>
+                                <td class="py-3 px-4">Matematika</td>
+                                <td class="py-3 px-4">
+                                    <span class="difficulty-badge bg-red-100 text-red-800">Sulit</span>
+                                </td>
+                                <td class="py-3 px-4 text-red-600 font-medium">23%</td>
+                                <td class="py-3 px-4 text-red-600 font-medium">0.12</td>
+                                <td class="py-3 px-4">
+                                    <span class="status-badge bg-red-100 text-red-800">Buruk</span>
+                                </td>
+                                <td class="py-3 px-4">
+                                    <button class="text-blue-600 hover:text-blue-700 text-sm">Edit</button>
+                                    <span class="text-gray-400 mx-2">|</span>
+                                    <button class="text-red-600 hover:text-red-700 text-sm">Hapus</button>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-3 px-4 font-mono text-sm">BIN-11-045</td>
+                                <td class="py-3 px-4">Bahasa Indonesia</td>
+                                <td class="py-3 px-4">
+                                    <span class="difficulty-badge bg-green-100 text-green-800">Mudah</span>
+                                </td>
+                                <td class="py-3 px-4 text-green-600 font-medium">89%</td>
+                                <td class="py-3 px-4 text-red-600 font-medium">0.08</td>
+                                <td class="py-3 px-4">
+                                    <span class="status-badge bg-yellow-100 text-yellow-800">Terlalu Mudah</span>
+                                </td>
+                                <td class="py-3 px-4">
+                                    <button class="text-blue-600 hover:text-blue-700 text-sm">Edit</button>
+                                    <span class="text-gray-400 mx-2">|</span>
+                                    <button class="text-red-600 hover:text-red-700 text-sm">Hapus</button>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-3 px-4 font-mono text-sm">FIS-12-023</td>
+                                <td class="py-3 px-4">Fisika</td>
+                                <td class="py-3 px-4">
+                                    <span class="difficulty-badge bg-yellow-100 text-yellow-800">Sedang</span>
+                                </td>
+                                <td class="py-3 px-4 text-yellow-600 font-medium">45%</td>
+                                <td class="py-3 px-4 text-green-600 font-medium">0.35</td>
+                                <td class="py-3 px-4">
+                                    <span class="status-badge bg-green-100 text-green-800">Baik</span>
+                                </td>
+                                <td class="py-3 px-4">
+                                    <button class="text-blue-600 hover:text-blue-700 text-sm">Edit</button>
+                                    <span class="text-gray-400 mx-2">|</span>
+                                    <button class="text-red-600 hover:text-red-700 text-sm">Hapus</button>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-3 px-4 font-mono text-sm">KIM-11-078</td>
+                                <td class="py-3 px-4">Kimia</td>
+                                <td class="py-3 px-4">
+                                    <span class="difficulty-badge bg-red-100 text-red-800">Sulit</span>
+                                </td>
+                                <td class="py-3 px-4 text-red-600 font-medium">31%</td>
+                                <td class="py-3 px-4 text-green-600 font-medium">0.42</td>
+                                <td class="py-3 px-4">
+                                    <span class="status-badge bg-blue-100 text-blue-800">Baik - Sulit</span>
+                                </td>
+                                <td class="py-3 px-4">
+                                    <button class="text-blue-600 hover:text-blue-700 text-sm">Edit</button>
+                                    <span class="text-gray-400 mx-2">|</span>
+                                    <button class="text-red-600 hover:text-red-700 text-sm">Hapus</button>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-3 px-4 font-mono text-sm">BIO-12-156</td>
+                                <td class="py-3 px-4">Biologi</td>
+                                <td class="py-3 px-4">
+                                    <span class="difficulty-badge bg-yellow-100 text-yellow-800">Sedang</span>
+                                </td>
+                                <td class="py-3 px-4 text-green-600 font-medium">67%</td>
+                                <td class="py-3 px-4 text-red-600 font-medium">0.15</td>
+                                <td class="py-3 px-4">
+                                    <span class="status-badge bg-red-100 text-red-800">Diskriminasi Rendah</span>
+                                </td>
+                                <td class="py-3 px-4">
+                                    <button class="text-blue-600 hover:text-blue-700 text-sm">Edit</button>
+                                    <span class="text-gray-400 mx-2">|</span>
+                                    <button class="text-red-600 hover:text-red-700 text-sm">Hapus</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Recommendations -->
+            <div class="bg-white rounded-xl shadow-sm p-6">
+                <h3 class="text-lg font-bold text-gray-800 mb-4">Rekomendasi Perbaikan</h3>
+                <div class="space-y-4">
+                    <div class="flex items-start space-x-3 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                        <i class="fas fa-lightbulb text-blue-600 mt-1"></i>
+                        <div>
+                            <p class="font-medium text-blue-800">Soal Terlalu Sulit</p>
+                            <p class="text-sm text-blue-600">5 soal memiliki tingkat kesulitan > 0.8. Pertimbangkan untuk menyederhanakan bahasa atau memberikan petunjuk tambahan.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-3 p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+                        <i class="fas fa-exclamation-triangle text-yellow-600 mt-1"></i>
+                        <div>
+                            <p class="font-medium text-yellow-800">Diskriminasi Rendah</p>
+                            <p class="text-sm text-yellow-600">8 soal memiliki index diskriminasi < 0.2. Review kembali apakah soal tersebut mengukur kompetensi yang tepat.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-3 p-4 bg-green-50 rounded-lg border border-green-200">
+                        <i class="fas fa-check-circle text-green-600 mt-1"></i>
+                        <div>
+                            <p class="font-medium text-green-800">Soal Berkualitas</p>
+                            <p class="text-sm text-green-600">85% soal memiliki kualitas baik. Pertahankan standar ini untuk soal-soal berikutnya.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4">Rekap Nilai Per Sekolah</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead>
+                                <tr class="border-b border-gray-200">
+                                    <th class="text-left py-3 px-4 font-medium text-gray-700">Sekolah</th>
+                                    <th class="text-left py-3 px-4 font-medium text-gray-700">Jenjang</th>
+                                    <th class="text-center py-3 px-4 font-medium text-gray-700">Jumlah Siswa</th>
+                                    <th class="text-center py-3 px-4 font-medium text-gray-700">Rata-rata Nilai</th>
+                                    <th class="text-center py-3 px-4 font-medium text-gray-700">% Lulus</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
+                                <tr class="hover:bg-gray-50">
+                                    <td class="py-3 px-4 text-gray-900">SMA Negeri 1 Jakarta</td>
+                                    <td class="py-3 px-4 text-gray-700">SMA</td>
+                                    <td class="py-3 px-4 text-center text-gray-700">245</td>
+                                    <td class="py-3 px-4 text-center font-medium text-gray-900">81,2</td>
+                                    <td class="py-3 px-4 text-center font-medium text-green-600">92%</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="py-3 px-4 text-gray-900">SMA Negeri 5 Bandung</td>
+                                    <td class="py-3 px-4 text-gray-700">SMA</td>
+                                    <td class="py-3 px-4 text-center text-gray-700">198</td>
+                                    <td class="py-3 px-4 text-center font-medium text-gray-900">78,5</td>
+                                    <td class="py-3 px-4 text-center font-medium text-green-600">88%</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="py-3 px-4 text-gray-900">SMP Negeri 1 Surabaya</td>
+                                    <td class="py-3 px-4 text-gray-700">SMP</td>
+                                    <td class="py-3 px-4 text-center text-gray-700">312</td>
+                                    <td class="py-3 px-4 text-center font-medium text-gray-900">75,3</td>
+                                    <td class="py-3 px-4 text-center font-medium text-yellow-600">81%</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4">Pemeriksaan Jawaban Per Siswa</h3>
+                    <div class="mb-4 flex space-x-2 text-sm">
+                        <input class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Cari siswa atau NISN">
+                        <select class="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option>Semua Sekolah</option>
+                            <option>SMA Negeri 1 Jakarta</option>
+                            <option>SMA Negeri 5 Bandung</option>
+                        </select>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead>
+                                <tr class="border-b border-gray-200">
+                                    <th class="text-left py-3 px-4 font-medium text-gray-700">Nama Siswa</th>
+                                    <th class="text-left py-3 px-4 font-medium text-gray-700">Sekolah</th>
+                                    <th class="text-center py-3 px-4 font-medium text-gray-700">Mapel</th>
+                                    <th class="text-center py-3 px-4 font-medium text-gray-700">Nilai</th>
+                                    <th class="text-center py-3 px-4 font-medium text-gray-700">KKM</th>
+                                    <th class="text-right py-3 px-4 font-medium text-gray-700">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
+                                <tr class="hover:bg-gray-50">
+                                    <td class="py-3 px-4 text-gray-900">Ahmad Fajar</td>
+                                    <td class="py-3 px-4 text-gray-700">SMA Negeri 1 Jakarta</td>
+                                    <td class="py-3 px-4 text-center text-gray-700">Matematika</td>
+                                    <td class="py-3 px-4 text-center font-medium text-gray-900">82</td>
+                                    <td class="py-3 px-4 text-center text-gray-700">75</td>
+                                    <td class="py-3 px-4 text-right">
+                                        <button class="px-3 py-1 rounded-lg text-xs bg-blue-50 text-blue-700 hover:bg-blue-100">
+                                            Lihat Jawaban
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="py-3 px-4 text-gray-900">Siti Nurhaliza</td>
+                                    <td class="py-3 px-4 text-gray-700">SMA Negeri 5 Bandung</td>
+                                    <td class="py-3 px-4 text-center text-gray-700">Bahasa Indonesia</td>
+                                    <td class="py-3 px-4 text-center font-medium text-gray-900">74</td>
+                                    <td class="py-3 px-4 text-center text-gray-700">75</td>
+                                    <td class="py-3 px-4 text-right">
+                                        <button class="px-3 py-1 rounded-lg text-xs bg-yellow-50 text-yellow-700 hover:bg-yellow-100">
+                                            Butuh Review
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4">Koreksi Essay</h3>
+                    <div class="space-y-4 text-sm">
+                        <div class="border border-gray-200 rounded-lg p-4">
+                            <div class="flex items-center justify-between mb-2">
+                                <div>
+                                    <p class="font-medium text-gray-900">Soal Essay 12</p>
+                                    <p class="text-gray-600 text-xs">Matematika - SMA Kelas 12</p>
+                                </div>
+                                <span class="px-2 py-1 rounded-full text-xs bg-yellow-50 text-yellow-700">
+                                    8 jawaban belum dikoreksi
+                                </span>
+                            </div>
+                            <p class="text-gray-700 text-xs mb-2">
+                                Topik: Analisis fungsi kuadrat dan penerapannya dalam masalah kontekstual.
+                            </p>
+                            <button class="px-3 py-1 rounded-lg text-xs bg-blue-50 text-blue-700 hover:bg-blue-100">
+                                Buka Antrian Koreksi
+                            </button>
+                        </div>
+                        <div class="border border-gray-200 rounded-lg p-4">
+                            <div class="flex items-center justify-between mb-2">
+                                <div>
+                                    <p class="font-medium text-gray-900">Soal Essay 7</p>
+                                    <p class="text-gray-600 text-xs">Bahasa Indonesia - SMP Kelas 9</p>
+                                </div>
+                                <span class="px-2 py-1 rounded-full text-xs bg-green-50 text-green-700">
+                                    Semua jawaban sudah dikoreksi
+                                </span>
+                            </div>
+                            <p class="text-gray-700 text-xs mb-2">
+                                Topik: Menyusun teks eksposisi dengan struktur dan kaidah bahasa yang tepat.
+                            </p>
+                            <button class="px-3 py-1 rounded-lg text-xs bg-gray-50 text-gray-700 hover:bg-gray-100">
+                                Lihat Hasil Koreksi
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4">Validasi Jawaban</h3>
+                    <div class="space-y-4 text-sm">
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-700">Jawaban mencurigakan (pattern sama)</span>
+                            <span class="font-medium text-red-600">12 pasangan siswa</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-700">Perubahan jawaban berulang</span>
+                            <span class="font-medium text-yellow-600">34 kejadian</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-700">Jawaban di luar pola normal</span>
+                            <span class="font-medium text-blue-600">7 soal</span>
+                        </div>
+                        <div class="mt-4">
+                            <button class="w-full px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700">
+                                Buka Detail Validasi
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Difficulty Distribution Chart
+        const difficultyCtx = document.getElementById('difficultyChart').getContext('2d');
+        new Chart(difficultyCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Mudah (0.0-0.3)', 'Sedang (0.3-0.7)', 'Sulit (0.7-1.0)'],
+                datasets: [{
+                    label: 'Jumlah Soal',
+                    data: [245, 867, 135],
+                    backgroundColor: ['#10b981', '#f59e0b', '#ef4444']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Subject Performance Chart
+        const subjectCtx = document.getElementById('subjectChart').getContext('2d');
+        new Chart(subjectCtx, {
+            type: 'line',
+            data: {
+                labels: ['Matematika', 'Bahasa Indonesia', 'Bahasa Inggris', 'Fisika', 'Kimia', 'Biologi'],
+                datasets: [{
+                    label: 'Rata-rata Benar (%)',
+                    data: [68, 72, 65, 58, 62, 71],
+                    borderColor: '#3b82f6',
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

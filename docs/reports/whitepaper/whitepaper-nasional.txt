@@ -1,0 +1,112 @@
+WHITEPAPER NASIONAL
+
+
+Arsitektur Platform Ujian TKA Berbasis Server-Authoritative Multi-Region
+
+
+Versi Dokumen: 1.0
+Tahun: 2026
+ 
+
+
+Dokumen ini menjelaskan desain arsitektur nasional untuk platform ujian TKA berbasis server-authoritative.
+
+Sistem dirancang untuk menangani hingga 1 juta peserta simultan dengan keamanan dan kepatuhan regulasi tinggi.
+
+Estimasi biaya per siswa berada pada kisaran Rp4.000–6.000 per tahun.
+ 
+
+
+Sistem ujian konvensional memiliki risiko kebocoran soal, manipulasi nilai, dan keterbatasan distribusi.
+
+Transformasi digital membutuhkan arsitektur yang skalabel, aman, dan terukur.
+ 
+
+
+Menjamin integritas ujian nasional. Menyediakan audit trail yang dapat diverifikasi.
+Mewujudkan efisiensi biaya operasional nasional.
+ 
+
+
+Server authoritative exam engine. Isolasi database per provinsi.
+Horizontal scalability dan high availability. Zero trust security model.
+ 
+
+
+Client Siswa  Provincial Cluster  National Core  Analytics & Grading. Setiap layer memiliki isolasi keamanan dan monitoring terpusat.
+ 
+
+
+Load Balancer & WAF.
+
+Cluster Aplikasi (Laravel Octane). Redis Cluster.
+PostgreSQL High Availability.
+
+Object Storage dan Monitoring Stack.
+ 
+
+
+Setiap provinsi memiliki database terpisah.
+
+Core nasional hanya untuk agregasi dan governance.
+ 
+
+
+Enkripsi AES-256 at rest dan TLS 1.3 in transit. Password hashing Argon2id.
+Immutable audit logging.
+ 
+
+
+Append-only audit log dengan hash chain. Retensi data 5–7 tahun.
+WORM storage untuk backup.
+ 
+
+
+Estimasi 100.000 RPS sustained.
+
+60–70 application nodes (8vCPU/16GB). Database 64vCPU dengan partitioning.
+ 
+
+
+Perkiraan bandwidth internal minimal 10 Gbps. Optimasi dengan HTTP/2 dan keep-alive.
+ 
+
+
+Multi-region active-passive.
+
+RPO < 5 menit dan RTO < 30 menit. DR drill dua kali per tahun.
+ 
+
+
+Simulasi menggunakan distributed load generator. Monitoring latency, CPU, memory, dan WAL.
+ 
+
+
+Server-side timer validation. Replay attack prevention.
+Rate limiting dan fingerprinting.
+ 
+
+
+Auto-grading MCQ.
+
+Queue-based essay grading. Audit scoring replay capability.
+ 
+
+
+Agregasi nasional berbasis anonymized dataset. Performance benchmarking sekolah.
+ 
+
+
+Mitigasi DDoS dengan WAF. Failover otomatis saat region failure.
+ 
+
+
+Pembagian peran pusat dan provinsi. Role-based access control.
+ 
+
+
+Total estimasi investasi 5 tahun: ±120–130 Miliar. Model CAPEX dan OPEX berkelanjutan.
+ 
+
+
+Platform ini dirancang sebagai infrastruktur pendidikan nasional yang aman, skalabel, dan patuh regulasi.

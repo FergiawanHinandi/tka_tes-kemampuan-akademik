@@ -1,0 +1,45 @@
+# ============================================================
+# DASHBOARD & ANALYTICS ENDPOINTS
+# ============================================================
+
+# --- Super Admin Dashboard ---
+GET    /dashboard/super-admin
+  # Response: {
+  #   totalSchools, totalStudents, totalExams,
+  #   activeExams, totalQuestionBanks, totalUsers,
+  #   recentActivities, systemHealth
+  # }
+
+# --- Disdik Dashboard ---
+GET    /dashboard/disdik
+  # Response: {
+  #   schoolsByLevel: { SD: 45, SMP: 30, SMA: 15, SMK: 10 },
+  #   totalStudents, activeExams,
+  #   avgScoreByLevel, avgScoreBySubject,
+  #   topSchools, bottomSchools,
+  #   examCompletion, trendData
+  # }
+
+GET    /dashboard/disdik/schools-map
+  # Data untuk peta sebaran sekolah
+  # Response: [{ schoolId, name, lat, lng, level, studentCount }]
+
+GET    /dashboard/disdik/comparison
+  # Perbandingan antar sekolah
+  # Query: ?schoolIds=id1,id2,id3&examId=xxx
+
+# --- FKKG Dashboard ---
+GET    /dashboard/fkkg
+  # Response: {
+  #   totalQuestionBanks, publishedBanks, draftBanks,
+  #   totalQuestions, pendingEssayGrading,
+  #   upcomingExams, recentExamResults
+  # }
+
+# --- Admin Sekolah Dashboard ---
+GET    /dashboard/school
+  # Response: {
+  #   schoolInfo, totalStudents, studentsByClass,
+  #   upcomingExams, recentResults,
+  #   examRooms, notifications
+  # }

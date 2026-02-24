@@ -1,0 +1,63 @@
+# ============================================================
+# QUESTION BANK & QUESTIONS ENDPOINTS
+# Access: ADMIN_FKKG (full), SUPER_ADMIN (read)
+# ============================================================
+
+# --- Question Banks ---
+GET    /question-banks
+  # Query: ?page=1&perPage=20&subjectId=xxx&level=SD&grade=6
+  #        &isPublished=true&search=xxx
+
+POST   /question-banks
+  # Body: { title, subjectId, level, grade, semester?, academicYear,
+  #         description? }
+
+GET    /question-banks/:id
+  # Response: bank detail + questions summary
+
+PUT    /question-banks/:id
+
+DELETE /question-banks/:id
+
+PUT    /question-banks/:id/publish
+  # Publish bank soal (lock dari editing)
+
+PUT    /question-banks/:id/unpublish
+  # Unpublish untuk editing ulang
+
+POST   /question-banks/:id/duplicate
+  # Duplikasi bank soal beserta semua soal
+
+# --- Questions (within a bank) ---
+GET    /question-banks/:bankId/questions
+  # Query: ?type=PILIHAN_GANDA&difficulty=MUDAH
+
+POST   /question-banks/:bankId/questions
+  # Body: { orderNumber, type, content, contentImages?, contentAudio?,
+  #         difficulty, points, explanation?,
+  #         options?: [{ label, content, image?, isCorrect }] }
+
+GET    /question-banks/:bankId/questions/:id
+
+PUT    /question-banks/:bankId/questions/:id
+
+DELETE /question-banks/:bankId/questions/:id
+
+PUT    /question-banks/:bankId/questions/reorder
+  # Body: { orders: [{ id: "xxx", orderNumber: 1 }, ...] }
+
+POST   /question-banks/:bankId/questions/import
+  # Body: multipart/form-data { file: Excel/CSV }
+  # Import soal dari file
+
+GET    /question-banks/:bankId/questions/import/template
+  # Download template import soal
+
+POST   /question-banks/:bankId/questions/:id/upload-media
+  # Body: multipart/form-data { file: image/audio }
+  # Upload gambar/audio untuk soal
+
+# --- Question Analysis ---
+GET    /question-banks/:bankId/analysis
+  # Response: analisis butir soal (daya pembeda, tingkat kesukaran, dll)
+  # Available setelah ujian selesai

@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal FKKG - Hasil dan Analisis Ujian</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .sidebar-item:hover {
+            background: linear-gradient(90deg, #3b82f6 0%, #1e40af 100%);
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <header class="bg-white shadow-sm border-b">
+        <div class="px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <div class="bg-blue-600 rounded-lg w-10 h-10 flex items-center justify-center">
+                    <i class="fas fa-graduation-cap text-white"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold text-gray-800">Portal FKKG</h1>
+                    <p class="text-sm text-gray-600">Hasil dan Analisis Ujian TKA</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button class="text-gray-600 hover:text-blue-600">
+                    <i class="fas fa-bell text-xl"></i>
+                </button>
+                <div class="flex items-center space-x-2">
+                    <div class="bg-blue-100 rounded-full w-8 h-8 flex items-center justify-center">
+                        <i class="fas fa-user text-blue-600"></i>
+                    </div>
+                    <span class="text-gray-700 font-medium">Dr. Suryadi, M.Pd</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex">
+        <aside class="w-64 bg-white shadow-sm min-h-screen">
+            <nav class="p-4 space-y-2">
+                <a href="portal-fkkg-dashboard.html" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:text-white transition">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="portal-fkkg-upload-soal.html" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:text-white transition">
+                    <i class="fas fa-upload"></i>
+                    <span>Upload Soal</span>
+                </a>
+                <a href="portal-fkkg-editor-soal.html" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:text-white transition">
+                    <i class="fas fa-edit"></i>
+                    <span>Editor Soal</span>
+                </a>
+                <a href="portal-fkkg-review-jawaban.html" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:text-white transition">
+                    <i class="fas fa-eye"></i>
+                    <span>Review Jawaban</span>
+                </a>
+                <a href="portal-fkkg-monitoring-ujian.html" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:text-white transition">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Monitoring Ujian</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg text-blue-600 bg-blue-50">
+                    <i class="fas fa-chart-bar"></i>
+                    <span class="font-medium">Hasil & Analisis</span>
+                </a>
+            </nav>
+        </aside>
+
+        <main class="flex-1 p-6">
+            <div class="mb-6 flex items-center justify-between">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-800 mb-2">Hasil dan Analisis Ujian</h1>
+                    <p class="text-gray-600 text-sm">Ringkasan nilai per sekolah dan analisis butir soal</p>
+                </div>
+                <div class="flex space-x-3">
+                    <select class="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+                        <option>Ujian Akhir Semester Ganjil 2023/2024</option>
+                        <option>Ujian Tengah Semester Ganjil 2023/2024</option>
+                    </select>
+                    <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">
+                        <i class="fas fa-file-export mr-2"></i>Export Laporan
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                <div class="bg-white rounded-xl shadow-sm p-5 card-hover">
+                    <p class="text-xs text-gray-500 mb-1">Rata-rata Nilai Nasional</p>
+                    <p class="text-3xl font-bold text-gray-900 mb-2">78,4</p>
+                    <p class="text-xs text-green-600">+2,1 poin dari periode sebelumnya</p>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm p-5 card-hover">
+                    <p class="text-xs text-gray-500 mb-1">Persentase Lulus (≥ KKM)</p>
+                    <p class="text-3xl font-bold text-gray-900 mb-2">84%</p>
+                    <p class="text-xs text-yellow-600">Target minimal 80%</p>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm p-5 card-hover">
+                    <p class="text-xs text-gray-500 mb-1">Jumlah Sekolah Berpartisipasi</p>
+                    <p class="text-3xl font-bold text-gray-900 mb-2">128</p>
+                    <p class="text-xs text-blue-600">Mencakup SD, SMP, SMA, SMK</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-lg font-bold text-gray-800">Nilai Rata-rata per Sekolah</h2>
+                        <select class="px-3 py-1 border border-gray-200 rounded-lg text-xs">
+                            <option>Semua Jenjang</option>
+                            <option>SD</option>
+                            <option>SMP</option>
+                            <option>SMA</option>
+                            <option>SMK</option>
+                        </select>
+                    </div>
+                    <canvas id="schoolAverageChart" height="220"></canvas>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-lg font-bold text-gray-800">Analisis Nilai per Mapel</h2>
+                        <select class="px-3 py-1 border border-gray-200 rounded-lg text-xs">
+                            <option>Semua Sekolah</option>
+                            <option>SMA Negeri 1 Jakarta</option>
+                            <option>SMA Negeri 5 Bandung</option>
+                        </select>
+                    </div>
+                    <canvas id="subjectPerformanceChart" height="220"></canvas>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-lg font-bold text-gray-800">Analisis Butir Soal</h2>
+                    <div class="flex space-x-2 text-xs">
+                        <select class="px-2 py-1 border border-gray-200 rounded-lg">
+                            <option>Matematika</option>
+                            <option>Bahasa Indonesia</option>
+                            <option>Bahasa Inggris</option>
+                            <option>IPA</option>
+                        </select>
+                        <select class="px-2 py-1 border border-gray-200 rounded-lg">
+                            <option>Semua Tingkat Kesulitan</option>
+                            <option>Mudah</option>
+                            <option>Sedang</option>
+                            <option>Sulit</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-xs">
+                        <thead>
+                            <tr class="border-b border-gray-200">
+                                <th class="text-left py-3 px-3 font-medium text-gray-700">Kode Soal</th>
+                                <th class="text-left py-3 px-3 font-medium text-gray-700">Mapel</th>
+                                <th class="text-center py-3 px-3 font-medium text-gray-700">% Benar</th>
+                                <th class="text-center py-3 px-3 font-medium text-gray-700">Index Kesulitan</th>
+                                <th class="text-center py-3 px-3 font-medium text-gray-700">Index Diskriminasi</th>
+                                <th class="text-left py-3 px-3 font-medium text-gray-700">Kategori</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-2 px-3 font-mono text-gray-900">MTK-12-001</td>
+                                <td class="py-2 px-3 text-gray-700">Matematika</td>
+                                <td class="py-2 px-3 text-center text-red-600 font-medium">23%</td>
+                                <td class="py-2 px-3 text-center text-red-600 font-medium">0.82</td>
+                                <td class="py-2 px-3 text-center text-red-600 font-medium">0.10</td>
+                                <td class="py-2 px-3 text-red-700 font-medium">Perlu direvisi</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-2 px-3 font-mono text-gray-900">BIN-11-045</td>
+                                <td class="py-2 px-3 text-gray-700">Bahasa Indonesia</td>
+                                <td class="py-2 px-3 text-center text-green-600 font-medium">89%</td>
+                                <td class="py-2 px-3 text-center text-yellow-600 font-medium">0.25</td>
+                                <td class="py-2 px-3 text-center text-red-600 font-medium">0.12</td>
+                                <td class="py-2 px-3 text-yellow-700 font-medium">Terlalu mudah</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-2 px-3 font-mono text-gray-900">FIS-12-023</td>
+                                <td class="py-2 px-3 text-gray-700">Fisika</td>
+                                <td class="py-2 px-3 text-center text-yellow-600 font-medium">54%</td>
+                                <td class="py-2 px-3 text-center text-green-600 font-medium">0.48</td>
+                                <td class="py-2 px-3 text-center text-green-600 font-medium">0.35</td>
+                                <td class="py-2 px-3 text-green-700 font-medium">Baik</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    <h2 class="text-lg font-bold text-gray-800 mb-4">Highlight Sekolah</h2>
+                    <ul class="space-y-3 text-sm">
+                        <li class="flex items-start justify-between">
+                            <div>
+                                <p class="font-medium text-gray-900">SMA Negeri 1 Jakarta</p>
+                                <p class="text-gray-600 text-xs">Rata-rata nilai tertinggi nasional untuk Matematika</p>
+                            </div>
+                            <span class="px-2 py-1 rounded-full bg-green-50 text-green-700 text-xs">Performa tinggi</span>
+                        </li>
+                        <li class="flex items-start justify-between">
+                            <div>
+                                <p class="font-medium text-gray-900">SMP Negeri 3 Surabaya</p>
+                                <p class="text-gray-600 text-xs">Peningkatan nilai terbesar dibanding periode sebelumnya</p>
+                            </div>
+                            <span class="px-2 py-1 rounded-full bg-blue-50 text-blue-700 text-xs">Perbaikan signifikan</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    <h2 class="text-lg font-bold text-gray-800 mb-4">Ringkasan Ekspor Laporan</h2>
+                    <ul class="space-y-3 text-sm">
+                        <li class="flex items-center justify-between">
+                            <span class="text-gray-700">Laporan Nilai per Sekolah (Excel)</span>
+                            <button class="px-3 py-1 rounded-lg bg-blue-50 text-blue-700 text-xs hover:bg-blue-100">
+                                Download
+                            </button>
+                        </li>
+                        <li class="flex items-center justify-between">
+                            <span class="text-gray-700">Analisis Butir Soal (CSV)</span>
+                            <button class="px-3 py-1 rounded-lg bg-blue-50 text-blue-700 text-xs hover:bg-blue-100">
+                                Download
+                            </button>
+                        </li>
+                        <li class="flex items-center justify-between">
+                            <span class="text-gray-700">Laporan Ringkas per Mapel (PDF)</span>
+                            <button class="px-3 py-1 rounded-lg bg-blue-50 text-blue-700 text-xs hover:bg-blue-100">
+                                Download
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const schoolAverageCtx = document.getElementById('schoolAverageChart').getContext('2d');
+        const subjectPerformanceCtx = document.getElementById('subjectPerformanceChart').getContext('2d');
+
+        new Chart(schoolAverageCtx, {
+            type: 'bar',
+            data: {
+                labels: ['SMA N 1 Jakarta', 'SMA N 5 Bandung', 'SMP N 1 Surabaya', 'SMK N 2 Semarang'],
+                datasets: [
+                    {
+                        label: 'Rata-rata Nilai',
+                        data: [81.2, 78.5, 75.3, 77.1],
+                        backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#6366f1']
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100
+                    }
+                }
+            }
+        });
+
+        new Chart(subjectPerformanceCtx, {
+            type: 'radar',
+            data: {
+                labels: ['Matematika', 'Bahasa Indonesia', 'Bahasa Inggris', 'IPA', 'IPS'],
+                datasets: [
+                    {
+                        label: 'Rata-rata Nilai',
+                        data: [78, 82, 80, 76, 75],
+                        backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                        borderColor: '#3b82f6',
+                        borderWidth: 2
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'bottom' }
+                },
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 100
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

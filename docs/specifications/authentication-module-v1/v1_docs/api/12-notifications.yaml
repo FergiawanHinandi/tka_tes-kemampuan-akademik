@@ -1,0 +1,18 @@
+# ============================================================
+# NOTIFICATION ENDPOINTS
+# Access: All authenticated (own notifications)
+# ============================================================
+
+GET    /notifications
+  # Query: ?page=1&perPage=20&isRead=false&type=EXAM_SCHEDULED
+
+GET    /notifications/unread-count
+  # Response: { count: 5 }
+
+PUT    /notifications/:id/read
+  # Tandai sudah dibaca
+
+PUT    /notifications/read-all
+  # Tandai semua sudah dibaca
+
+DELETE /notifications/:id

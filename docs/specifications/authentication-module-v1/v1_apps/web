@@ -1,0 +1,133 @@
+apps/web/
+├── 📄 package.json
+├── 📄 tsconfig.json
+├── 📄 next.config.ts
+├── 📄 tailwind.config.ts
+├── 📄 postcss.config.js
+├── 📄 components.json                  # shadcn/ui config
+│
+├── 📁 public/
+│   ├── 📁 images/
+│   ├── 📁 icons/
+│   └── 📄 favicon.ico
+│
+├── 📁 src/
+│   ├── 📁 app/                         # Next.js App Router
+│   │   ├── 📄 layout.tsx               # Root layout
+│   │   ├── 📄 page.tsx                 # Landing page
+│   │   ├── 📄 not-found.tsx
+│   │   │
+│   │   ├── 📁 (auth)/                  # Auth pages (no sidebar)
+│   │   │   ├── 📁 login/
+│   │   │   │   └── 📄 page.tsx
+│   │   │   ├── 📁 forgot-password/
+│   │   │   │   └── 📄 page.tsx
+│   │   │   └── 📁 reset-password/
+│   │   │       └── 📄 page.tsx
+│   │   │
+│   │   ├── 📁 (dashboard)/             # Dashboard pages (with sidebar)
+│   │   │   ├── 📄 layout.tsx           # Dashboard layout (sidebar+header)
+│   │   │   │
+│   │   │   ├── 📁 super-admin/         # Super Admin pages
+│   │   │   │   ├── 📄 page.tsx                    # Dashboard
+│   │   │   │   ├── 📁 users/
+│   │   │   │   ├── 📁 schools/
+│   │   │   │   ├── 📁 regional/
+│   │   │   │   ├── 📁 settings/
+│   │   │   │   ├── 📁 releases/
+│   │   │   │   ├── 📁 audit-logs/
+│   │   │   │   └── 📁 security/
+│   │   │   │
+│   │   │   ├── 📁 disdik/              # Disdik pages
+│   │   │   │   ├── 📄 page.tsx                    # Dashboard
+│   │   │   │   ├── 📁 schools/
+│   │   │   │   ├── 📁 results/
+│   │   │   │   ├── 📁 reports/
+│   │   │   │   └── 📁 comparison/
+│   │   │   │
+│   │   │   ├── 📁 fkkg/                # FKKG pages
+│   │   │   │   ├── 📄 page.tsx                    # Dashboard
+│   │   │   │   ├── 📁 question-banks/
+│   │   │   │   ├── 📁 grading/
+│   │   │   │   ├── 📁 monitoring/
+│   │   │   │   └── 📁 analysis/
+│   │   │   │
+│   │   │   ├── 📁 sekolah/             # Admin Sekolah pages
+│   │   │   │   ├── 📄 page.tsx                    # Dashboard
+│   │   │   │   ├── 📁 students/
+│   │   │   │   ├── 📁 exams/
+│   │   │   │   ├── 📁 rooms/
+│   │   │   │   ├── 📁 results/
+│   │   │   │   └── 📁 downloads/
+│   │   │   │
+│   │   │   └── 📁 profile/
+│   │   │       └── 📄 page.tsx
+│   │   │
+│   │   └── 📁 api/                     # Next.js API Routes (BFF)
+│   │       └── 📁 auth/
+│   │           └── 📄 [...nextauth]/route.ts
+│   │
+│   ├── 📁 components/
+│   │   ├── 📁 ui/                      # shadcn/ui components
+│   │   │   ├── 📄 button.tsx
+│   │   │   ├── 📄 input.tsx
+│   │   │   ├── 📄 dialog.tsx
+│   │   │   ├── 📄 data-table.tsx
+│   │   │   ├── 📄 select.tsx
+│   │   │   ├── 📄 toast.tsx
+│   │   │   └── ... (semua shadcn components)
+│   │   ├── 📁 layout/
+│   │   │   ├── 📄 sidebar.tsx
+│   │   │   ├── 📄 header.tsx
+│   │   │   ├── 📄 breadcrumb.tsx
+│   │   │   └── 📄 user-nav.tsx
+│   │   ├── 📁 shared/
+│   │   │   ├── 📄 loading-spinner.tsx
+│   │   │   ├── 📄 empty-state.tsx
+│   │   │   ├── 📄 confirm-dialog.tsx
+│   │   │   ├── 📄 file-upload.tsx
+│   │   │   ├── 📄 rich-text-editor.tsx
+│   │   │   ├── 📄 stats-card.tsx
+│   │   │   └── 📄 search-input.tsx
+│   │   └── 📁 charts/
+│   │       ├── 📄 bar-chart.tsx
+│   │       ├── 📄 line-chart.tsx
+│   │       ├── 📄 pie-chart.tsx
+│   │       └── 📄 school-map.tsx
+│   │
+│   ├── 📁 hooks/
+│   │   ├── 📄 use-auth.ts
+│   │   ├── 📄 use-debounce.ts
+│   │   ├── 📄 use-pagination.ts
+│   │   └── 📄 use-toast.ts
+│   │
+│   ├── 📁 lib/
+│   │   ├── 📄 api-client.ts            # Axios/fetch wrapper
+│   │   ├── 📄 auth.ts                  # Auth utilities
+│   │   ├── 📄 utils.ts                 # cn() and helpers
+│   │   └── 📄 constants.ts
+│   │
+│   ├── 📁 services/                    # API service layer
+│   │   ├── 📄 auth.service.ts
+│   │   ├── 📄 users.service.ts
+│   │   ├── 📄 schools.service.ts
+│   │   ├── 📄 students.service.ts
+│   │   ├── 📄 question-banks.service.ts
+│   │   ├── 📄 exams.service.ts
+│   │   ├── 📄 results.service.ts
+│   │   ├── 📄 dashboard.service.ts
+│   │   └── 📄 notifications.service.ts
+│   │
+│   ├── 📁 stores/                      # Zustand stores
+│   │   ├── 📄 auth.store.ts
+│   │   ├── 📄 sidebar.store.ts
+│   │   └── 📄 notification.store.ts
+│   │
+│   ├── 📁 types/
+│   │   └── 📄 index.ts
+│   │
+│   └── 📁 styles/
+│       └── 📄 globals.css
+│
+└── 📁 __tests__/
+    └── ... (test files)

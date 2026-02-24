@@ -1,0 +1,43 @@
+{
+  "name": "tka-sistem-monorepo",
+  "version": "1.0.0",
+  "description": "Sistem Tes Kemampuan Akademik - Monorepo Architecture",
+  "private": true,
+  "workspaces": [
+    "apps/backend/*",
+    "apps/frontend/web/*",
+    "apps/frontend/desktop/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "check-types": "turbo run check-types",
+    "test": "turbo run test",
+    "clean": "turbo run clean && node -e \"require('node:fs').rmSync('node_modules', { recursive: true, force: true })\"",
+    "dev:api": "npm run start:dev -w apps/backend/api",
+    "dev:web": "turbo run dev --filter=web-*",
+    "dev:desktop": "turbo run dev --filter=desktop-*",
+    "build:api": "npm run build -w apps/backend/api",
+    "build:web": "turbo run build --filter=web-*",
+    "build:desktop": "turbo run build --filter=desktop-*",
+    "test:api": "npm run test -w apps/backend/api",
+    "lint:api": "npm run lint -w apps/backend/api",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "setup": "npm install && npm run build"
+  },
+  "devDependencies": {
+    "turbo": "^2.8.9",
+    "prettier": "^3.4.2",
+    "@types/node": "^22.10.7",
+    "typescript": "^5.7.3"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  },
+  "packageManager": "npm@10.0.0"
+}

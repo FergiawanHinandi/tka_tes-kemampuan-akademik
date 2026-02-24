@@ -1,0 +1,51 @@
+{
+  "name": "desktop-proktor",
+  "version": "1.0.0",
+  "description": "Desktop Application for Exam Proctor",
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "tsc",
+    "build:dir": "tsc && electron-builder --dir",
+    "dev": "tsc && electron .",
+    "dist": "npm run build && electron-builder --publish=never",
+    "lint": "eslint src --ext .ts",
+    "check-types": "tsc --noEmit",
+    "pack": "npm run build && electron-builder --dir",
+    "package": "npm run build && electron-builder"
+  },
+  "dependencies": {
+    "electron": "27.0.0",
+    "electron-store": "^8.1.0",
+    "sqlite3": "^5.1.6",
+    "socket.io-client": "^4.7.2",
+    "shared-types": "*"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "electron-builder": "^24.6.4",
+    "eslint": "^8.45.0",
+    "typescript": "^5.1.6"
+  },
+  "build": {
+    "appId": "com.tka.proktor",
+    "productName": "TKA Proktor Exam",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "assets/**/*"
+    ],
+    "mac": {
+      "category": "public.app-category.education"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "target": "AppImage"
+    }
+  }
+}

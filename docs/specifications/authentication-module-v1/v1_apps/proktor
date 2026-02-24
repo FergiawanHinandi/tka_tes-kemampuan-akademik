@@ -1,0 +1,37 @@
+apps/proktor/
+├── 📄 package.json
+├── 📄 tsconfig.json
+├── 📄 electron-builder.yml
+│
+├── 📁 src/
+│   ├── 📁 main/                        # Electron Main Process
+│   │   ├── 📄 index.ts                 # Entry point
+│   │   ├── 📄 window.ts               # Window management
+│   │   ├── 📄 ipc-handlers.ts         # IPC communication
+│   │   ├── 📄 auto-updater.ts         # Auto update
+│   │   ├── 📄 tray.ts                 # System tray
+│   │   └── 📁 services/
+│   │       ├── 📄 api.service.ts       # HTTP client
+│   │       ├── 📄 websocket.service.ts # WebSocket client
+│   │       └── 📄 local-db.service.ts  # SQLite local
+│   │
+│   ├── 📁 renderer/                    # Electron Renderer (React)
+│   │   ├── 📄 index.html
+│   │   ├── 📄 main.tsx
+│   │   ├── 📁 pages/
+│   │   │   ├── 📄 Login.tsx
+│   │   │   ├── 📄 SessionSelect.tsx
+│   │   │   ├── 📄 Dashboard.tsx
+│   │   │   └── 📄 Monitoring.tsx
+│   │   ├── 📁 components/
+│   │   ├── 📁 hooks/
+│   │   ├── 📁 stores/
+│   │   └── 📁 styles/
+│   │
+│   └── 📁 preload/
+│       └── 📄 index.ts                # Preload script (security)
+│
+└── 📁 resources/
+    ├── 📄 icon.ico
+    ├── 📄 icon.png
+    └── 📄 icon.icns

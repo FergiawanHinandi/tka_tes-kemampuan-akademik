@@ -1,0 +1,54 @@
+# ============================================================
+# AUTHENTICATION ENDPOINTS
+# ============================================================
+
+POST   /auth/login
+  # Body: { username, password }
+  # Response: { accessToken, refreshToken, user }
+  # Access: Public
+
+POST   /auth/refresh
+  # Body: { refreshToken }
+  # Response: { accessToken, refreshToken }
+  # Access: Public
+
+POST   /auth/logout
+  # Header: Authorization Bearer
+  # Response: { message }
+  # Access: All authenticated
+
+POST   /auth/forgot-password
+  # Body: { email }
+  # Response: { message }
+  # Access: Public
+
+POST   /auth/reset-password
+  # Body: { token, newPassword }
+  # Response: { message }
+  # Access: Public
+
+PUT    /auth/change-password
+  # Body: { currentPassword, newPassword }
+  # Response: { message }
+  # Access: All authenticated
+
+GET    /auth/me
+  # Response: { user profile data }
+  # Access: All authenticated
+
+PUT    /auth/profile
+  # Body: { fullName, phone, avatar }
+  # Response: { updated user }
+  # Access: All authenticated
+
+# --- PROKTOR & CLIENT AUTH ---
+
+POST   /auth/proctor/login
+  # Body: { schoolCode, username, password }
+  # Response: { accessToken, proctorSession }
+  # Access: PROKTOR
+
+POST   /auth/student/login
+  # Body: { token } (token dari kartu ujian)
+  # Response: { accessToken, studentInfo, examInfo }
+  # Access: Siswa (via Client App)

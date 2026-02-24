@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Proktor - Kontrol Ujian | TKA System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50">
+  <header class="bg-white shadow-sm border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg flex items-center justify-center">
+          <i class="fas fa-sliders text-white"></i>
+        </div>
+        <div>
+          <h1 class="text-lg font-bold text-gray-800">Kontrol Ujian</h1>
+          <p class="text-xs text-gray-500">Kelola status ujian dan tindakan pada peserta</p>
+        </div>
+      </div>
+      <div class="flex items-center space-x-3 text-sm">
+        <a href="proktor-pilih-sesi.html" class="text-gray-600 hover:text-gray-800"><i class="fas fa-list mr-1"></i>Pilih Sesi</a>
+        <a href="proktor-dashboard.html" class="text-blue-600 hover:text-blue-700"><i class="fas fa-display mr-1"></i>Dashboard Pengawasan</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-6 py-6">
+    <!-- Session Info -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+      <div class="bg-white border border-gray-200 rounded-lg p-5">
+        <div class="flex items-center justify-between mb-2">
+          <h2 class="font-semibold text-gray-800">Informasi Sesi</h2>
+          <span class="px-2 py-1 rounded-full text-xs bg-green-50 text-green-700 border border-green-100">Aktif</span>
+        </div>
+        <div class="text-sm text-gray-600 space-y-1">
+          <p><span class="text-gray-500">Kode Sesi:</span> SES-002</p>
+          <p><span class="text-gray-500">Mata Pelajaran:</span> Bahasa Indonesia XI</p>
+          <p><span class="text-gray-500">Ruang:</span> B2 • Kapasitas 36</p>
+          <p><span class="text-gray-500">Hadir:</span> 28 siswa</p>
+          <p><span class="text-gray-500">Waktu Tersisa:</span> 01:23:45</p>
+        </div>
+      </div>
+
+      <div class="bg-white border border-gray-200 rounded-lg p-5">
+        <h2 class="font-semibold text-gray-800 mb-3">Statistik Progres</h2>
+        <div class="space-y-3 text-sm">
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-gray-600">Rata-rata progres</span>
+              <span class="font-medium text-gray-800">52%</span>
+            </div>
+            <div class="h-2 bg-gray-200 rounded-full">
+              <div class="h-2 bg-blue-600 rounded-full" style="width: 52%"></div>
+            </div>
+          </div>
+          <div class="flex justify-between text-gray-600">
+            <span>Online: <span class="font-medium text-green-700">26</span></span>
+            <span>Offline: <span class="font-medium text-red-600">2</span></span>
+            <span>Selesai: <span class="font-medium text-purple-700">5</span></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white border border-gray-200 rounded-lg p-5">
+        <h2 class="font-semibold text-gray-800 mb-3">Aksi Cepat</h2>
+        <div class="grid grid-cols-2 gap-3">
+          <button class="px-3 py-2 bg-green-600 text-white rounded-lg text-sm hover:bg-green-700"><i class="fas fa-play mr-2"></i>Mulai</button>
+          <button class="px-3 py-2 bg-yellow-500 text-white rounded-lg text-sm hover:bg-yellow-600"><i class="fas fa-pause mr-2"></i>Pause</button>
+          <button class="px-3 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700"><i class="fas fa-rotate mr-2"></i>Resume</button>
+          <button class="px-3 py-2 bg-red-600 text-white rounded-lg text-sm hover:bg-red-700"><i class="fas fa-stop mr-2"></i>Akhiri</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <!-- Tambah Waktu -->
+      <div class="bg-white border border-gray-200 rounded-lg p-5">
+        <h3 class="font-semibold text-gray-800 mb-4">Tambah Waktu</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div class="md:col-span-2">
+            <label class="block text-xs font-medium text-gray-700 mb-1">Durasi Tambahan (menit)</label>
+            <input type="number" min="1" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="mis. 10">
+          </div>
+          <div class="flex items-end">
+            <button class="w-full px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700">Terapkan ke Sesi</button>
+          </div>
+        </div>
+        <p class="text-xs text-gray-500 mt-2">Catatan: penambahan waktu akan diterapkan ke seluruh peserta sesi ini.</p>
+      </div>
+
+      <!-- Force Submit Siswa -->
+      <div class="bg-white border border-gray-200 rounded-lg p-5">
+        <h3 class="font-semibold text-gray-800 mb-4">Force Submit Siswa</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div class="md:col-span-2">
+            <label class="block text-xs font-medium text-gray-700 mb-1">Pilih Siswa</label>
+            <select class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm">
+              <option>Pilih siswa...</option>
+              <option>Ahmad Fauzan (NIS 12345678)</option>
+              <option>Siti Nurhaliza (NIS 12345679)</option>
+              <option>Budi Santoso (NIS 12345680)</option>
+            </select>
+          </div>
+          <div class="flex items-end">
+            <button class="w-full px-4 py-2 bg-red-600 text-white rounded-lg text-sm hover:bg-red-700">Force Submit</button>
+          </div>
+        </div>
+        <p class="text-xs text-gray-500 mt-2">Tindakan ini akan langsung mengumpulkan jawaban siswa yang dipilih.</p>
+      </div>
+
+      <!-- Kick Siswa -->
+      <div class="bg-white border border-gray-200 rounded-lg p-5">
+        <h3 class="font-semibold text-gray-800 mb-4">Kick Siswa</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div class="md:col-span-2">
+            <label class="block text-xs font-medium text-gray-700 mb-1">Pilih Siswa</label>
+            <select class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm">
+              <option>Pilih siswa...</option>
+              <option>Rizki Pratama (Pelanggaran berat)</option>
+              <option>Lina Agustin (Koneksi tidak stabil)</option>
+            </select>
+          </div>
+          <div class="flex items-end">
+            <button class="w-full px-4 py-2 bg-gray-800 text-white rounded-lg text-sm hover:bg-gray-900">Kick</button>
+          </div>
+        </div>
+        <p class="text-xs text-gray-500 mt-2">Siswa akan dikeluarkan dari sesi dan memerlukan persetujuan untuk bergabung lagi.</p>
+      </div>
+
+      <!-- Mulai/Pause/Resume/Akhiri Ujian -->
+      <div class="bg-white border border-gray-200 rounded-lg p-5">
+        <h3 class="font-semibold text-gray-800 mb-4">Status Ujian</h3>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <button class="px-3 py-2 bg-green-600 text-white rounded-lg text-sm hover:bg-green-700"><i class="fas fa-play mr-2"></i>Mulai</button>
+          <button class="px-3 py-2 bg-yellow-500 text-white rounded-lg text-sm hover:bg-yellow-600"><i class="fas fa-pause mr-2"></i>Pause</button>
+          <button class="px-3 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700"><i class="fas fa-rotate mr-2"></i>Resume</button>
+          <button class="px-3 py-2 bg-red-600 text-white rounded-lg text-sm hover:bg-red-700"><i class="fas fa-stop mr-2"></i>Akhiri</button>
+        </div>
+        <div class="mt-4 text-xs text-gray-500">
+          Gunakan kontrol ini untuk mengelola status ujian pada tingkat sesi. Semua aksi akan tercatat di log aktivitas.
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

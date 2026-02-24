@@ -1,0 +1,202 @@
+Dari Gemini
+Laporan Komprehensif Pengembangan Ekosistem Tes Kemampuan Akademik (TKA) Multi-Tenant: Arsitektur, Implementasi, dan Strategi Penetrasi Pasar Nasional
+Bab 1: Perencanaan Strategis dan Analisis Ekosistem Pendidikan Digital
+Transformasi digital dalam sektor pendidikan Indonesia telah mencapai titik infleksi yang kritis, didorong oleh mandat nasional seperti Asesmen Nasional Berbasis Komputer (ANBK). Pergeseran paradigma dari ujian berbasis kertas ke platform digital menuntut infrastruktur yang tidak hanya tangguh secara teknis tetapi juga adaptif terhadap disparitas konektivitas geografis di seluruh nusantara. Pengembangan sistem TKA (Tes Kemampuan Akademik) yang mencakup jenjang SD hingga SMK dengan arsitektur multi-tenant menuntut pemahaman mendalam mengenai hierarki administratif pendidikan, mulai dari pemilik platform, Dinas Pendidikan (Disdik), Forum Komunikasi Kelompok Guru (FKKG), hingga administrator sekolah di tingkat satuan pendidikan.1
+Laporan ini menyajikan cetak biru (blueprint) komprehensif untuk membangun ekosistem ujian yang skalabel, aman, dan patuh regulasi. Fokus utama diletakkan pada integrasi peran pemangku kepentingan, mitigasi risiko teknis melalui arsitektur hibrida (daring dan semi-daring), serta kepatuhan terhadap Undang-Undang Perlindungan Data Pribadi (UU PDP) yang baru disahkan.
+1.1 Definisi Peran dan Matriks Aksesibilitas (Role-Based Access Control)
+Keberhasilan sistem manajemen pembelajaran dan ujian terletak pada pemisahan kewenangan yang jelas namun terintegrasi. Sistem yang diusulkan harus memfasilitasi empat aktor utama dengan kebutuhan fungsional yang berbeda secara radikal namun saling bergantung.
+1.1.1 Super Admin (Platform Owner)
+Sebagai entitas puncak dalam hierarki sistem, Super Admin atau Pemilik Platform memegang kendali penuh atas aspek operasional bisnis dan kesehatan infrastruktur global. Peran ini tidak terlibat dalam intervensi pedagogis sehari-hari, melainkan berfokus pada manajemen tenancy (penyewaan) dan skalabilitas sistem.
+? Manajemen Lisensi dan Langganan: Fungsi krusial adalah pengelolaan siklus hidup langganan SaaS (Software as a Service). Super Admin memiliki otoritas untuk memprovisioning instance database baru untuk sekolah yang baru mendaftar, mengatur kuota penyimpanan, dan mengaktifkan fitur premium berdasarkan tier langganan.
+? Observabilitas Global: Melalui dashboard telemetri terpusat, Super Admin memantau beban server secara real-time, mendeteksi anomali pada latency jaringan, dan mengelola distribusi beban (load balancing) antar zona ketersediaan server.3
+? Audit Keamanan Sistem: Mengelola kunci enkripsi master, sertifikat SSL/TLS, dan memantau log akses untuk mendeteksi upaya intrusi atau serangan DDoS yang dapat mengancam integritas platform secara keseluruhan.
+1.1.2 Dinas Pendidikan (Disdik)
+Peran Dinas Pendidikan (tingkat Kabupaten/Kota untuk SD-SMP dan Provinsi untuk SMA/SMK) adalah sebagai pengawas regulator dan penjamin mutu pendidikan daerah. Dalam arsitektur aplikasi, Disdik membutuhkan pandangan "Helicopter View" terhadap performa sekolah di bawah yurisdiksinya.
+? Agregasi Data Wilayah: Dashboard Disdik harus mampu menarik data dari ribuan sekolah secara simultan untuk menyajikan visualisasi performa akademik berbasis peta (geospasial). Hal ini memungkinkan Disdik mengidentifikasi sekolah-sekolah yang memerlukan intervensi khusus berdasarkan tren nilai TKA.5
+? Standardisasi Jadwal Ujian: Disdik memiliki wewenang untuk menetapkan jendela waktu pelaksanaan Try Out Daerah (TODA) atau ujian semester bersama. Sistem harus memungkinkan Disdik untuk "mengunci" jadwal ujian pada kalender akademik semua sekolah binaan secara serentak.
+? Analisis Kesenjangan (Gap Analysis): Fitur analitik canggih diperlukan untuk membandingkan capaian antar kecamatan atau antar jenjang pendidikan, memberikan data dukung bagi perumusan kebijakan alokasi anggaran daerah.7
+1.1.3 FKKG dan MGMP (Administrator Konten)
+Forum Komunikasi Kelompok Guru (FKKG) untuk SD dan Musyawarah Guru Mata Pelajaran (MGMP) untuk SMP/SMA/SMK bertindak sebagai kurator intelektual sistem. Peran mereka adalah memastikan validitas, reliabilitas, dan kualitas butir soal yang didistribusikan ke sekolah-sekolah.
+? Manajemen Bank Soal Terpusat: Sistem harus menyediakan Content Management System (CMS) khusus yang mendukung kolaborasi penulisan soal. Fitur ini mencakup alur kerja drafting, review sejawat, dan approval sebelum soal dipublikasikan ke repositori global.8
+? Analisis Psikometrik: Sebelum soal digunakan secara luas, FKKG/MGMP memerlukan akses ke data uji coba untuk menghitung tingkat kesukaran, daya pembeda, dan efektivitas pengecoh (distractor) pada setiap butir soal. Hal ini memastikan instrumen evaluasi memenuhi standar Asesmen Kompetensi Minimum (AKM).9
+? Distribusi Paket Soal: Kemampuan untuk "mendorong" (push) paket soal yang telah distandardisasi ke akun sekolah-sekolah tertentu, memastikan keseragaman materi ujian di seluruh wilayah administratif.
+1.1.4 Administrator Sekolah dan Proktor
+Pada tingkat operasional terbawah namun paling kritis, Admin Sekolah dan Proktor bertugas mengeksekusi pelaksanaan ujian. Di Indonesia, peran Proktor sangat teknis dan vital, seringkali merangkap sebagai teknisi jaringan sekolah.
+? Manajemen Sesi dan Gelombang: Mengingat keterbatasan perangkat komputer di sekolah, Admin Sekolah harus dapat membagi siswa ke dalam beberapa sesi dan gelombang ujian. Logika penjadwalan ini harus mencegah bentrokan (conflict detection) antara siswa dan ketersediaan perangkat.10
+? Monitoring Real-Time (Proctoring): Dashboard Proktor adalah pusat komando selama ujian berlangsung. Proktor harus dapat melihat status koneksi setiap siswa, memantau progres pengerjaan, mereset login peserta yang mengalami kendala teknis, dan menghentikan ujian jika terindikasi kecurangan.7
+? Sinkronisasi Data (Semi-Daring): Untuk sekolah dengan koneksi internet terbatas, Proktor bertanggung jawab mengelola server lokal (VHD), melakukan sinkronisasi data soal dari server pusat (download), dan mengunggah jawaban siswa (upload) setelah sesi berakhir.13
+1.2 Analisis Kebutuhan Infrastruktur dan Kendala Teknis
+Lansekap infrastruktur digital Indonesia yang belum merata menuntut pendekatan arsitektur ganda. Mengandalkan sepenuhnya pada sistem berbasis awan (cloud-native) akan mengalienasi sekolah-sekolah di daerah 3T (Tertinggal, Terdepan, dan Terluar). Oleh karena itu, sistem harus dirancang dengan paradigma "Offline-First" namun tetap tersinkronisasi.
+1.2.1 Strategi Hybrid: Moda Daring dan Semi-Daring
+Mengacu pada standar ANBK yang ditetapkan Pusmendik Kemdikbud, aplikasi harus mendukung dua moda operasional utama. Kegagalan mengakomodasi salah satu moda ini akan secara drastis mengurangi adopsi pasar.
+
+FiturModa Daring (Full Online)Moda Semi-Daring (Semi-Online)Konektivitas InternetStabil, dedicated 12 Mbps per 15 klien.1Minimal 1 Mbps stabil (hanya untuk sinkronisasi).14Server LokalTidak diperlukan (Direct to Cloud).Wajib (PC Proktor berfungsi sebagai server lokal).2Mekanisme DataReal-time streaming soal dan jawaban.Store-and-forward: Download soal diawal, upload jawaban diakhir.Arsitektur JaringanKlien terhubung langsung ke internet.Klien terhubung ke LAN lokal; hanya Server Proktor ke internet.KeandalanRentan terhadap putus koneksi massal.Tahan gangguan internet selama ujian berlangsung.1.2.2 Spesifikasi Teknis Perangkat Keras
+Untuk memastikan kompatibilitas yang luas, spesifikasi sistem harus ditetapkan seringan mungkin namun tetap aman.
+? Komputer Proktor (Semi-Daring): Harus mampu menjalankan mesin virtual (VirtualBox/VMware). Spesifikasi minimum yang direkomendasikan adalah CPU 4 Core, RAM 8GB (ideal 16GB), dan penyimpanan SSD untuk kecepatan I/O database lokal yang tinggi.1
+? Klien Siswa: Aplikasi Exambrowser harus dapat berjalan pada spesifikasi rendah (Dual Core, RAM 2GB) dan mendukung berbagai OS (Windows, ChromeOS, macOS) mengingat diversitas perangkat di sekolah-sekolah.2
+Bab 2: Arsitektur Sistem dan Desain Database Multi-Tenant
+Fondasi teknis dari aplikasi TKA skala nasional adalah desain database yang mampu menangani isolasi data antar sekolah (tenancy) sekaligus mendukung konkurensi tinggi saat ribuan siswa mengakses sistem secara bersamaan.
+2.1 Strategi Database Multi-Tenant
+Mengingat adanya kebutuhan hierarki Disdik yang perlu melihat data lintas sekolah, pendekatan Hybrid Schema pada database PostgreSQL adalah solusi yang paling optimal. Pendekatan ini menyeimbangkan antara keamanan data, kemudahan pengelolaan, dan performa pelaporan.16
+2.1.1 Skema Terisolasi untuk Data Sekolah (Schema-per-Tenant)
+Setiap sekolah akan memiliki skema database tersendiri (misalnya: sekolah_A, sekolah_B).
+? Keuntungan Keamanan: Isolasi fisik pada level database mencegah kebocoran data antar sekolah. Sebuah query yang salah pada aplikasi tidak akan pernah bisa mengakses data siswa dari sekolah lain karena batasan skema. Hal ini sangat krusial untuk mematuhi standar UU PDP terkait data anak.18
+? Kustomisasi: Memungkinkan sekolah tertentu memiliki tabel tambahan atau konfigurasi khusus tanpa mengganggu struktur database global.
+? Backup & Restore: Memudahkan proses backup data per sekolah. Jika satu sekolah mengalami korupsi data, proses restore dapat dilakukan hanya pada skema tersebut tanpa mematikan layanan untuk sekolah lain.16
+2.1.2 Skema Bersama untuk Data Global (Shared Schema)
+Data yang bersifat lintas entitas disimpan dalam skema publik atau global.
+? Entitas: Tabel Users (untuk login SSO), QuestionBank (Bank Soal FKKG), SubscriptionPlan, dan GlobalLogs.
+? Agregasi Disdik: Dashboard Disdik akan melakukan query agregasi yang "menjahit" data ringkasan dari berbagai skema sekolah untuk keperluan pelaporan statistik tanpa perlu memindahkan data mentah secara fisik.
+2.2 Arsitektur Konkurensi Tinggi (High Concurrency)
+Masalah klasik dalam sistem ujian online adalah "Thundering Herd Problem", di mana ribuan siswa mencoba login dan mengunduh soal pada detik yang sama. Arsitektur harus dirancang untuk menyerap lonjakan beban ini.19
+2.2.1 Mekanisme Caching dan Load Balancing
+? Redis Cluster: Digunakan untuk menyimpan sesi aktif siswa, token ujian, dan jawaban sementara. Redis bekerja dalam memori (in-memory), memberikan kecepatan baca/tulis sub-milidetik yang jauh lebih cepat dibandingkan database disk tradisional.21
+? Content Delivery Network (CDN): Semua aset statis soal (gambar, audio listening, video) harus didistribusikan melalui CDN. Ini memastikan bahwa beban bandwidth server utama berkurang drastis karena siswa mengunduh media dari server tepi (edge server) terdekat.3
+? Antrean Asinkron (Message Queue): Saat siswa menekan tombol "Selesai", sistem tidak boleh langsung menulis ke database utama secara sinkron. Sebaliknya, data jawaban dikirim ke antrean (RabbitMQ atau Apache Kafka) untuk diproses secara bertahap oleh worker service. Ini mencegah database locking yang dapat membekukan sistem.22
+2.3 Desain Skema Database untuk Bank Soal Kompleks
+Mengakomodasi format soal AKM (Asesmen Kompetensi Minimum) menuntut struktur tabel yang fleksibel, tidak sekadar Pilihan Ganda sederhana.
+Tabel Questions:
+? id: UUID
+? content: JSONB (Menyimpan teks soal, dan referensi media)
+? type: Enum (PG, PG_Kompleks, Menjodohkan, Isian_Singkat, Uraian) 9
+? complexity_level: Integer
+? fkkg_id: Reference to Content Owner
+Tabel Answers (Kunci Jawaban):
+? Menggunakan tipe data JSONB pada PostgreSQL memungkinkan penyimpanan struktur jawaban yang dinamis. Misalnya, untuk soal "Menjodohkan", kunci jawaban disimpan sebagai pasangan key-value { "A": "1", "B": "3", "C": "2" }. Struktur ini memungkinkan validasi otomatis yang cepat dan fleksibel tanpa perlu merubah skema tabel setiap kali ada tipe soal baru.
+Bab 3: Desain Aplikasi dan Pengalaman Pengguna (UX)
+Desain antarmuka pengguna harus mempertimbangkan literasi digital yang beragam dari pengguna sistem, mulai dari siswa SD hingga pengawas sekolah yang mungkin kurang fasih teknologi.
+3.1 Antarmuka Klien Siswa (Exambrowser)
+Aplikasi klien siswa harus dirancang dengan filosofi "Distraction-Free" dan keamanan maksimal.
+? Mode Kiosk: Aplikasi berjalan dalam mode layar penuh yang tidak dapat diminimalkan. Navigasi sistem operasi (Start Menu, Taskbar) disembunyikan sepenuhnya.23
+? Navigasi Soal: Panel navigasi di sisi kanan layar menampilkan status butir soal dengan kode warna: Hijau (Sudah Dijawab), Kuning (Ragu-ragu), dan Putih (Belum Dijawab).
+? Fitur Aksesibilitas: Mengingat inklusivitas pendidikan, tersedia fitur Font Resizing (memperbesar teks) dan High Contrast Mode bagi siswa dengan gangguan penglihatan.
+? Split Screen untuk Stimulus: Untuk soal tipe literasi yang memuat bacaan panjang, layar dibagi dua: sisi kiri untuk wacana/stimulus yang dapat di-scroll independen, dan sisi kanan untuk butir pertanyaan. Ini mengurangi beban kognitif siswa karena tidak perlu bolak-balik scroll atas-bawah.9
+3.2 Dashboard Monitoring Proktor
+Dashboard Proktor adalah alat vital untuk manajemen krisis selama ujian. Desainnya harus memprioritaskan visibilitas status.
+? Visualisasi Grid Kelas: Setiap siswa direpresentasikan sebagai kartu (card) dalam grid. Kartu ini menampilkan foto siswa, nama, status koneksi (Online/Offline), dan progres pengerjaan (%).
+? Indikator Masalah: Kartu siswa akan berkedip merah jika terjadi kehilangan koneksi atau jika sistem mendeteksi anomali (misalnya upaya keluar dari aplikasi).
+? Kontrol Otoritatif: Tombol aksi cepat (Quick Actions) untuk "Force Reset Login" (mengizinkan siswa login ulang di komputer lain) dan "Stop Exam" harus mudah diakses namun terlindungi konfirmasi ganda untuk mencegah kesalahan klik.7
+3.3 Dashboard Eksekutif Disdik
+Bagi Admin Disdik, data disajikan dalam bentuk analitik tingkat tinggi.
+? Peta Sebaran Nilai: Menggunakan peta interaktif (GIS) untuk menampilkan rata-rata nilai per kecamatan. Warna merah menunjukkan area dengan capaian di bawah standar, memicu investigasi lebih lanjut.
+? Trend Analysis: Grafik garis yang menunjukkan perbandingan performa ujian saat ini dengan periode sebelumnya (Year-over-Year), membantu dalam evaluasi keberhasilan program pendidikan daerah.5
+Bab 4: Pengembangan Teknis dan Scripting
+Tahap konstruksi sistem melibatkan pemilihan tech stack yang tepat dan penulisan kode untuk modul-modul kritis, terutama yang berkaitan dengan keamanan dan sinkronisasi.
+4.1 Pemilihan Tech Stack
+Pemilihan teknologi didasarkan pada kebutuhan performa tinggi, keamanan tipe data, dan dukungan komunitas.
+
+KomponenTeknologiAlasan PemilihanBackend API.NET 8 (C#) atau GolangPerforma tinggi, manajemen memori yang ketat, dan dukungan concurrency yang sangat baik untuk menangani ribuan koneksi WebSocket.26Frontend WebReact.js atau Vue.jsArsitektur berbasis komponen memudahkan pengelolaan UI yang kompleks seperti editor soal interaktif.Desktop ClientElectron +.NETMemungkinkan pembuatan aplikasi lintas platform (Windows/Mac) dengan akses ke API sistem tingkat rendah untuk penguncian layar (Lockdown Browser).26DatabasePostgreSQLFitur Row Level Security (RLS) bawaan sangat ideal untuk implementasi multi-tenant yang aman.17Real-timeSignalR / WebSocketProtokol komunikasi dua arah yang efisien untuk fitur live proctoring dan chat bantuan.294.2 Pengembangan Modul Keamanan Klien (Scripting)
+Bagian tersulit dari aplikasi ujian adalah mencegah kecurangan pada sisi klien. Scripting pada level Electron Main Process diperlukan untuk mengontrol perilaku OS.
+? Keyboard Hooking: Menggunakan library C++ atau C# native yang dipanggil melalui Electron untuk mencegat keystrokes sistem. Tombol kombinasi seperti Alt+Tab, Ctrl+Alt+Del, WinKey, dan PrintScreen harus dinonaktifkan secara global saat aplikasi berjalan.31
+? Deteksi Virtual Machine: Implementasi script yang memeriksa signature hardware (MAC Address, BIOS Vendor, CPU ID) untuk mendeteksi apakah aplikasi dijalankan di dalam Virtual Machine (VM). Penggunaan VM sering menjadi modus kecurangan untuk memisahkan OS ujian dengan OS induk tempat siswa mencari jawaban. Aplikasi harus menolak berjalan jika terdeteksi lingkungan virtual.32
+? Blacklist Proses: Daemon latar belakang yang memindai daftar proses berjalan setiap 5 detik. Jika ditemukan proses terlarang (TeamViewer, Discord, Calculator, Browser eksternal), aplikasi ujian akan otomatis tertutup dan mengirimkan log pelanggaran ke server pusat.
+4.3 Logika Sinkronisasi VHD (Semi-Daring)
+Untuk moda semi-daring, mekanisme sinkronisasi data harus kuat terhadap gangguan jaringan.
+1. Enkripsi Paket Soal: Data soal diunduh dalam bentuk file terenkripsi (AES-256). Kunci dekripsi hanya dikirimkan oleh server pusat saat token ujian dirilis, mencegah kebocoran soal sebelum waktunya.
+2. Delta Sync: Script sinkronisasi harus mendukung resume capability. Jika unduhan 500MB terputus di tengah jalan, sistem harus bisa melanjutkan dari byte terakhir, bukan mengulang dari awal. Ini krusial untuk daerah dengan internet tidak stabil.13
+3. Local Server API: Aplikasi VHD menjalankan server web lokal (Nginx + PHP/Python) yang melayani request dari klien siswa melalui LAN. Script PHP/Python ini bertugas mencatat jawaban siswa ke database lokal (SQLite/MariaDB) dan kemudian melakukan sinkronisasi balik (Push Response) ke cloud saat koneksi internet tersedia.
+Bab 5: Jaminan Kualitas dan Pengujian (Testing)
+Sebelum peluncuran, sistem harus melalui serangkaian pengujian ekstrem untuk menjamin stabilitas saat digunakan secara massal.
+5.1 Uji Beban (Load Testing) Skala Masif
+Simulasi pengguna harus mencerminkan kondisi nyata di lapangan. Target pengujian adalah 10.000 pengguna konkuren (Concurrent Users/CCU).
+? Alat Uji: Menggunakan JMeter atau k6 untuk mensimulasikan trafik.
+? Skenario Uji: "Login Storm" - mensimulasikan 5.000 siswa mencoba login dalam jendela waktu 5 menit. Ini adalah momen paling kritis dimana database seringkali choke (tersedak).
+? Parameter Keberhasilan: CPU server database tidak boleh melebihi 80%, response time API harus tetap di bawah 200ms, dan tidak ada koneksi WebSocket yang terputus (dropped connections).19
+5.2 Audit Keamanan dan Penetrasi (Pentest)
+? Packet Sniffing: Menguji ketahanan aplikasi klien terhadap analisis trafik jaringan (menggunakan Wireshark). Memastikan bahwa payload soal dan jawaban terenkripsi SSL/TLS dan tidak dapat dibaca man-in-the-middle.
+? Bypass Kiosk Mode: Mencoba membobol restriksi layar penuh menggunakan berbagai teknik peretasan antarmuka (Sticky Keys exploit, gesture touchpad, fitur aksesibilitas OS) untuk memastikan siswa tidak bisa keluar ke desktop selama ujian.
+5.3 User Acceptance Testing (UAT)
+Melibatkan perwakilan Guru, Proktor, dan Siswa dari berbagai latar belakang sekolah.
+? Fokus UAT Guru: Kemudahan penggunaan editor soal (WYSIWYG) dan fitur impor soal dari Excel/Word.
+? Fokus UAT Proktor: Kejelasan indikator pada dashboard monitoring dan kemudahan prosedur troubleshooting (reset login).
+? Kuesioner: Mengukur System Usability Scale (SUS) untuk memastikan aplikasi intuitif dan tidak memerlukan pelatihan teknis yang berlebihan.34
+Bab 6: Promosi dan Strategi Penetrasi Pasar (Go-to-Market)
+Memasarkan produk teknologi pendidikan di Indonesia memerlukan pemahaman mendalam tentang mekanisme pengadaan pemerintah (B2G) dan dinamika komunitas sekolah.
+6.1 Integrasi dan Pendaftaran SIPLah
+SIPLah (Sistem Informasi Pengadaan di Sekolah) adalah kanal utama belanja sekolah menggunakan dana BOS. Agar dapat dibeli oleh sekolah, aplikasi harus terdaftar di ekosistem ini.
+? Kemitraan Mitra Pasar Daring: Pengembang aplikasi harus mendaftar sebagai "Penyedia" melalui salah satu Mitra Pasar Daring resmi SIPLah (seperti Blibli, Eureka, atau Intan Pariwara).
+? Integrasi SSO Dapodik: Persyaratan mutlak adalah integrasi Single Sign-On (SSO) dengan Dapodik. Ini memungkinkan sekolah login ke aplikasi menggunakan akun operator sekolah yang sudah terverifikasi, memvalidasi identitas pembeli secara otomatis.35
+? Alur Transaksi: Memahami alur negosiasi, penerbitan invoice, dan Berita Acara Serah Terima (BAST) digital yang diwajibkan dalam platform SIPLah untuk pencairan dana.35
+6.2 Strategi E-Katalog LKPP (Sektoral Pendidikan)
+Untuk kontrak skala besar dengan Dinas Pendidikan (pengadaan tingkat daerah), produk harus tayang di E-Katalog LKPP.
+? Sertifikasi TKDN: Pengurusan sertifikat Tingkat Komponen Dalam Negeri (TKDN) adalah nilai jual utama. Produk software yang dikembangkan oleh tenaga ahli lokal dapat mencapai skor TKDN tinggi, yang menjadi prioritas dalam pengadaan barang/jasa pemerintah.36
+? Etalase Sektoral: Mendaftarkan produk pada Etalase Produk Pendidikan dengan spesifikasi harga yang transparan (misalnya harga per siswa per tahun atau harga lisensi per sekolah).
+6.3 Pelibatan Komunitas (Community Engagement)
+Pemasaran grassroot melalui komunitas guru sangat efektif di Indonesia.
+? Pemberdayaan FKKG/MGMP: Memberikan akses gratis atau "Freemium" kepada pengurus FKKG/MGMP untuk menggunakan fitur Bank Soal. Ketika mereka terbiasa dan nyaman dengan platform ini, mereka akan menjadi "evangelist" yang merekomendasikan penggunaan aplikasi ke sekolah-sekolah anggota mereka.
+? Bimtek Proktor: Menyelenggarakan webinar dan Bimbingan Teknis (Bimtek) gratis tentang "Manajemen ANBK Sukses". Proktor adalah influencer teknis utama di sekolah; memenangkan hati proktor dengan aplikasi yang stabil dan mudah digunakan adalah kunci adopsi produk.12
+Bab 7: Kepatuhan Regulasi dan Privasi Data (UU PDP)
+Dengan disahkannya UU No. 27 Tahun 2022 tentang Perlindungan Data Pribadi (UU PDP), pengelolaan data siswa (yang sebagian besar adalah anak di bawah umur) membawa implikasi hukum yang serius.
+7.1 Perlindungan Data Anak
+Data siswa dikategorikan sebagai data yang memerlukan pelindungan khusus.
+? Persetujuan (Consent): Sistem harus memfasilitasi mekanisme persetujuan dari orang tua/wali (Parental Consent) sebelum data siswa diproses, terutama jika aplikasi mengambil data biometrik (foto wajah untuk proctoring).18
+? Minimisasi Data: Hanya mengumpulkan data yang relevan dengan tujuan akademik (Nilai, Absensi). Menghindari pengumpulan data yang tidak perlu (seperti data lokasi GPS presisi di luar jam ujian) yang dapat melanggar prinsip minimisasi data UU PDP.
+7.2 Kedaulatan Data dan Keamanan
+? Lokasi Server: Sesuai regulasi penyelenggara sistem elektronik lingkup publik, server dan pusat data harus berlokasi di wilayah hukum Indonesia. Penggunaan region Jakarta pada penyedia cloud global (AWS/GCP/Azure) atau penyedia data center lokal adalah wajib.38
+? Enkripsi End-to-End: Semua data sensitif (Identitas Siswa, Hasil Ujian) harus dienkripsi baik saat transit (in-transit) maupun saat disimpan (at-rest) untuk mencegah kebocoran data yang dapat berujung pada sanksi pidana dan denda administratif sesuai UU PDP.39
+Bab 8: Pemeliharaan dan Dukungan Operasional (Maintenance)
+Fase pasca-peluncuran adalah tentang menjaga kepercayaan pengguna melalui layanan yang andal.
+8.1 Manajemen SLA (Service Level Agreement)
+Menetapkan dan mematuhi SLA adalah komitmen profesional kepada sekolah dan Disdik.
+? Uptime Guarantee: Menjamin ketersediaan layanan 99.9% selama jam kerja sekolah, dan 99.99% selama periode ujian kritis (PTS/PAS/US).
+? Response Time Matrix:
+? Insiden Kritis (Sistem Down/Soal Tidak Muncul): Respon < 15 menit, Resolusi < 2 jam.
+? Insiden Mayor (Fitur Error): Respon < 1 jam, Resolusi < 1 hari kerja.
+? Permintaan Layanan (Lupa Password): Respon < 4 jam.40
+8.2 Struktur Helpdesk Berjenjang
+Membangun sistem dukungan teknis yang efisien untuk menangani ribuan tiket bantuan.
+? Tier 1 (Self-Service & Chatbot): Menggunakan AI Chatbot untuk menjawab pertanyaan repetitif (FAQ) seperti cara reset token, cara instalasi VHD, dan persyaratan sistem.
+? Tier 2 (Technical Support): Tim teknis yang menangani masalah konfigurasi VHD, sinkronisasi gagal, dan kendala jaringan lokal proktor melalui panduan jarak jauh (remote support).
+? Tier 3 (Engineering): Eskalasi bug perangkat lunak dan masalah database yang memerlukan intervensi level kode atau perbaikan data langsung di backend.42
+8.3 Manajemen Rilis dan Pembaruan
+Pembaruan perangkat lunak harus dikelola dengan hati-hati agar tidak mengganggu kalender akademik.
+? Maintenance Windows: Jadwal pemeliharaan rutin (patching server) hanya dilakukan di luar jam operasional sekolah (misalnya Jumat malam atau hari libur nasional).
+? Code Freeze: Menerapkan kebijakan pembekuan kode (code freeze) dua minggu sebelum periode ujian besar nasional. Tidak ada fitur baru yang dirilis pada periode ini untuk meminimalkan risiko bug baru yang tidak terduga.44
+Kesimpulan
+Pengembangan sistem TKA terintegrasi untuk jenjang SD-SMK di Indonesia bukan sekadar proyek pengembangan perangkat lunak, melainkan upaya pembangunan infrastruktur pendidikan digital yang holistik. Keberhasilan inisiatif ini bergantung pada integrasi harmonis antara teknologi canggih (arsitektur cloud-edge hibrida, keamanan berbasis AI) dengan realitas operasional di lapangan (koneksi internet terbatas, literasi digital beragam). Dengan mematuhi standar ANBK, mengadopsi model bisnis melalui SIPLah dan E-Katalog, serta menempatkan keamanan data anak sebagai prioritas utama sesuai UU PDP, platform ini memiliki potensi untuk menjadi standar emas dalam ekosistem penilaian pendidikan nasional, memberikan data akurat bagi Disdik untuk peningkatan mutu, sekaligus memudahkan beban administrasi sekolah dan guru. Langkah-langkah taktis yang diuraikan dalam laporan ini memberikan peta jalan yang jelas, terukur, dan dapat dieksekusi untuk mewujudkan visi tersebut.
+Karya yang dikutip
+1. Aplikasi ANBK 2025: Panduan Lengkap Pelaksanaan Asesmen Nasional Berbasis Komputer Serta Spesifikasi Perangkat yang Digunakan - Madrasah Hebat Bermartabat, diakses Februari 13, 2026, https://www.madrasahebat.com/2025/07/aplikasi-anbk-2025-panduan-lengkap.html?m=1
+2. Materi Sistem Aplikasi Dan Troubleshooting ANBK | PDF - Scribd, diakses Februari 13, 2026, https://id.scribd.com/presentation/837186990/Materi-Sistem-Aplikasi-Dan-Troubleshooting-ANBK
+3. 15 Key Strategies for Designing High-Concurrency Systems | by Yilin | Medium, diakses Februari 13, 2026, https://yillyu1.medium.com/15-key-strategies-for-designing-high-concurrency-systems-86ab2849fe1d?source=rss------software_engineering-5
+4. What is Load Balancing? - Load Balancing Algorithm Explained - AWS - Amazon.com, diakses Februari 13, 2026, https://aws.amazon.com/what-is/load-balancing/
+5. Dashboard Design UX Patterns Best Practices - Pencil & Paper, diakses Februari 13, 2026, https://www.pencilandpaper.io/articles/ux-pattern-analysis-data-dashboards
+6. Dashboard design pattern - UI-Patterns.com, diakses Februari 13, 2026, https://ui-patterns.com/patterns/dashboard
+7. Fitur Ujiansekolah, diakses Februari 13, 2026, https://ujiansekolah.id/fitur
+8. Aplikasi CBT Ujian Sekolah Terbaik untuk Ujian Online, diakses Februari 13, 2026, https://ujiansekolah.id/aplikasi-cbt-ujian-sekolah
+9. Framework Asesmen Kompetensi Minimum (AKM), diakses Februari 13, 2026, https://pusmendik.kemdikbud.go.id/an/Framework_AKM_31032022.pdf
+10. A Complete Guide to School Schedule Management Systems for 2025 - WPSchoolPress, diakses Februari 13, 2026, https://wpschoolpress.com/school-schedule-management-systems/
+11. Cara Pengaturan Gelombang dan Sesi ANBK 2025 - Tirto.id, diakses Februari 13, 2026, https://tirto.id/cara-pengaturan-gelombang-dan-sesi-anbk-gPMM
+12. YANG DIKERJAKAN PROKTOR SAAT SIMULASI ANBK | TUGAS WAJIB PROKTOR DI HARI H - YouTube, diakses Februari 13, 2026, https://www.youtube.com/watch?v=1onptFT5DiY
+13. Cara Sinkronisasi VHD ANBK Moda Semi Online / Semi Daring dari Awal sampai Siap Pakai - YouTube, diakses Februari 13, 2026, https://www.youtube.com/watch?v=E66BH_dYNJw
+14. Aplikasi Asesmen Nasional 2025-OSNK | PDF - Scribd, diakses Februari 13, 2026, https://id.scribd.com/document/858369568/Aplikasi-Asesmen-Nasional-2025-OSNK
+15. Safe Exam Browser (SEB) Resources for Students | Moodle - Trinity Washington University, diakses Februari 13, 2026, https://discover.trinitydc.edu/moodle/safe-exam-browser-seb-resources-for-students/
+16. Design database schema to support multi-tenant in MYSQL - Stack Overflow, diakses Februari 13, 2026, https://stackoverflow.com/questions/54946326/design-database-schema-to-support-multi-tenant-in-mysql
+17. Multitenant Database Designs Strategies — with PostgreSQL | by Satish Mishra - Medium, diakses Februari 13, 2026, https://techtonics.medium.com/multitenant-database-designs-strategies-with-postgresql-55a9e3ec882c
+18. PP TUNAS: Aturan Pelindungan Data Anak Digital 2025, diakses Februari 13, 2026, https://robere.co.id/id/pp-tunas-pelindungan-data-anak/
+19. Simulate 10,000 users without coding: our tips for successful load testing - Mr Suricate, diakses Februari 13, 2026, https://en.blog.mrsuricate.com/simuler-10-000-utilisateurs-sans-coder-conseils-r%C3%A9ussir-tests-charge
+20. How to Size Load Tests: Three Practical Methods, diakses Februari 13, 2026, https://www.loadview-testing.com/blog/how-to-size-load-tests/
+21. Three Strategies of High Concurrency Architecture Design - Part 1: Caching - Alibaba Cloud, diakses Februari 13, 2026, https://www.alibabacloud.com/blog/three-strategies-of-high-concurrency-architecture-design---part-1-caching_601161
+22. Real-World Examples of Performance Testing Failures and Fixes - Testriq, diakses Februari 13, 2026, https://www.testriq.com/blog/post/real-world-examples-of-performance-testing-failures-and-fixes
+23. Take a Test App Technical Reference - Windows Education | Microsoft Learn, diakses Februari 13, 2026, https://learn.microsoft.com/en-us/education/windows/take-a-test-app-technical
+24. Windows User Manual - Safe Exam Browser, diakses Februari 13, 2026, https://safeexambrowser.org/windows/win_usermanual_en.html
+25. Dashboard Design Patterns, diakses Februari 13, 2026, https://dashboarddesignpatterns.github.io/
+26. Building Cross-Platform Desktop Apps with Electron.NET | ComponentOne - mescius, diakses Februari 13, 2026, https://developer.mescius.com/blogs/building-cross-platform-desktop-apps-with-electron-dot-net
+27. An Introduction to Real-Time Communication with SignalR - Simple Talk - Redgate Software, diakses Februari 13, 2026, https://www.red-gate.com/simple-talk/development/dotnet-development/an-introduction-to-real-time-communication-with-signalr/
+28. Electron.NET Uses ASP.NET Core 2.0 for Cross-Platform Desktop Apps, diakses Februari 13, 2026, https://visualstudiomagazine.com/articles/2017/11/03/electron-net.aspx
+29. A Comprehensive Guide to SignalR: Real-Time Web Communication Made Simple | by Sylvain Tiset | Medium, diakses Februari 13, 2026, https://medium.com/@sylvain.tiset/a-comprehensive-guide-to-signalr-real-time-web-communication-made-simple-a098deeb05f1
+30. Azure SignalR Service internals | Microsoft Learn, diakses Februari 13, 2026, https://learn.microsoft.com/en-us/azure/azure-signalr/signalr-concept-internals
+31. Safe Exam Browser - IT Support - The University of Oklahoma, diakses Februari 13, 2026, https://itsupport.ou.edu/TDClient/30/Unified/KB/ArticleDet?ID=402
+32. About - Safe Exam Browser, diakses Februari 13, 2026, https://safeexambrowser.org/about_overview_en.html
+33. how to loadtest with 10k users : r/softwaretesting - Reddit, diakses Februari 13, 2026, https://www.reddit.com/r/softwaretesting/comments/1k50imr/how_to_loadtest_with_10k_users/
+34. Kuesioner UAT | PDF - Scribd, diakses Februari 13, 2026, https://id.scribd.com/document/439316821/Kuesioner-UAT-docx
+35. Alur Penggunaan SIPLah | Kemdikbudristek API - GitLab, diakses Februari 13, 2026, https://wartek-id.gitlab.io/api/siplah/docs/flow/
+36. Detail Layanan | Mendaftar Sebagai Penyedia Baru - LKPP, diakses Februari 13, 2026, https://www.lkpp.go.id/layanan/daftar-sebagai-penyedia-baru
+37. E Katalog LKPP: Pengertian dan Panduan Lengkap Cara Daftar Jadi Penyedia!, diakses Februari 13, 2026, https://biropbj.ntbprov.go.id/post/e-katalog-lkpp-pengertian-dan-panduan-lengkap-cara-daftar-jadi-penyedia
+38. Menko PMK Bantah Ada Kebocoran Data 58 Juta Siswa Indonesia, diakses Februari 13, 2026, https://www.beritasatu.com/nasional/2966433/menko-pmk-bantah-ada-kebocoran-data-58-juta-siswa-indonesia
+39. Era Baru Perlindungan Data Pribadi - Komdigi, diakses Februari 13, 2026, https://djkpm.komdigi.go.id/berita/artikel/35/era-baru-perlindungan-data-pribadi
+40. Google Workspace Service Level Agreement, diakses Februari 13, 2026, https://workspace.google.com/terms/sla/
+41. Automate SLA and Ticket Resolution Reporting for MSP Clients - NinjaOne, diakses Februari 13, 2026, https://www.ninjaone.com/blog/automate-sla-and-ticket-resolution-reporting/
+42. Service Desk Ticketing Solution - ConnectWise, diakses Februari 13, 2026, https://www.connectwise.com/solutions/service-desk-ticketing
+43. Help desk software and Ticketing system for K12 schools - ManageEngine, diakses Februari 13, 2026, https://www.manageengine.com/products/service-desk/industry/help-desk-software-k12-schools.html
+44. autoUpdater | Electron, diakses Februari 13, 2026, https://electronjs.org/docs/latest/api/auto-updater
+

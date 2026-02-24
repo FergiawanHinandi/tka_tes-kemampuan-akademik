@@ -1,0 +1,24 @@
+# dependencies
+node_modules/
+
+# build artifacts
+dist/
+build/
+coverage/
+.turbo/
+release/
+
+# logs
+*.log
+npm-debug.log*
+
+# environment variables
+.env
+.env.*
+!.env.example
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

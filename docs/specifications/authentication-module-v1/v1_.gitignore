@@ -1,0 +1,56 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build
+dist/
+.next/
+out/
+build/
+*.tsbuildinfo
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Keys (JANGAN commit ke git!)
+keys/
+*.pem
+*.key
+
+# Database
+prisma/migrations/**/migration_lock.toml
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+coverage/
+test-results/
+playwright-report/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Electron
+apps/proktor/release/
+apps/client-siswa/release/
+
+# Docker
+postgres_data/
+redis_data/
+minio_data/
+
+# Turbo
+.turbo/

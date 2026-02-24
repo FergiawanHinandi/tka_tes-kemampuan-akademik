@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Client Siswa - Ujian Selesai | TKA System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-slate-950 text-slate-50 min-h-screen flex items-center justify-center p-4">
+  <div class="absolute inset-0 opacity-30 pointer-events-none">
+    <div class="absolute -top-32 -left-16 w-80 h-80 bg-emerald-500 rounded-full blur-3xl"></div>
+    <div class="absolute -bottom-32 right-0 w-96 h-96 bg-sky-400 rounded-full blur-3xl"></div>
+  </div>
+
+  <main class="relative z-10 w-full max-w-xl">
+    <div class="border border-slate-800 rounded-2xl bg-slate-900/90 backdrop-blur-xl p-8 space-y-6 text-center">
+      <div class="flex justify-center">
+        <div class="w-16 h-16 rounded-full bg-emerald-500 flex items-center justify-center">
+          <i class="fas fa-check text-3xl text-slate-900"></i>
+        </div>
+      </div>
+      <div class="space-y-2">
+        <h1 class="text-2xl font-semibold">Ujian Telah Selesai</h1>
+        <p class="text-sm text-slate-300">
+          Terima kasih telah mengikuti Tes Kemampuan Akademik. Jawaban Anda telah tersimpan di sistem.
+        </p>
+      </div>
+
+      <section class="border border-slate-800 rounded-xl bg-slate-900/80 p-4 text-sm text-left">
+        <p class="text-xs text-slate-400 mb-1">Ringkasan</p>
+        <p class="text-xs text-slate-300">Nama: <span class="font-semibold text-slate-50">Ahmad Fauzan</span></p>
+        <p class="text-xs text-slate-300">NISN: <span class="font-semibold text-slate-50">1234567890</span></p>
+        <p class="text-xs text-slate-300 mt-1">Mapel: <span class="font-semibold text-slate-50">Matematika Kelas X</span></p>
+        <p class="text-xs text-slate-300">Waktu selesai: <span class="font-semibold text-slate-50">10:45:21 WIB</span></p>
+        <p class="text-xs text-slate-300 mt-2">
+          Nilai akhir dan rincian hasil ujian akan diinformasikan oleh pihak sekolah atau dapat diakses di portal sesuai ketentuan.
+        </p>
+      </section>
+
+      <section class="border border-slate-800 rounded-xl bg-slate-900/80 p-4 text-xs text-left text-slate-300 space-y-1">
+        <p class="font-semibold text-slate-200 mb-1">Langkah Berikutnya</p>
+        <p>1. Tetap duduk di tempat sampai proktor mengizinkan meninggalkan ruangan.</p>
+        <p>2. Jangan menutup aplikasi atau mematikan perangkat sampai diminta oleh proktor.</p>
+        <p>3. Jika ada kendala, segera sampaikan kepada proktor.</p>
+      </section>
+
+      <button class="w-full mt-2 px-4 py-2 rounded-lg bg-emerald-500 text-slate-900 text-sm font-semibold hover:bg-emerald-400">
+        <i class="fas fa-door-open mr-2"></i>Tutup Halaman Ujian
+      </button>
+    </div>
+  </main>
+</body>
+</html>

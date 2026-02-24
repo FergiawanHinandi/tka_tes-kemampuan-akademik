@@ -1,0 +1,41 @@
+# ============================================================
+# PROCTOR ENDPOINTS
+# Access: PROKTOR (own sessions)
+# ============================================================
+
+GET    /proctor/sessions
+  # List sesi ujian yang di-assign ke proktor ini
+
+GET    /proctor/sessions/:sessionId
+  # Detail sesi + daftar siswa + status real-time
+
+POST   /proctor/sessions/:sessionId/start
+  # Mulai ujian di sesi ini
+  # Broadcast ke semua client siswa via WebSocket
+
+POST   /proctor/sessions/:sessionId/pause
+  # Pause ujian (timer berhenti)
+
+POST   /proctor/sessions/:sessionId/resume
+  # Resume ujian
+
+POST   /proctor/sessions/:sessionId/end
+  # Akhiri ujian (force submit semua siswa)
+
+POST   /proctor/sessions/:sessionId/extend-time
+  # Body: { additionalMinutes: 15 }
+  # Tambah waktu ujian
+
+POST   /proctor/sessions/:sessionId/students/:studentId/force-submit
+  # Force submit jawaban siswa tertentu
+
+POST   /proctor/sessions/:sessionId/students/:studentId/kick
+  # Kick siswa dari ujian (misal: kecurangan)
+  # Body: { reason: "..." }
+
+GET    /proctor/sessions/:sessionId/logs
+  # Activity log sesi ujian
+  # Query: ?studentId=xxx&eventType=FOCUS_LOST
+
+GET    /proctor/sessions/:sessionId/statistics
+  # Statistik real-time: progress pengerjaan, rata-rata, dll

@@ -1,0 +1,51 @@
+apps/client-siswa/
+├── 📄 package.json
+├── 📄 tsconfig.json
+├── 📄 electron-builder.yml
+│
+├── 📁 src/
+│   ├── 📁 main/                        # Electron Main Process
+│   │   ├── 📄 index.ts
+│   │   ├── 📄 window.ts
+│   │   ├── 📄 ipc-handlers.ts
+│   │   ├── 📄 auto-updater.ts
+│   │   ├── 📁 lockdown/               # 🔒 LOCKDOWN MODE
+│   │   │   ├── 📄 lockdown-manager.ts
+│   │   │   ├── 📄 keyboard-blocker.ts
+│   │   │   ├── 📄 process-monitor.ts
+│   │   │   ├── 📄 display-monitor.ts
+│   │   │   └── 📄 focus-monitor.ts
+│   │   └── 📁 services/
+│   │       ├── 📄 api.service.ts
+│   │       ├── 📄 websocket.service.ts
+│   │       ├── 📄 local-db.service.ts  # SQLite (offline answers)
+│   │       ├── 📄 sync.service.ts      # Answer sync engine
+│   │       └── 📄 timer.service.ts     # Server-synced timer
+│   │
+│   ├── 📁 renderer/                    # Electron Renderer (React)
+│   │   ├── 📄 index.html
+│   │   ├── 📄 main.tsx
+│   │   ├── 📁 pages/
+│   │   │   ├── 📄 Login.tsx
+│   │   │   ├── 📄 WaitingRoom.tsx
+│   │   │   ├── 📄 Exam.tsx
+│   │   │   ├── 📄 Review.tsx
+│   │   │   └── 📄 Completed.tsx
+│   │   ├── 📁 components/
+│   │   │   ├── 📄 QuestionDisplay.tsx
+│   │   │   ├── 📄 AnswerInput.tsx
+│   │   │   ├── 📄 QuestionNavigation.tsx
+│   │   │   ├── 📄 Timer.tsx
+│   │   │   ├── 📄 ConnectionStatus.tsx
+│   │   │   └── 📄 OfflineIndicator.tsx
+│   │   ├── 📁 hooks/
+│   │   ├── 📁 stores/
+│   │   └── 📁 styles/
+│   │
+│   └── 📁 preload/
+│       └── 📄 index.ts
+│
+└── 📁 resources/
+    ├── 📄 icon.ico
+    ├── 📄 icon.png
+    └── 📄 icon.icns

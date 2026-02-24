@@ -1,0 +1,52 @@
+# ============================================================
+# RESULTS & REPORTS ENDPOINTS
+# Access: varies by role
+# ============================================================
+
+# --- Exam Results ---
+GET    /results/exams/:examId
+  # Hasil ujian per exam (semua siswa)
+  # Query: ?page=1&perPage=20&sortBy=percentage&order=desc
+  # Access: ADMIN_SEKOLAH, ADMIN_FKKG, ADMIN_DISDIK, SUPER_ADMIN
+
+GET    /results/exams/:examId/summary
+  # Ringkasan: rata-rata, median, tertinggi, terendah, distribusi nilai
+  # Access: All admin roles
+
+GET    /results/exams/:examId/students/:studentId
+  # Detail hasil per siswa (jawaban per soal)
+  # Access: ADMIN_SEKOLAH, ADMIN_FKKG
+
+GET    /results/schools/:schoolId
+  # Semua hasil ujian sekolah tertentu
+  # Query: ?examId=xxx&className=6A
+  # Access: ADMIN_SEKOLAH (own), ADMIN_DISDIK, ADMIN_FKKG
+
+GET    /results/schools/:schoolId/ranking
+  # Peringkat siswa di sekolah
+  # Query: ?examId=xxx
+
+# --- FKKG: Grading Essay ---
+GET    /grading/exams/:examId/essays
+  # List jawaban essay yang perlu dikoreksi
+  # Query: ?schoolId=xxx&status=ungraded&page=1
+
+POST   /grading/essays/:studentAnswerId
+  # Body: { score, feedback? }
+  # Koreksi jawaban essay
+
+POST   /grading/exams/:examId/calculate
+  # Hitung ulang nilai setelah essay selesai dikoreksi
+
+# --- Reports & Export ---
+GET    /reports/exams/:examId/export/pdf
+  # Download laporan ujian dalam PDF
+
+GET    /reports/exams/:examId/export/excel
+  # Download laporan ujian dalam Excel
+
+GET    /reports/schools/:schoolId/export/pdf
+  # Laporan sekolah (semua ujian)
+
+GET    /reports/schools/:schoolId/students/:studentId/transcript
+  # Transkrip nilai siswa (semua ujian)

@@ -1,0 +1,284 @@
+apps/api/
+├── 📄 package.json
+├── 📄 tsconfig.json
+├── 📄 tsconfig.build.json
+├── 📄 nest-cli.json
+├── 📄 .eslintrc.js
+│
+├── 📁 keys/                              # RSA keys (gitignored)
+│   ├── 📄 access-private.pem
+│   ├── 📄 access-public.pem
+│   ├── 📄 refresh-private.pem
+│   └── 📄 refresh-public.pem
+│
+├── 📁 prisma/
+│   ├── 📄 schema.prisma                  # Database schema
+│   ├── 📁 migrations/                    # Migration files
+│   └── 📁 seeds/
+│       ├── 📄 index.ts                   # Main seed runner
+│       ├── 📄 provinces.seed.ts
+│       ├── 📄 cities.seed.ts
+│       ├── 📄 districts.seed.ts
+│       ├── 📄 subjects.seed.ts
+│       ├── 📄 users.seed.ts
+│       ├── 📄 schools.seed.ts
+│       ├── 📄 students.seed.ts
+│       └── 📄 academic-years.seed.ts
+│
+├── 📁 src/
+│   ├── 📄 main.ts                        # Entry point
+│   ├── 📄 app.module.ts                  # Root module
+│   │
+│   ├── 📁 common/                        # Shared across all modules
+│   │   ├── 📁 constants/
+│   │   │   ├── 📄 roles.constant.ts
+│   │   │   ├── 📄 pagination.constant.ts
+│   │   │   └── 📄 error-codes.constant.ts
+│   │   ├── 📁 decorators/
+│   │   │   ├── 📄 roles.decorator.ts           # @Roles(Role.ADMIN)
+│   │   │   ├── 📄 current-user.decorator.ts    # @CurrentUser()
+│   │   │   ├── 📄 public.decorator.ts          # @Public()
+│   │   │   └── 📄 api-paginated.decorator.ts
+│   │   ├── 📁 dto/
+│   │   │   ├── 📄 pagination.dto.ts
+│   │   │   └── 📄 api-response.dto.ts
+│   │   ├── 📁 exceptions/
+│   │   │   ├── 📄 business.exception.ts
+│   │   │   └── 📄 all-exceptions.filter.ts
+│   │   ├── 📁 guards/
+│   │   │   ├── 📄 jwt-auth.guard.ts
+│   │   │   ├── 📄 roles.guard.ts
+│   │   │   ├── 📄 throttle.guard.ts
+│   │   │   └── 📄 app-signature.guard.ts
+│   │   ├── 📁 interceptors/
+│   │   │   ├── 📄 response-transform.interceptor.ts
+│   │   │   ├── 📄 logging.interceptor.ts
+│   │   │   └── 📄 timeout.interceptor.ts
+│   │   ├── 📁 middleware/
+│   │   │   ├── 📄 correlation-id.middleware.ts
+│   │   │   └── 📄 security-headers.middleware.ts
+│   │   ├── 📁 pipes/
+│   │   │   └── 📄 parse-cuid.pipe.ts
+│   │   └── 📁 utils/
+│   │       ├── 📄 hash.util.ts
+│   │       ├── 📄 encryption.util.ts
+│   │       ├── 📄 pagination.util.ts
+│   │       └── 📄 date.util.ts
+│   │
+│   ├── 📁 config/                        # Configuration
+│   │   ├── 📄 app.config.ts
+│   │   ├── 📄 database.config.ts
+│   │   ├── 📄 jwt.config.ts
+│   │   ├── 📄 redis.config.ts
+│   │   ├── 📄 minio.config.ts
+│   │   ├── 📄 mail.config.ts
+│   │   ├── 📄 throttle.config.ts
+│   │   └── 📄 config.module.ts
+│   │
+│   ├── 📁 database/                      # Database module
+│   │   ├── 📄 database.module.ts
+│   │   └── 📄 prisma.service.ts
+│   │
+│   ├── 📁 redis/                         # Redis module
+│   │   ├── 📄 redis.module.ts
+│   │   └── 📄 redis.service.ts
+│   │
+│   ├──    storage/                       # MinIO/File storage module
+│   │   ├── 📄 storage.module.ts
+│   │   ├── 📄 storage.service.ts
+│   │   └── 📄 storage.controller.ts
+│   │
+│   ├── 📁 mail/                          # Email module
+│   │   ├── 📄 mail.module.ts
+│   │   ├── 📄 mail.service.ts
+│   │   └── 📁 templates/
+│   │       ├── 📄 welcome.hbs
+│   │       ├── 📄 reset-password.hbs
+│   │       └── 📄 exam-notification.hbs
+│   │
+│   ├── 📁 queue/                         # BullMQ job queue
+│   │   ├── 📄 queue.module.ts
+│   │   └── 📁 processors/
+│   │       ├── 📄 email.processor.ts
+│   │       ├── 📄 report.processor.ts
+│   │       ├── 📄 exam-result.processor.ts
+│   │       └── 📄 import.processor.ts
+│   │
+│   │── 📁 websocket/                     # WebSocket (Socket.io)
+│   │   ├── 📄 websocket.module.ts
+│   │   ├── 📄 websocket.gateway.ts
+│   │   ├── 📄 exam.gateway.ts
+│   │   └── 📄 websocket.adapter.ts
+│   │
+│   │
+│   │   # ================================================
+│   │   # FEATURE MODULES (Business Logic)
+│   │   # ================================================
+│   │
+│   ├── 📁 modules/
+│   │   │
+│   │   ├── 📁 auth/                      # 🔐 Authentication
+│   │   │   ├── 📄 auth.module.ts
+│   │   │   ├── 📄 auth.controller.ts
+│   │   │   ├── 📄 auth.service.ts
+│   │   │   ├── 📁 dto/
+│   │   │   │   ├── 📄 login.dto.ts
+│   │   │   │   ├── 📄 refresh-token.dto.ts
+│   │   │   │   ├── 📄 change-password.dto.ts
+│   │   │   │   ├── 📄 forgot-password.dto.ts
+│   │   │   │   ├── 📄 reset-password.dto.ts
+│   │   │   │   ├── 📄 proctor-login.dto.ts
+│   │   │   │   ├── 📄 student-login.dto.ts
+│   │   │   │   └── 📄 setup-2fa.dto.ts
+│   │   │   ├── 📁 strategies/
+│   │   │   │   ├── 📄 jwt.strategy.ts
+│   │   │   │   └── 📄 jwt-refresh.strategy.ts
+│   │   │   ├── 📁 guards/
+│   │   │   │   └── 📄 two-factor.guard.ts
+│   │   │   └── 📁 tests/
+│   │   │       ├── 📄 auth.controller.spec.ts
+│   │   │       └── 📄 auth.service.spec.ts
+│   │   │
+│   │   ├── 📁 users/                     # 👥 User Management
+│   │   │   ├── 📄 users.module.ts
+│   │   │   ├── 📄 users.controller.ts
+│   │   │   ├── 📄 users.service.ts
+│   │   │   ├── 📁 dto/
+│   │   │   │   ├── 📄 create-user.dto.ts
+│   │   │   │   ├── 📄 update-user.dto.ts
+│   │   │   │   └── 📄 query-user.dto.ts
+│   │   │   └── 📁 tests/
+│   │   │       ├── 📄 users.controller.spec.ts
+│   │   │       └── 📄 users.service.spec.ts
+│   │   │
+│   │   ├── 📁 regional/                  # 🌍 Wilayah
+│   │   │   ├── 📄 regional.module.ts
+│   │   │   ├── 📄 provinces.controller.ts
+│   │   │   ├── 📄 cities.controller.ts
+│   │   │   ├── 📄 districts.controller.ts
+│   │   │   ├── 📄 regional.service.ts
+│   │   │   ├── 📁 dto/
+│   │   │   └── 📁 tests/
+│   │   │
+│   │   ├── 📁 schools/                   # 🏫 Sekolah
+│   │   │   ├── 📄 schools.module.ts
+│   │   │   ├── 📄 schools.controller.ts
+│   │   │   ├── 📄 schools.service.ts
+│   │   │   ├── 📁 dto/
+│   │   │   └── 📁 tests/
+│   │   │
+│   │   ├── 📁 students/                  # 👨‍🎓 Siswa
+│   │   │   ├── 📄 students.module.ts
+│   │   │   ├── 📄 students.controller.ts
+│   │   │   ├── 📄 students.service.ts
+│   │   │   ├── 📄 students-import.service.ts
+│   │   │   ├── 📄 exam-card.service.ts
+│   │   │   ├── 📁 dto/
+│   │   │   └── 📁 tests/
+│   │   │
+│   │   ├── 📁 subjects/                  # 📚 Mata Pelajaran
+│   │   │   ├── 📄 subjects.module.ts
+│   │   │   ├── 📄 subjects.controller.ts
+│   │   │   ├── 📄 subjects.service.ts
+│   │   │   ├── 📁 dto/
+│   │   │   └── 📁 tests/
+│   │   │
+│   │   ├── 📁 question-banks/            # 📝 Bank Soal
+│   │   │   ├── 📄 question-banks.module.ts
+│   │   │   ├── 📄 question-banks.controller.ts
+│   │   │   ├── 📄 question-banks.service.ts
+│   │   │   ├── 📄 questions.controller.ts
+│   │   │   ├── 📄 questions.service.ts
+│   │   │   ├── 📄 questions-import.service.ts
+│   │   │   ├── 📁 dto/
+│   │   │   └── 📁 tests/
+│   │   │
+│   │   ├── 📁 exams/                     # 📋 Ujian
+│   │   │   ├── 📄 exams.module.ts
+│   │   │   ├── 📄 exams.controller.ts
+│   │   │   ├── 📄 exams.service.ts
+│   │   │   ├── 📄 exam-waves.controller.ts
+│   │   │   ├── 📄 exam-waves.service.ts
+│   │   │   ├── 📄 exam-sessions.controller.ts
+│   │   │   ├── 📄 exam-sessions.service.ts
+│   │   │   ├── 📄 exam-rooms.controller.ts
+│   │   │   ├── 📄 exam-rooms.service.ts
+│   │   │   ├── 📄 exam-mapping.controller.ts
+│   │   │   ├── 📄 exam-mapping.service.ts
+│   │   │   ├── 📁 dto/
+│   │   │   └── 📁 tests/
+│   │   │
+│   │   ├── 📁 proctor/                   # 🖥️ Proktor
+│   │   │   ├── 📄 proctor.module.ts
+│   │   │   ├── 📄 proctor.controller.ts
+│   │   │   ├── 📄 proctor.service.ts
+│   │   │   ├── 📁 dto/
+│   │   │   └── 📁 tests/
+│   │   │
+│   │   ├── 📁 student-exam/              # 💻 Ujian Siswa
+│   │   │   ├── 📄 student-exam.module.ts
+│   │   │   ├── 📄 student-exam.controller.ts
+│   │   │   ├──     student-exam.service.ts
+│   │   │   ├── 📄 answer-sync.service.ts
+│   │   │   ├── 📁 dto/
+│   │   │   └── 📁 tests/
+│   │   │
+│   │   ├── 📁 results/                   # 📊 Hasil & Laporan
+│   │   │   ├── 📄 results.module.ts
+│   │   │   ├── 📄 results.controller.ts
+│   │   │   ├── 📄 results.service.ts
+│   │   │   ├── 📄 grading.controller.ts
+│   │   │   ├── 📄 grading.service.ts
+│   │   │   ├── 📄 reports.controller.ts
+│   │   │   ├── 📄 reports.service.ts
+│   │   │   ├── 📄 question-analysis.service.ts
+│   │   │   ├── 📁 dto/
+│   │   │   └── 📁 tests/
+│   │   │
+│   │   ├── 📁 dashboard/                 # 📈 Dashboard
+│   │   │   ├── 📄 dashboard.module.ts
+│   │   │   ├── 📄 dashboard.controller.ts
+│   │   │   ├── 📄 dashboard.service.ts
+│   │   │   └── 📁 tests/
+│   │   │
+│   │   ├── 📁 notifications/             # 🔔 Notifikasi
+│   │   │   ├── 📄 notifications.module.ts
+│   │   │   ├── 📄 notifications.controller.ts
+│   │   │   ├── 📄 notifications.service.ts
+│   │   │   ├── 📁 dto/
+│   │   │   └─   📁 tests/
+│   │   │
+│   │   ├── 📁 settings/                  # ⚙️ Settings
+│   │   │   ├── 📄 settings.module.ts
+│   │   │   ├── 📄 settings.controller.ts
+│   │   │   ├── 📄 settings.service.ts
+│   │   │   ├── 📄 releases.controller.ts
+│   │   │   ├── 📄 releases.service.ts
+│   │   │   ├── 📄 academic-years.controller.ts
+│   │   │   ├── 📄 academic-years.service.ts
+│   │   │   ├── 📁 dto/
+│   │   │   └── 📁 tests/
+│   │   │
+│   │   ├── 📁 audit/                     # 📜 Audit Log
+│   │   │   ├── 📄 audit.module.ts
+│   │   │   ├── 📄 audit.controller.ts
+│   │   │   ├── 📄 audit.service.ts
+│   │   │   └── 📁 tests/
+│   │   │
+│   │   └── 📁 security/                  # 🛡️ Security
+│   │       ├── 📄 security.module.ts
+│   │       ├── 📄 security.controller.ts
+│   │       ├── 📄 security.service.ts
+│   │       ├── 📄 ip-blacklist.service.ts
+│   │       ├── 📄 device-fingerprint.service.ts
+│   │       └── 📁 tests/
+│   │
+│   └── 📁 health/                        # 🏥 Health Check
+│       ├── 📄 health.module.ts
+│       └── 📄 health.controller.ts
+│
+└── 📁 test/                              # E2E Tests
+    ├── 📄 jest-e2e.json
+    ├── 📄 app.e2e-spec.ts
+    ├── 📄 auth.e2e-spec.ts
+    └── 📄 setup.ts

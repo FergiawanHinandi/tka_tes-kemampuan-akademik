@@ -1,0 +1,35 @@
+# ============================================================
+# SCHOOL MANAGEMENT ENDPOINTS
+# Access: SUPER_ADMIN (full), ADMIN_DISDIK (read in city),
+#         ADMIN_SEKOLAH (read own)
+# ============================================================
+
+GET    /schools
+  # Query: ?page=1&perPage=20&level=SD&cityId=xxx&districtId=xxx
+  #        &search=xxx&isActive=true
+  # Access: SUPER_ADMIN, ADMIN_DISDIK
+
+POST   /schools
+  # Body: { npsn, name, level, address, cityId, districtId,
+  #         phone?, email?, principalName?, logo? }
+  # Access: SUPER_ADMIN
+
+GET    /schools/:id
+  # Response: school detail + statistics
+
+PUT    /schools/:id
+  # Access: SUPER_ADMIN
+
+DELETE /schools/:id
+  # Soft delete
+  # Access: SUPER_ADMIN
+
+GET    /schools/:id/statistics
+  # Response: { totalStudents, totalExams, avgScore, ... }
+  # Access: SUPER_ADMIN, ADMIN_DISDIK, ADMIN_SEKOLAH (own)
+
+GET    /schools/:id/students
+  # Shortcut to get students of a school
+
+GET    /schools/:id/exams
+  # Shortcut to get exams of a school

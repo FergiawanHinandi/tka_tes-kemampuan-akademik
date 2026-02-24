@@ -1,0 +1,31 @@
+# ============================================================
+# USER MANAGEMENT ENDPOINTS
+# Access: SUPER_ADMIN (full), ADMIN_DISDIK (read users in city)
+# ============================================================
+
+GET    /users
+  # Query: ?page=1&perPage=20&role=ADMIN_SEKOLAH&cityId=xxx&search=xxx
+  # Response: paginated list of users
+
+POST   /users
+  # Body: { email, username, password, fullName, phone, role, cityId?, schoolId? }
+  # Access: SUPER_ADMIN
+
+GET    /users/:id
+  # Response: user detail
+
+PUT    /users/:id
+  # Body: { fullName, phone, role, isActive, cityId?, schoolId? }
+  # Access: SUPER_ADMIN
+
+DELETE /users/:id
+  # Soft delete (set isActive = false)
+  # Access: SUPER_ADMIN
+
+PUT    /users/:id/toggle-status
+  # Toggle isActive
+  # Access: SUPER_ADMIN
+
+POST   /users/:id/reset-password
+  # Reset password by admin
+  # Access: SUPER_ADMIN

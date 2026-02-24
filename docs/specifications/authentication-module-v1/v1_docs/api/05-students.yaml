@@ -1,0 +1,33 @@
+# ============================================================
+# STUDENT MANAGEMENT ENDPOINTS
+# Access: ADMIN_SEKOLAH (own school), SUPER_ADMIN (all)
+# ============================================================
+
+GET    /students
+  # Query: ?page=1&perPage=20&schoolId=xxx&className=6A
+  #        &search=xxx&isActive=true
+
+POST   /students
+  # Body: { nisn, nis?, fullName, gender, birthPlace?, birthDate?,
+  #         className, classYear, schoolId, parentName?, parentPhone?, photo? }
+
+GET    /students/:id
+
+PUT    /students/:id
+
+DELETE /students/:id
+  # Soft delete
+
+POST   /students/import
+  # Body: multipart/form-data { file: Excel/CSV }
+  # Response: { imported: 45, skipped: 3, errors: [...] }
+
+GET    /students/import/template
+  # Download template Excel untuk import
+
+POST   /students/:id/exam-card
+  # Generate & download kartu ujian siswa (PDF)
+
+POST   /students/exam-cards/batch
+  # Body: { studentIds: [...] } atau { className: "6A" }
+  # Generate kartu ujian batch (PDF)

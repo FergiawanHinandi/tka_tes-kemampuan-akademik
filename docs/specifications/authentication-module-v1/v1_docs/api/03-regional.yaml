@@ -1,0 +1,31 @@
+# ============================================================
+# REGIONAL ENDPOINTS
+# Access: SUPER_ADMIN (CUD), All authenticated (Read)
+# ============================================================
+
+# --- Provinces ---
+GET    /provinces
+  # Query: ?search=xxx
+GET    /provinces/:id
+POST   /provinces
+  # Body: { code, name }
+PUT    /provinces/:id
+DELETE /provinces/:id
+
+# --- Cities ---
+GET    /cities
+  # Query: ?provinceId=xxx&search=xxx
+GET    /cities/:id
+POST   /cities
+  # Body: { code, name, provinceId }
+PUT    /cities/:id
+DELETE /cities/:id
+
+# --- Districts ---
+GET    /districts
+  # Query: ?cityId=xxx&search=xxx
+GET    /districts/:id
+POST   /districts
+  # Body: { code, name, cityId }
+PUT    /districts/:id
+DELETE /districts/:id

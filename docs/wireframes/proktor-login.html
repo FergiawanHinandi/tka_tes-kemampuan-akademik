@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proktor Exam App - Login | TKA System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .hover-lift {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .hover-lift:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        .input-focus {
+            transition: all 0.3s ease;
+        }
+        .input-focus:focus {
+            transform: scale(1.02);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        .status-online { background-color: #10b981; }
+        .status-offline { background-color: #ef4444; }
+        .status-warning { background-color: #f59e0b; }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen flex items-center justify-center p-4">
+    <!-- Background Pattern -->
+    <div class="absolute inset-0 opacity-10">
+        <div class="absolute top-0 left-0 w-72 h-72 bg-white rounded-full filter blur-3xl"></div>
+        <div class="absolute bottom-0 right-0 w-96 h-96 bg-purple-300 rounded-full filter blur-3xl"></div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="relative z-10 w-full max-w-md">
+        <!-- App Header -->
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-20 h-20 bg-white bg-opacity-20 rounded-2xl mb-4 hover-lift">
+                <i class="fas fa-user-shield text-white text-3xl"></i>
+            </div>
+            <h1 class="text-3xl font-bold text-white mb-2">Proktor Exam App</h1>
+            <p class="text-purple-100">Aplikasi Monitoring Ujian TKA</p>
+            <div class="flex items-center justify-center mt-3">
+                <span class="status-indicator status-online pulse-animation"></span>
+                <span class="text-sm text-purple-100">Server Online</span>
+            </div>
+        </div>
+
+        <!-- Login Form -->
+        <div class="glass-effect rounded-2xl p-8 hover-lift">
+            <div class="text-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">Login Proktor</h2>
+                <p class="text-gray-600">Masuk untuk memulai sesi monitoring ujian</p>
+            </div>
+
+            <form class="space-y-6">
+                <!-- Username Field -->
+                <div>
+                    <label for="username" class="block text-sm font-medium text-gray-700 mb-2">
+                        Username / Email
+                    </label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-user text-gray-400"></i>
+                        </div>
+                        <input 
+                            type="text" 
+                            id="username" 
+                            name="username"
+                            placeholder="Masukkan username atau email"
+                            class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent input-focus"
+                            required
+                        >
+                    </div>
+                </div>
+
+                <!-- Password Field -->
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
+                        Password
+                    </label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-lock text-gray-400"></i>
+                        </div>
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password"
+                            placeholder="Masukkan password"
+                            class="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent input-focus"
+                            required
+                        >
+                        <button 
+                            type="button" 
+                            class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
+                            onclick="togglePassword()"
+                        >
+                            <i class="fas fa-eye" id="toggleIcon"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Exam Session Selection -->
+                <div>
+                    <label for="session" class="block text-sm font-medium text-gray-700 mb-2">
+                        Sesi Ujian
+                    </label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-clock text-gray-400"></i>
+                        </div>
+                        <select 
+                            id="session" 
+                            name="session"
+                            class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent input-focus"
+                            required
+                        >
+                            <option value="">Pilih sesi ujian</option>
+                            <option value="ses1">SES-001 - Matematika Kelas X (08:00-10:00)</option>
+                            <option value="ses2">SES-002 - Bahasa Indonesia Kelas XI (10:30-12:30)</option>
+                            <option value="ses3">SES-003 - Bahasa Inggris Kelas XII (13:00-15:00)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Room Selection -->
+                <div>
+                    <label for="room" class="block text-sm font-medium text-gray-700 mb-2">
+                        Ruang Ujian
+                    </label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-door-open text-gray-400"></i>
+                        </div>
+                        <select 
+                            id="room" 
+                            name="room"
+                            class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent input-focus"
+                            required
+                        >
+                            <option value="">Pilih ruang ujian</option>
+                            <option value="a1">Ruang A1 - Kapasitas: 30 siswa</option>
+                            <option value="a2">Ruang A2 - Kapasitas: 30 siswa</option>
+                            <option value="b1">Ruang B1 - Kapasitas: 25 siswa</option>
+                            <option value="b2">Ruang B2 - Kapasitas: 25 siswa</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Remember Me & Forgot Password -->
+                <div class="flex items-center justify-between">
+                    <label class="flex items-center">
+                        <input type="checkbox" class="rounded border-gray-300 text-purple-600 focus:ring-purple-500">
+                        <span class="ml-2 text-sm text-gray-600">Ingat saya</span>
+                    </label>
+                    <a href="#" class="text-sm text-purple-600 hover:text-purple-800">
+                        Lupa password?
+                    </a>
+                </div>
+
+                <!-- Login Button -->
+                <button 
+                    type="submit" 
+                    class="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
+                >
+                    <i class="fas fa-sign-in-alt mr-2"></i>
+                    Login & Mulai Monitoring
+                </button>
+            </form>
+
+            <!-- System Info -->
+            <div class="mt-6 pt-6 border-t border-gray-200">
+                <div class="flex items-center justify-between text-sm text-gray-500">
+                    <div class="flex items-center">
+                        <span class="status-indicator status-online"></span>
+                        <span>Versi App: 2.1.0</span>
+                    </div>
+                    <div>
+                        <span>Server Time: 14:35:22</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Info -->
+        <div class="text-center mt-6">
+            <p class="text-purple-100 text-sm">
+                <i class="fas fa-shield-alt mr-1"></i>
+                Aplikasi ini menggunakan enkripsi end-to-end untuk keamanan data ujian
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Toggle password visibility
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.getElementById('toggleIcon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
+        }
+
+        // Form submission handler
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            
+            // Show loading state
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Memproses...';
+            submitBtn.disabled = true;
+            
+            // Simulate login process
+            setTimeout(() => {
+                // Redirect to monitoring dashboard
+                window.location.href = 'proktor-dashboard.html';
+            }, 2000);
+        });
+
+        // Real-time clock update
+        function updateClock() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('id-ID');
+            document.querySelector('.text-center.mt-6 > div > div:last-child span').textContent = `Server Time: ${timeString}`;
+        }
+
+        // Update clock every second
+        setInterval(updateClock, 1000);
+        updateClock(); // Initial call
+
+        // Check server status (simulation)
+        function checkServerStatus() {
+            const statusIndicator = document.querySelector('.status-indicator');
+            const statusText = document.querySelector('.text-center.mt-3 p');
+            
+            // Simulate random status changes
+            const statuses = [
+                { class: 'status-online', text: 'Server Online' },
+                { class: 'status-warning', text: 'Server Busy' },
+                { class: 'status-offline', text: 'Server Offline' }
+            ];
+            
+            const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
+            
+            statusIndicator.className = `status-indicator ${randomStatus.class} pulse-animation`;
+            statusText.textContent = randomStatus.text;
+        }
+
+        // Check status every 10 seconds
+        setInterval(checkServerStatus, 10000);
+    </script>
+</body>
+</html>

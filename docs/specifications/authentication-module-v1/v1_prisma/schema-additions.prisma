@@ -1,0 +1,98 @@
+// ============================================================
+// TAMBAHAN SCHEMA UNTUK FITUR CANGGIH
+// ============================================================
+
+// IP Blacklist (Anti brute force)
+model IpBlacklist {
+  id          String   @id @default(cuid())
+  ipAddress   String   @unique @map("ip_address")
+  reason      String
+  blockedAt   DateTime @default(now()) @map("blocked_at")
+  expiresAt   DateTime? @map("expires_at") // null = permanent
+  blockedBy   String?  @map("blocked_by")
+
+  @@index([ipAddress])
+  @@index([expiresAt])
+  @@map("ip_blacklist")
+}
+
+// Login Attempt Tracking
+model LoginAttempt {
+  id        String   @id @default(cuid())
+  username  String
+  ipAddress String   @map("ip_address")
+  userAgent String?  @map("user_agent")
+  success   Boolean
+  failReason String? @map("fail_reason")
+  attemptedAt DateTime @default(now()) @map("attempted_at")
+
+  @@index([username, attemptedAt])
+  @@index([ipAddress, attemptedAt])
+  @@map("login_attempts")
+}
+
+// Device Fingerprint (bind session ke device)
+model DeviceFingerprint {
+  id          String   @id @default(cuid())
+  userId      String   @map("user_id")
+  fingerprint String   // Hash dari device info
+  deviceName  String?  @map("device_name")
+  os          String?
+  browser     String?
+  isTrusted   Boolean  @default(false) @map("is_trusted")
+  lastUsedAt  DateTime @default(now()) @map("last_used_at")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@unique([userId, fingerprint])
+  @@index([userId])
+  @@map("device_fingerprints")
+}
+
+// Exam Incident Report (laporan insiden saat ujian)
+model ExamIncident {
+  id          String   @id @default(cuid())
+  sessionId   String   @map("session_id")
+  studentId   String?  @map("student_id")
+  reportedBy  String   @map("reported_by") // User ID proktor
+  type        String   // CHEATING, TECHNICAL, NETWORK, OTHER
+  severity    String   // LOW, MEDIUM, HIGH, CRITICAL
+  description String
+  evidence    String[] // URL screenshots/logs
+  action      String?  // Tindakan yang diambil
+  resolvedAt  DateTime? @map("resolved_at")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@index([sessionId])
+  @@index([studentId])
+  @@map("exam_incidents")
+}
+
+// System Health Log
+model SystemHealthLog {
+  id          String   @id @default(cuid())
+  service     String   // api, database, redis, minio, websocket
+  status      String   // healthy, degraded, down
+  responseTime Int?    @map("response_time") // ms
+  details     Json?
+  checkedAt   DateTime @default(now()) @map("checked_at")
+
+  @@index([service, checkedAt])
+  @@map("system_health_logs")
+}
+
+// Data Export Request (GDPR/UU PDP compliance)
+model DataExportRequest {
+  id          String   @id @default(cuid())
+  requestedBy String   @map("requested_by")
+  dataType    String   @map("data_type") // student_data, exam_results, etc
+  scope       Json     // { schoolId, studentId, dateRange, etc }
+  status      String   // pending, processing, completed, expired
+  fileUrl     String?  @map("file_url")
+  expiresAt   DateTime? @map("expires_at")
+  createdAt   DateTime @default(now()) @map("created_at")
+  completedAt DateTime? @map("completed_at")
+
+  @@index([requestedBy])
+  @@index([status])
+  @@map("data_export_requests")
+}

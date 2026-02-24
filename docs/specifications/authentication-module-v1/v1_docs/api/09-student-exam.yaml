@@ -1,0 +1,43 @@
+# ============================================================
+# STUDENT EXAM ENDPOINTS (diakses dari Client App)
+# Access: Authenticated Student (via token)
+# ============================================================
+
+GET    /student-exam/info
+  # Info ujian: nama ujian, durasi, jumlah soal, instruksi
+  # Response: { exam, session, student, status }
+
+GET    /student-exam/status
+  # Status: WAITING / ACTIVE / SUBMITTED
+  # Cek apakah proktor sudah mulai ujian
+
+GET    /student-exam/questions
+  # Ambil semua soal (setelah ujian dimulai)
+  # Response: soal dalam urutan yang sudah di-shuffle
+  # Kunci jawaban TIDAK disertakan
+
+GET    /student-exam/questions/:questionId
+  # Detail 1 soal + jawaban siswa saat ini
+
+POST   /student-exam/questions/:questionId/answer
+  # Body: { selectedOptionId? } atau { answerText? }
+  # Auto-save jawaban siswa
+
+PUT    /student-exam/questions/:questionId/mark
+  # Body: { isMarked: true/false }
+  # Tandai soal ragu-ragu
+
+GET    /student-exam/progress
+  # Response: { answered: 35, unanswered: 15, marked: 5, total: 50 }
+
+POST   /student-exam/submit
+  # Submit ujian final
+  # Response: { message, submittedAt }
+
+GET    /student-exam/time-remaining
+  # Sisa waktu dalam detik
+
+# --- Sync (untuk offline mode) ---
+POST   /student-exam/sync
+  # Body: { answers: [{ questionId, selectedOptionId?, answerText?, answeredAt }] }
+  # Sync jawaban yang disimpan secara lokal saat offline

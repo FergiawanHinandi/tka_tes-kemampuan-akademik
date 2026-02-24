@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Client Siswa - Menunggu Proktor | TKA System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex items-center justify-center p-4">
+  <div class="absolute inset-0 opacity-30 pointer-events-none">
+    <div class="absolute -top-32 -left-16 w-80 h-80 bg-blue-500 rounded-full blur-3xl"></div>
+    <div class="absolute -bottom-32 right-0 w-96 h-96 bg-sky-400 rounded-full blur-3xl"></div>
+  </div>
+
+  <main class="relative z-10 w-full max-w-3xl">
+    <div class="border border-slate-800 rounded-2xl bg-slate-900/80 backdrop-blur-xl p-6 space-y-6">
+      <header class="flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-xl bg-sky-500 flex items-center justify-center">
+            <i class="fas fa-graduation-cap text-slate-900"></i>
+          </div>
+          <div>
+            <h1 class="text-lg font-semibold">Tes Kemampuan Akademik</h1>
+            <p class="text-xs text-slate-300">Client Ujian Siswa</p>
+          </div>
+        </div>
+        <div class="text-right text-xs text-slate-300">
+          <p>Nama: <span class="font-semibold text-slate-50">Ahmad Fauzan</span></p>
+          <p>NISN: <span class="font-semibold text-slate-50">1234567890</span></p>
+        </div>
+      </header>
+
+      <section class="rounded-xl border border-sky-500/40 bg-sky-900/20 p-4 flex items-center space-x-4">
+        <div class="relative">
+          <div class="w-10 h-10 rounded-full border-2 border-sky-400 border-t-transparent animate-spin"></div>
+          <span class="absolute inset-0 flex items-center justify-center text-xs text-sky-300">...</span>
+        </div>
+        <div class="text-sm">
+          <p class="font-semibold text-sky-100">Menunggu Proktor Memulai Ujian</p>
+          <p class="text-slate-300 text-xs mt-1">
+            Tetap di halaman ini. Ujian akan dimulai secara otomatis ketika proktor mengaktifkan sesi.
+          </p>
+        </div>
+      </section>
+
+      <section class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+        <div class="border border-slate-700 rounded-xl p-4 bg-slate-900/60">
+          <p class="text-xs text-slate-400 mb-1">Informasi Ujian</p>
+          <p class="font-semibold text-slate-50">Matematika Kelas X</p>
+          <p class="text-xs text-slate-300 mt-1">Durasi: 90 menit</p>
+          <p class="text-xs text-slate-300">Jumlah soal: 40</p>
+        </div>
+        <div class="border border-slate-700 rounded-xl p-4 bg-slate-900/60">
+          <p class="text-xs text-slate-400 mb-1">Status Koneksi</p>
+          <div class="flex items-center space-x-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span class="text-emerald-300 font-medium">Terhubung ke server</span>
+          </div>
+          <p class="text-xs text-slate-300 mt-1">IP lokal: 10.0.0.21</p>
+        </div>
+        <div class="border border-slate-700 rounded-xl p-4 bg-slate-900/60">
+          <p class="text-xs text-slate-400 mb-1">Mode Ujian</p>
+          <p class="text-xs text-slate-300">• Fullscreen wajib</p>
+          <p class="text-xs text-slate-300">• Aktivitas dicatat proktor</p>
+          <p class="text-xs text-slate-300">• Jangan menutup aplikasi</p>
+        </div>
+      </section>
+
+      <section class="border border-slate-800 rounded-xl p-4 bg-slate-900/80">
+        <p class="text-xs font-semibold text-slate-200 mb-2">Tata Tertib Singkat</p>
+        <ul class="text-xs text-slate-300 space-y-1 list-disc list-inside">
+          <li>Dilarang berbicara atau bekerja sama dengan peserta lain.</li>
+          <li>Dilarang membuka aplikasi lain selain Client Ujian Siswa.</li>
+          <li>Jika terjadi masalah teknis, segera angkat tangan dan hubungi proktor.</li>
+          <li>Jangan menekan tombol apapun sampai ujian dimulai.</li>
+        </ul>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

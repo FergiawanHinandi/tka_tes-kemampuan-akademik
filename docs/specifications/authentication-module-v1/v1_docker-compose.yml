@@ -1,0 +1,91 @@
+# ============================================================
+# DEVELOPMENT ENVIRONMENT
+# ============================================================
+version: '3.9'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: tka_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: tka_ujian
+      POSTGRES_USER: tka_admin
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-tka_secret_2026}
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U tka_admin -d tka_ujian']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis (Cache, Session, Queue)
+  redis:
+    image: redis:7-alpine
+    container_name: tka_redis
+    restart: unless-stopped
+    command: redis-server --requirepass ${REDIS_PASSWORD:-tka_redis_2026} --maxmemory 256mb --maxmemory-policy allkeys-lru
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ['CMD', 'redis-cli', '-a', '${REDIS_PASSWORD:-tka_redis_2026}', 'ping']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # MinIO (Object Storage - gambar soal, audio, file)
+  minio:
+    image: minio/minio:latest
+    container_name: tka_minio
+    restart: unless-stopped
+    environment:
+      MINIO_ROOT_USER: ${MINIO_USER:-tka_minio}
+      MINIO_ROOT_PASSWORD: ${MINIO_PASSWORD:-tka_minio_2026}
+    command: server /data --console-address ":9001"
+    ports:
+      - '9000:9000'   # API
+      - '9001:9001'   # Console
+    volumes:
+      - minio_data:/data
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:9000/minio/health/live']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # pgAdmin (Database management UI) - opsional
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: tka_pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@tka-ujian.id
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-admin123}
+    ports:
+      - '5050:80'
+    depends_on:
+      - postgres
+
+  # Redis Commander (Redis management UI) - opsional
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: tka_redis_commander
+    restart: unless-stopped
+    environment:
+      REDIS_HOSTS: local:redis:6379:0:${REDIS_PASSWORD:-tka_redis_2026}
+    ports:
+      - '8081:8081'
+    depends_on:
+      - redis
+
+volumes:
+  postgres_data:
+  redis_data:
+  minio_data:

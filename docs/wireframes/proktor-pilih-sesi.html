@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Proktor - Pilih Sesi Ujian | TKA System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50">
+  <header class="bg-white shadow-sm border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg flex items-center justify-center">
+          <i class="fas fa-user-shield text-white"></i>
+        </div>
+        <div>
+          <h1 class="text-lg font-bold text-gray-800">Proktor Exam App</h1>
+          <p class="text-xs text-gray-500">Pilih sesi ujian yang akan diawasi</p>
+        </div>
+      </div>
+      <div class="flex items-center space-x-3">
+        <a class="text-sm text-blue-600 hover:text-blue-700" href="proktor-login.html">
+          <i class="fas fa-sign-in-alt mr-1"></i>Login
+        </a>
+        <a class="text-sm text-gray-600 hover:text-gray-800" href="proktor-dashboard.html">
+          <i class="fas fa-tablet-screen-button mr-1"></i>Dashboard
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-6 py-6">
+    <div class="bg-white border border-gray-200 rounded-lg p-4 mb-4">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div>
+          <label class="text-xs font-medium text-gray-700 mb-1 block">Cari Sesi</label>
+          <div class="relative">
+            <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+            <input class="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Nama ujian / kode sesi">
+          </div>
+        </div>
+        <div>
+          <label class="text-xs font-medium text-gray-700 mb-1 block">Tanggal</label>
+          <input type="date" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+        <div>
+          <label class="text-xs font-medium text-gray-700 mb-1 block">Status</label>
+          <select class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option>Semua</option>
+            <option>Terjadwal</option>
+            <option>Aktif</option>
+            <option>Selesai</option>
+          </select>
+        </div>
+        <div class="flex items-end space-x-2">
+          <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm hover:bg-gray-200">Reset</button>
+          <button class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700">Terapkan</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <!-- Card Sesi -->
+      <div class="bg-white border border-gray-200 rounded-lg p-4">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs font-medium text-blue-700 bg-blue-50 border border-blue-100 px-2 py-1 rounded-full">Terjadwal</span>
+          <span class="text-xs text-gray-500">Kode: SES-001</span>
+        </div>
+        <h3 class="font-semibold text-gray-800 mb-1">Matematika Kelas X</h3>
+        <p class="text-sm text-gray-600 mb-3">Ruang A1 • Durasi 120 menit</p>
+        <div class="flex items-center justify-between text-xs text-gray-600 mb-3">
+          <span><i class="fas fa-calendar mr-1"></i>25 Feb 2024, 08:00</span>
+          <span><i class="fas fa-users mr-1"></i>0/36 hadir</span>
+        </div>
+        <button class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg text-sm font-medium">
+          Pilih Sesi
+        </button>
+      </div>
+
+      <div class="bg-white border border-gray-200 rounded-lg p-4">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs font-medium text-green-700 bg-green-50 border border-green-100 px-2 py-1 rounded-full">Aktif</span>
+          <span class="text-xs text-gray-500">Kode: SES-002</span>
+        </div>
+        <h3 class="font-semibold text-gray-800 mb-1">Bahasa Indonesia XI</h3>
+        <p class="text-sm text-gray-600 mb-3">Ruang B2 • Durasi 90 menit</p>
+        <div class="flex items-center justify-between text-xs text-gray-600 mb-3">
+          <span><i class="fas fa-calendar mr-1"></i>25 Feb 2024, 10:00</span>
+          <span><i class="fas fa-users mr-1"></i>28/36 hadir</span>
+        </div>
+        <a href="proktor-dashboard.html" class="block w-full text-center bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg text-sm font-medium">
+          Masuk Dashboard Pengawasan
+        </a>
+      </div>
+
+      <div class="bg-white border border-gray-200 rounded-lg p-4">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs font-medium text-gray-700 bg-gray-100 border border-gray-200 px-2 py-1 rounded-full">Selesai</span>
+          <span class="text-xs text-gray-500">Kode: SES-003</span>
+        </div>
+        <h3 class="font-semibold text-gray-800 mb-1">Fisika XII</h3>
+        <p class="text-sm text-gray-600 mb-3">Ruang C1 • Durasi 120 menit</p>
+        <div class="flex items-center justify-between text-xs text-gray-600 mb-3">
+          <span><i class="fas fa-calendar mr-1"></i>24 Feb 2024, 13:30</span>
+          <span><i class="fas fa-users mr-1"></i>35/35 hadir</span>
+        </div>
+        <button class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 rounded-lg text-sm font-medium" disabled>
+          Sesi Selesai
+        </button>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

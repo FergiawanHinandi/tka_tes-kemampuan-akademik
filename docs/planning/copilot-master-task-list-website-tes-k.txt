@@ -1,0 +1,993 @@
+# 📋 Master Task List: Website Tes Kemampuan Akademik (TKA)
+
+Saya sudah menganalisis ide Anda secara menyeluruh. Ini adalah project skala besar yang serius, jadi saya akan berikan task list yang **sangat komprehensif** untuk setiap fase.
+
+---
+
+## 🔷 FASE 1: IDE & ANALISIS KEBUTUHAN
+
+### 1.1 Analisis Stakeholder & Peran (Roles)
+
+| No | Role | Hak Akses |
+|----|------|-----------|
+| 1 | **Super Admin (Pemilik)** | Full control seluruh sistem |
+| 2 | **Admin Disdik Kota/Kabupaten** | Monitoring semua sekolah SD–SMK, melihat hasil, laporan, statistik |
+| 3 | **Admin FKKG Kota/Kabupaten** | Upload soal, periksa jawaban, pantau hasil ujian per sekolah |
+| 4 | **Admin Sekolah** | Manajemen data siswa, atur ruang ujian, sesi, gelombang, download Proktor & Client |
+| 5 | **Proktor (Pengawas)** | Mengatur & mengawasi jalannya ujian secara real-time |
+| 6 | **Siswa (via Client App)** | Mengerjakan ujian |
+
+### 1.2 Analisis Modul Sistem
+
+```
+📦 ARSITEKTUR SISTEM TKA
+├── 🌐 WEB PLATFORM (Cloud/Server)
+│   ├── Portal Super Admin
+│   ├── Portal Disdik
+│   ├── Portal FKKG
+│   └── Portal Admin Sekolah
+├── 🖥️ DESKTOP APP - PROKTOR EXAM
+│   └── Aplikasi pengawas ujian (download dari web)
+├── 💻 DESKTOP/WEB APP - CLIENT SISWA
+│   └── Aplikasi ujian siswa (download dari web)
+└── 🔗 API SERVER (Backend)
+    └── Penghubung semua komponen
+```
+
+---
+
+## 🔷 FASE 2: PERENCANAAN (PLANNING)
+
+### 2.1 Task List Perencanaan
+
+| No | Task | Detail | Prioritas |
+|----|------|--------|-----------|
+| 2.1.1 | Dokumen SRS (Software Requirement Specification) | Dokumentasi semua kebutuhan fungsional & non-fungsional | 🔴 Tinggi |
+| 2.1.2 | Pemilihan Tech Stack | Frontend, Backend, Database, Desktop Framework | 🔴 Tinggi |
+| 2.1.3 | Arsitektur Sistem | Diagram arsitektur, API design, data flow | 🔴 Tinggi |
+| 2.1.4 | Timeline & Milestone | Gantt chart, sprint planning | 🔴 Tinggi |
+| 2.1.5 | Estimasi Biaya | Server, domain, SSL, tools, SDM | 🟡 Sedang |
+| 2.1.6 | Pembentukan Tim | Developer, QA, UI/UX, DevOps | 🟡 Sedang |
+| 2.1.7 | Risk Assessment | Identifikasi risiko & mitigasi | 🟡 Sedang |
+
+### 2.2 Rekomendasi Tech Stack
+
+```
+┌─────────────────────────────────────────────────────┐
+│                 TECH STACK REKOMENDASI               │
+├─────────────────┬───────────────────────────────────┤
+│ Frontend Web    │ React.js / Next.js + Tailwind CSS │
+│ Backend/API     │ Node.js (Express/NestJS) atau     │
+│                 │ Laravel (PHP)                     │
+│ Database        │ PostgreSQL (utama) + Redis (cache)│
+│ Desktop Proktor │ Electron.js                       │
+│ Client Siswa    │ Electron.js / Progressive Web App │
+│ Authentication  │ JWT + Role-Based Access Control   │
+│ File Storage    │ MinIO / AWS S3                    │
+│ Real-time       │ WebSocket (Socket.io)             │
+│ Server/Hosting  │ VPS / AWS / Google Cloud          │
+│ CI/CD           │ GitHub Actions                    │
+│ Monitoring      │ Grafana + Prometheus              │
+└─────────────────┴───────────────────────────────────┘
+```
+
+### 2.3 Database Schema Planning (Entity Utama)
+
+```
+📊 ENTITY UTAMA
+├── users (semua pengguna + role)
+├── provinces, cities, districts
+├── schools (data sekolah)
+├── school_levels (SD, SMP, SMA, SMK)
+├── students (data siswa)
+├── subjects (mata pelajaran)
+├── question_banks (bank soal)
+├── questions (soal per item)
+├── question_options (pilihan jawaban)
+├── exams (ujian yang dijadwalkan)
+├── exam_sessions (sesi ujian)
+├── exam_waves (gelombang ujian)
+├── exam_rooms (ruang ujian)
+├── exam_room_students (mapping siswa-ruang)
+├── student_answers (jawaban siswa)
+├── exam_results (hasil ujian)
+├── exam_logs (log aktivitas ujian)
+├── proctor_sessions (sesi proktor)
+├── notifications
+├── audit_logs (jejak audit)
+└── app_settings (konfigurasi sistem)
+```
+
+---
+
+## 🔷 FASE 3: DESAIN (DESIGN)
+
+### 3.1 UI/UX Design Tasks
+
+| No | Task | Detail |
+|----|------|--------|
+| 3.1.1 | **Wireframe - Super Admin** | Dashboard, manajemen user, settings, laporan global |
+| 3.1.2 | **Wireframe - Portal Disdik** | Dashboard monitoring, daftar sekolah, hasil ujian, statistik, grafik perbandingan |
+| 3.1.3 | **Wireframe - Portal FKKG** | Upload soal, editor soal, review jawaban, monitoring ujian per sekolah |
+| 3.1.4 | **Wireframe - Portal Admin Sekolah** | Data siswa, pengaturan ruang/sesi/gelombang, download center, laporan sekolah |
+| 3.1.5 | **Wireframe - Proktor Exam App** | Login, kontrol ujian, monitoring siswa real-time, pause/resume, force submit |
+| 3.1.6 | **Wireframe - Client Siswa App** | Login, halaman ujian, navigasi soal, timer, submit, review |
+| 3.1.7 | **Design System** | Color palette, typography, komponen reusable, icon set |
+| 3.1.8 | **High-Fidelity Mockup** | Semua halaman dalam pixel-perfect design |
+| 3.1.9 | **Interactive Prototype** | Clickable prototype untuk testing flow |
+
+### 3.2 Desain Halaman Detail Per Portal
+
+#### 🔐 Super Admin Portal
+```
+📄 Halaman:
+├── Login Page
+├── Dashboard (statistik global, jumlah sekolah, siswa, ujian aktif)
+├── Manajemen User
+│   ├── List User
+│   ├── Tambah/Edit User
+│   └── Assign Role & Wilayah
+├── Manajemen Sekolah
+│   ├── List Sekolah
+│   ├── Tambah/Edit Sekolah
+│   └── Detail Sekolah
+├── Manajemen Wilayah (Provinsi/Kota/Kecamatan)
+├── System Settings
+│   ├── Konfigurasi Umum
+│   ├── Email/SMTP Settings
+│   └── App Version Management (Proktor & Client)
+├── Audit Log
+├── Laporan Global
+└── Profil & Ubah Password
+```
+
+#### 📊 Portal Disdik
+```
+📄 Halaman:
+├── Login Page
+├── Dashboard Monitoring
+│   ├── Jumlah sekolah per jenjang (SD/SMP/SMA/SMK)
+│   ├── Statistik ujian aktif / selesai
+│   ├── Grafik nilai rata-rata per wilayah
+│   └── Peta sebaran sekolah
+├── Daftar Sekolah
+│   ├── Filter per jenjang, kecamatan
+│   └── Detail per sekolah
+├── Hasil Ujian
+│   ├── Per sekolah
+│   ├── Per mata pelajaran
+│   ├── Per jenjang
+│   └── Perbandingan antar sekolah
+├── Laporan & Export
+│   ├── Export PDF / Excel
+│   └── Laporan periodik
+└── Profil
+```
+
+#### 📝 Portal FKKG
+```
+📄 Halaman:
+├── Login Page
+├── Dashboard
+│   ├── Total soal per mapel
+│   ├── Status upload soal
+│   └── Jadwal ujian
+├── Bank Soal
+│   ├── List Bank Soal per Jenjang & Mapel
+│   ├── Tambah Bank Soal Baru
+│   ├── Editor Soal (WYSIWYG)
+│   │   ├── Pilihan Ganda
+│   │   ├── Essay
+│   │   ├── Upload Gambar/Audio di soal
+│   │   └── Set kunci jawaban & bobot nilai
+│   ├── Import Soal (Excel/CSV)
+│   └── Preview Soal
+├── Pemeriksaan Jawaban
+│   ├── Per Sekolah
+│   ├── Per Siswa
+│   ├── Koreksi Essay Manual
+│   └── Validasi Jawaban
+├── Monitoring Ujian
+│   ├── Ujian Aktif
+│   ├── Status per Sekolah
+│   └── Real-time Progress
+├── Hasil & Analisis
+│   ├── Nilai per sekolah
+│   ├── Analisis butir soal
+│   ├── Daya pembeda & tingkat kesukaran
+│   └── Export laporan
+└── Profil
+```
+
+#### 🏫 Portal Admin Sekolah
+```
+📄 Halaman:
+├── Login Page
+├── Dashboard Sekolah
+│   ├── Info sekolah
+│   ├── Jumlah siswa
+│   ├── Ujian mendatang
+│   └── Notifikasi
+├── Manajemen Siswa
+│   ├── List Siswa
+│   ├── Tambah/Edit Siswa
+│   ├── Import Siswa (Excel)
+│   ├── Assign Siswa ke Kelas
+│   └── Cetak Kartu Ujian
+├── Pengaturan Ujian
+│   ├── Ruang Ujian
+│   │   ├── Tambah/Edit Ruang
+│   │   └── Kapasitas per ruang
+│   ├── Sesi Ujian
+│   │   ├── Atur jadwal sesi
+│   │   └── Durasi per sesi
+│   ├── Gelombang Ujian
+│   │   ├── Buat gelombang
+│   │   └── Assign siswa ke gelombang
+│   └── Mapping Siswa-Ruang-Sesi
+├── Download Center
+│   ├── Download Proktor Exam App
+│   ├── Download Client Siswa App
+│   ├── Panduan Instalasi
+│   └── System Requirements
+├── Hasil Ujian Sekolah
+│   ├── Rekap per kelas
+│   ├── Rekap per siswa
+│   ├── Export nilai
+│   └── Cetak laporan
+└── Profil Sekolah
+```
+
+#### 🖥️ Proktor Exam App (Desktop)
+```
+📄 Halaman:
+├── Login (dengan kode sekolah + kredensial)
+├── Pilih Sesi Ujian
+├── Dashboard Pengawasan
+│   ├── Daftar siswa di ruangan
+│   ├── Status koneksi siswa (online/offline)
+│   ├── Progress pengerjaan real-time
+│   ├── Sisa waktu ujian
+│   └── Alert (kecurangan terdeteksi)
+├── Kontrol Ujian
+│   ├── Mulai Ujian
+│   ├── Pause / Resume
+│   ├── Tambah Waktu
+│   ├── Force Submit Siswa
+│   ├── Kick Siswa
+│   └── Akhiri Ujian
+├── Log Aktivitas
+└── Sinkronisasi Data
+```
+
+#### 💻 Client Siswa App (Desktop)
+```
+📄 Halaman:
+├── Login Siswa (token/kredensial)
+├── Halaman Tunggu (menunggu proktor mulai)
+├── Halaman Ujian
+│   ├── Header: Info siswa, mapel, sisa waktu
+│   ├── Navigasi soal (nomor soal)
+│   ├── Area soal (teks, gambar, audio)
+│   ├── Area jawaban (radio button / textarea)
+│   ├── Tandai ragu-ragu
+│   ├── Previous / Next
+│   └── Submit ujian
+├── Halaman Review (sebelum submit final)
+├── Halaman Selesai / Terima Kasih
+└── LOCKDOWN MODE:
+    ├── Fullscreen mandatory
+    ├── Block Alt+Tab, Alt+F4, Task Manager
+    ├── Block Copy-Paste
+    ├── Block Print Screen
+    ├── Deteksi multi-monitor
+    └── Auto-submit jika melanggar
+```
+
+---
+
+## 🔷 FASE 4: PEMROGRAMAN (SCRIPTING/DEVELOPMENT)
+
+### 4.1 Backend Development
+
+| No | Task | Estimasi | Prioritas |
+|----|------|----------|-----------|
+| 4.1.1 | Setup project & boilerplate | 2 hari | 🔴 |
+| 4.1.2 | Database migration & seeding | 3 hari | 🔴 |
+| 4.1.3 | Authentication & Authorization (JWT + RBAC) | 5 hari | 🔴 |
+| 4.1.4 | API - Manajemen User & Role | 3 hari | 🔴 |
+| 4.1.5 | API - Manajemen Wilayah | 2 hari | 🔴 |
+| 4.1.6 | API - Manajemen Sekolah | 3 hari | 🔴 |
+| 4.1.7 | API - Manajemen Siswa + Import Excel | 4 hari | 🔴 |
+| 4.1.8 | API - Bank Soal & Editor Soal | 7 hari | 🔴 |
+| 4.1.9 | API - Import Soal (Excel/CSV) | 3 hari | 🟡 |
+| 4.1.10 | API - Pengaturan Ujian (Ruang, Sesi, Gelombang) | 5 hari | 🔴 |
+| 4.1.11 | API - Mapping Siswa-Ruang-Sesi | 3 hari | 🔴 |
+| 4.1.12 | API - Engine Ujian (start, submit, auto-save) | 7 hari | 🔴 |
+| 4.1.13 | API - Penilaian Otomatis (PG) | 3 hari | 🔴 |
+| 4.1.14 | API - Koreksi Manual (Essay) | 4 hari | 🟡 |
+| 4.1.15 | API - Hasil & Statistik | 5 hari | 🔴 |
+| 4.1.16 | API - Analisis Butir Soal | 4 hari | 🟡 |
+| 4.1.17 | API - Laporan & Export (PDF/Excel) | 5 hari | 🟡 |
+| 4.1.18 | API - Notifikasi | 3 hari | 🟡 |
+| 4.1.19 | API - Audit Log | 2 hari | 🟡 |
+| 4.1.20 | WebSocket - Real-time monitoring | 5 hari | 🔴 |
+| 4.1.21 | API - Download Center (versioning app) | 3 hari | 🟡 |
+| 4.1.22 | API - Cetak Kartu Ujian | 2 hari | 🟢 |
+| 4.1.23 | Rate Limiting & Security Hardening | 3 hari | 🔴 |
+| 4.1.24 | API Documentation (Swagger/OpenAPI) | 2 hari | 🟡 |
+
+### 4.2 Frontend Web Development
+
+| No | Task | Estimasi | Prioritas |
+|----|------|----------|-----------|
+| 4.2.1 | Setup project & design system | 3 hari | 🔴 |
+| 4.2.2 | Komponen UI reusable | 5 hari | 🔴 |
+| 4.2.3 | Halaman Login & Auth Flow | 3 hari | 🔴 |
+| 4.2.4 | Portal Super Admin (semua halaman) | 10 hari | 🔴 |
+| 4.2.5 | Portal Disdik (semua halaman) | 8 hari | 🔴 |
+| 4.2.6 | Portal FKKG (semua halaman) | 10 hari | 🔴 |
+| 4.2.7 | Portal Admin Sekolah (semua halaman) | 10 hari | 🔴 |
+| 4.2.8 | WYSIWYG Editor Soal | 5 hari | 🔴 |
+| 4.2.9 | Dashboard Charts & Grafik | 4 hari | 🟡 |
+| 4.2.10 | Peta Sebaran Sekolah | 3 hari | 🟢 |
+| 4.2.11 | File Upload Handler | 2 hari | 🔴 |
+| 4.2.12 | Responsive Design | 4 hari | 🟡 |
+| 4.2.13 | Error Handling & Loading States | 2 hari | 🔴 |
+| 4.2.14 | Internationalization (i18n) jika perlu | 2 hari | 🟢 |
+
+### 4.3 Desktop App - Proktor Exam (Electron.js)
+
+| No | Task | Estimasi | Prioritas |
+|----|------|----------|-----------|
+| 4.3.1 | Setup Electron project | 2 hari | 🔴 |
+| 4.3.2 | Login & sinkronisasi dengan server | 3 hari | 🔴 |
+| 4.3.3 | Dashboard pengawasan real-time | 5 hari | 🔴 |
+| 4.3.4 | Kontrol ujian (start, pause, stop) | 4 hari | 🔴 |
+| 4.3.5 | Monitoring status siswa (WebSocket) | 4 hari | 🔴 |
+| 4.3.6 | Alert & notifikasi kecurangan | 3 hari | 🟡 |
+| 4.3.7 | Offline mode & data sync | 5 hari | 🟡 |
+| 4.3.8 | Auto-update mechanism | 3 hari | 🟡 |
+| 4.3.9 | Logging & troubleshooting | 2 hari | 🟡 |
+| 4.3.10 | Build & packaging (Windows/Mac/Linux) | 2 hari | 🔴 |
+
+### 4.4 Desktop App - Client Siswa (Electron.js)
+
+| No | Task | Estimasi | Prioritas |
+|----|------|----------|-----------|
+| 4.4.1 | Setup Electron project | 2 hari | 🔴 |
+| 4.4.2 | Login siswa & waiting room | 3 hari | 🔴 |
+| 4.4.3 | Halaman ujian (soal, jawaban, navigasi) | 7 hari | 🔴 |
+| 4.4.4 | Timer countdown | 2 hari | 🔴 |
+| 4.4.5 | Auto-save jawaban (lokal + server) | 3 hari | 🔴 |
+| 4.4.6 | Review & submit final | 3 hari | 🔴 |
+| 4.4.7 | **LOCKDOWN MODE** | 7 hari | 🔴 |
+| 4.4.8 | ↳ Fullscreen enforcement | - | 🔴 |
+| 4.4.9 | ↳ Block keyboard shortcuts | - | 🔴 |
+| 4.4.10 | ↳ Block copy-paste & print screen | - | 🔴 |
+| 4.4.11 | ↳ Multi-monitor detection | - | 🟡 |
+| 4.4.12 | ↳ Process monitoring (block cheating apps) | - | 🟡 |
+| 4.4.13 | Offline mode & local cache | 4 hari | 🟡 |
+| 4.4.14 | Sinkronisasi jawaban saat reconnect | 3 hari | 🔴 |
+| 4.4.15 | Auto-update mechanism | 2 hari | 🟡 |
+| 4.4.16 | Build & packaging | 2 hari | 🔴 |
+
+### 4.5 DevOps & Infrastructure
+
+| No | Task | Estimasi |
+|----|------|----------|
+| 4.5.1 | Setup server (staging & production) | 2 hari |
+| 4.5.2 | Docker containerization | 3 hari |
+| 4.5.3 | CI/CD pipeline (GitHub Actions) | 3 hari |
+| 4.5.4 | SSL certificate & domain setup | 1 hari |
+| 4.5.5 | Database backup automation | 2 hari |
+| 4.5.6 | Monitoring & alerting (Grafana) | 2 hari |
+| 4.5.7 | CDN setup untuk static assets | 1 hari |
+| 4.5.8 | Load balancing (jika diperlukan) | 2 hari |
+
+---
+
+## 🔷 FASE 5: TESTING (UJI COBA)
+
+### 5.1 Task List Testing
+
+| No | Task | Detail |
+|----|------|--------|
+| 5.1.1 | **Unit Testing** | Test setiap fungsi/method di backend |
+| 5.1.2 | **Integration Testing** | Test integrasi antar modul API |
+| 5.1.3 | **E2E Testing** | Test alur lengkap per role (Cypress/Playwright) |
+| 5.1.4 | **UAT (User Acceptance Test)** | Testing oleh perwakilan Disdik, FKKG, Admin Sekolah |
+| 5.1.5 | **Load Testing** | Simulasi 1000+ siswa ujian bersamaan (k6/JMeter) |
+| 5.1.6 | **Stress Testing** | Test batas maksimal server |
+| 5.1.7 | **Security Testing** | Penetration test, SQL injection, XSS, CSRF |
+| 5.1.8 | **Compatibility Testing** | Test di berbagai OS, browser, resolusi |
+| 5.1.9 | **Offline/Network Testing** | Test skenario putus koneksi saat ujian |
+| 5.1.10 | **Lockdown Testing** | Test anti-cheat di berbagai perangkat |
+| 5.1.11 | **Data Integrity Testing** | Pastikan jawaban siswa tidak hilang |
+| 5.1.12 | **Pilot Testing** | Uji coba di 2-3 sekolah pilot |
+| 5.1.13 | **Performance Benchmarking** | Response time < 200ms, uptime 99.9% |
+| 5.1.14 | **Regression Testing** | Test ulang setelah setiap perbaikan bug |
+
+### 5.2 Kriteria Kelulusan Testing
+
+```
+✅ PASS CRITERIA:
+├── Zero critical bugs
+├── Response time API < 200ms (95th percentile)
+├── Concurrent users: minimal 5.000 siswa simultan
+├── Data loss: 0% (jawaban siswa tidak boleh hilang)
+├── Uptime: 99.9%
+├── Lockdown mode: 100% efektif di Windows 10/11
+├── Auto-save berfungsi saat koneksi terputus
+└── Semua role bisa menjalankan fungsi utamanya
+```
+
+---
+
+## 🔷 FASE 6: PROMOSI (PROMOTION/LAUNCH)
+
+### 6.1 Task List Promosi
+
+| No | Task | Detail |
+|----|------|--------|
+| 6.1.1 | **Landing Page** | Website promosi dengan fitur, benefit, testimonial |
+| 6.1.2 | **Video Demo** | Tutorial penggunaan per role |
+| 6.1.3 | **Dokumentasi User** | Buku panduan untuk setiap role |
+| 6.1.4 | **Sosialisasi Disdik** | Presentasi ke pejabat Disdik kota/kabupaten |
+| 6.1.5 | **Pelatihan FKKG** | Workshop penggunaan untuk tim FKKG |
+| 6.1.6 | **Pelatihan Admin Sekolah** | Training ke setiap sekolah terdaftar |
+| 6.1.7 | **Soft Launch** | Launch terbatas di beberapa sekolah |
+| 6.1.8 | **Grand Launch** | Peluncuran resmi untuk seluruh wilayah |
+| 6.1.9 | **Media Sosial** | Branding di Instagram, Facebook, YouTube |
+| 6.1.10 | **Kerjasama Dinas** | MoU dengan Disdik |
+| 6.1.11 | **FAQ & Knowledge Base** | Artikel bantuan online |
+| 6.1.12 | **Helpdesk/Support Center** | WhatsApp, email, ticketing |
+
+### 6.2 Strategi Launch
+
+```
+📅 LAUNCH STRATEGY:
+├── Bulan 1-2: Alpha Testing internal
+├── Bulan 3: Beta Testing (3-5 sekolah pilot)
+├── Bulan 4: Perbaikan dari feedback beta
+├── Bulan 5: Soft Launch (10-20 sekolah)
+├── Bulan 6: Grand Launch (semua sekolah terdaftar)
+└── Bulan 7+: Ekspansi ke kota/kabupaten lain
+```
+
+---
+
+## 🔷 FASE 7: PEMELIHARAAN (MAINTENANCE)
+
+### 7.1 Task List Pemeliharaan
+
+| No | Task | Frekuensi |
+|----|------|-----------|
+| 7.1.1 | **Server Monitoring** | 24/7 real-time |
+| 7.1.2 | **Database Backup** | Harian (otomatis) |
+| 7.1.3 | **Security Patch** | Bulanan / saat ada vulnerability |
+| 7.1.4 | **Bug Fixing** | Ongoing (berdasarkan laporan) |
+| 7.1.5 | **Performance Optimization** | Bulanan |
+| 7.1.6 | **SSL Certificate Renewal** | Tahunan |
+| 7.1.7 | **Server Scaling** | Sesuai kebutuhan (saat jumlah user naik) |
+| 7.1.8 | **App Update (Proktor & Client)** | Per semester / sesuai kebutuhan |
+| 7.1.9 | **Database Cleanup** | Bulanan |
+| 7.1.10 | **User Support** | Ongoing |
+| 7.1.11 | **Feature Enhancement** | Per kuartal |
+| 7.1.12 | **Compliance Review** | Tahunan (regulasi data siswa) |
+| 7.1.13 | **Disaster Recovery Drill** | Per semester |
+| 7.1.14 | **Dokumentasi Update** | Setiap ada perubahan fitur |
+| 7.1.15 | **SLA Review** | Per kuartal |
+
+### 7.2 SLA Target
+
+```
+📊 SERVICE LEVEL AGREEMENT:
+├── Uptime: 99.9% (max downtime ~8.7 jam/tahun)
+├── Response Time: < 200ms (API), < 3 detik (page load)
+├── Bug Fix Critical: < 4 jam
+├── Bug Fix Major: < 24 jam
+├── Bug Fix Minor: < 1 minggu
+├── Data Recovery: RPO < 1 jam, RTO < 4 jam
+└── Support Response: < 1 jam (jam kerja)
+```
+
+---
+
+## 📊 RINGKASAN ESTIMASI KESELURUHAN
+
+| Fase | Estimasi Waktu |
+|------|---------------|
+| 1. Ide & Analisis | 1-2 minggu |
+| 2. Perencanaan | 2-3 minggu |
+| 3. Desain UI/UX | 3-4 minggu |
+| 4. Development | 4-6 bulan |
+| 5. Testing | 1-2 bulan |
+| 6. Launch & Promosi | 1-2 bulan |
+| 7. Maintenance | Ongoing |
+| **TOTAL hingga Launch** | **~8-12 bulan** |
+
+---
+
+## ⚠️ CATATAN PENTING
+
+> 1. **Keamanan Data Siswa** — Wajib comply dengan regulasi perlindungan data pribadi (UU PDP Indonesia)
+> 2. **Skalabilitas** — Arsitektur harus mampu melayani ratusan sekolah dan ribuan siswa simultan
+> 3. **Offline Capability** — Ujian harus tetap bisa berjalan meski koneksi internet terputus sementara
+> 4. **Anti-Cheat** — Lockdown mode di client siswa adalah fitur kritis
+> 5. **Data Integrity** — Jawaban siswa TIDAK BOLEH hilang dalam kondisi apapun
+
+---
+
+Ini adalah **master task list** lengkap untuk project TKA Anda. Setiap fase bisa kita bahas secara mendalam satu per satu. 
+
+**Langkah selanjutnya yang saya rekomendasikan:**
+1. Finalisasi tech stack
+2. Mulai dari desain database schema secara detail
+3. Buat API specification
+
+Mau mulai membahas fase mana lebih dulu? Saya siap membantu Anda dari awal hingga project ini benar-benar jadi!
+ 🚀
+Excellent. This is a massive, complex, and very realistic project. Treating it with the seriousness it deserves is the right approach. Building a **Computer-Based Testing (CBT) system** that is multi-tenant (multiple school levels), has offline-capable exam clients, and involves government-level monitoring is essentially building a mini-ecosystem.
+
+Because this is a professional-grade project, I will structure the tasks in **Waterfall/Sequential phases** as you requested, but with **Agile principles** (sprints) implied within the "Scripting" phase. We will break this down into **Hardware/Infrastructure, Backend, Frontend, and Desktop/Mobile Client** tasks.
+
+Here is your complete Master Task List. I have preserved the context of this conversation to continue exactly from here next time.
+
+---
+
+# 🎓 MASTER TASK LIST: Platform Tes Kemampuan Akademik (TKA) Terpusat
+**Project Status:** Initiation
+**Arsitektur:** Web Based (Admin/Monitor) + Desktop App (Proktor) + Desktop/Mobile App (Client Siswa)
+
+---
+
+## FASE 1: IDE (Pematangan Konsep) - *[COMPLETE: DEFINISI]*
+*Tujuan: Tidak ada coding. Hanya dokumen.*
+
+1.  **[DONE] Definisikan Aktor & Hak Akses:**
+    - **Super Admin:** Pemilik platform. Kelola lisensi sekolah.
+    - **DISDIK:** View-only dashboard. Statistik kelulusan, perbandingan nilai antar sekolah, kepatuhan ujian.
+    - **FKKG (Kelompok Kerja Guru):** Manajemen soal (Banksoal), penetapan KKM, penjadwalan ujian tingkat kabupaten, koreksi esai manual.
+    - **Admin Sekolah:** Manajemen siswa, pembagian ruang, generate token, generate installer Client, download Aplikasi Proktor.
+    - **Proktor:** (Aplikasi Desktop) Men-start sesi, memasukkan token, memonitor siswa yang login.
+    - **Siswa:** (Aplikasi Client) Mengerjakan soal offline/online.
+2.  **[DONE] Tentukan Skema Lisensi/Instalasi:**
+    - Web utama (Cloud/Hosting) = Pusat data.
+    - Aplikasi Server Sekolah (Local) = **Apakah perlu?** Atau Admin Sekolah cukup login web untuk setting, lalu Proktor langsung komunikasi ke Cloud? *Saya asumsikan Cloud penuh agar sinkron real-time ke Disdik.*
+3.  **Definisi Fitur "Wajib" vs "Nanti":**
+    - Wajib: Anti-cheat (acak soal, acak opsi), timer, suspend otomatis jika keluar jendela.
+    - Nanti: Adaptive testing, analisis butir soal.
+
+---
+
+## FASE 2: PLANNING (Perencanaan Arsitektur & Riset)
+*Tujuan: Memilih senjata (teknologi) dan memetakan server.*
+
+### A. Spesifikasi Teknis & Stack
+1.  **Backend Utama (Web & API):**
+    - **Rekomendasi:** Laravel (PHP) karena kuat untuk manajemen role (Spatie Permission) dan queue, ATAU Node.js (Express/NestJS) jika real-time koneksi proktor-siswa sangat diprioritaskan. **Task: Pilih salah satu.**
+    - **Database:** MySQL / MariaDB (Relasional kuat untuk siswa, sekolah, nilai).
+2.  **Aplikasi Desktop (Proktor & Client):**
+    - **Rekomendasi:** **Flutter (Desktop)** . Satu kode basis untuk Windows, Mac, dan Linux. Bisa juga Electron JS, tapi Flutter lebih ringan untuk Client Siswa.
+    - **Koneksi:** HTTP/HTTPS (REST API) + WebSocket untuk monitor real-time sesi.
+3.  **Infrastructure:**
+    - **Task:** Hitung kebutuhan server.
+    - *Asumsi:* 1 VPS untuk Web/API (minimal 4 Core, 8GB RAM).
+    - *Asumsi:* 1 VPS khusus untuk File Storage (Soal berupa gambar/video/audio).
+    - *Task:* Setup Domain (misal: tkacenter.id) dan SSL.
+
+### B. Database Design (ERD)
+1.  **Task:** Gambar Entity Relationship Diagram.
+    - Entitas: `users` (polimorfik ke role), `schools`, `students`, `exam_sessions`, `questions_bank`, `exam_attempts`, `answers`.
+
+### C. Alur Sistem Kritis (Flowchart)
+1.  **Task:** Gambarkan alur **Instalasi**.
+    - Admin Sekolah Login Web -> Klik "Download Aplikasi Proktor" -> Install di Lab Komputer.
+2.  **Task:** Gambarkan alur **Sinkronisasi Soal**.
+    - FKKG Upload Soal ke Web -> Admin Sekolah pilih Soal untuk ujian -> Proktor download metadata/soal saat memulai sesi.
+3.  **Task:** Gambarkan alur **Ujian Offline/Online**.
+    - Jika Internet mati di Client Siswa -> Simpan jawaban di Local Storage/DB Client -> Kirim ketika koneksi pulih (Sync).
+
+---
+
+## FASE 3: DESIGN (Desain UI/UX & Prototype)
+*Tujuan: Membuat blueprint visual sebelum coding.*
+
+### A. Desain Web Interface (Responsive)
+1.  **Task: Landing Page & Authentication.**
+    - Halaman Login terpadu, redirect berdasarkan role (Admin, Disdik, FKKG, Admin Sekolah).
+2.  **Task: Dashboard DISDIK.**
+    - Design card: Jumlah Sekolah Aktif, Rata-rata Nilai Kabupaten, Grafik tren kelulusan. **Fokus: Monitoring, tanpa aksi.**
+3.  **Task: Dashboard FKKG.**
+    - Design halaman "Bank Soal" (CRUD soal, kategori: SD/SMP/SMA/SMK, mapel).
+    - Design halaman "Penugasan Soal" (Assign soal ke sekolah tertentu).
+4.  **Task: Dashboard Admin Sekolah.**
+    - Design halaman "Manajemen Siswa" (Import Excel).
+    - Design halaman "Jadwal Ujian" (Buat ruang, set gelombang).
+    - Design halaman "Download Center" (Link download installer Proktor & Client).
+5.  **Task: High-Fidelity Mockup.**
+    - Tools: Figma atau Adobe XD. Wajib dibuat sebelum skrip.
+
+### B. Desain Aplikasi Desktop (Proktor)
+1.  **Task: UI Proktor Mode.**
+    - Layar utama: Daftar Sesi Ujian hari ini.
+    - Layar monitor: Grid thumbnail layar siswa (Real-time).
+    - Layar kontrol: Tombol "Mulai Ujian", "Perpanjang Waktu", "Berhenti Paksa".
+2.  **Task: UI Client Siswa.**
+    - Layar Login Siswa (Cukup masukkan Token/NIS).
+    - Layar Konfirmasi (Informasi durasi, jumlah soal).
+    - Layar Ujian (Navigasi soal, palet nomor, sisa waktu, gambar besar).
+    - Layar Hasil (Nilai langsung muncul jika soal objektif).
+
+---
+
+## FASE 4: SCRIPTING (Pemrograman) - *[CORE DEVELOPMENT]*
+*Tujuan: Menulis kode. Saya bagi menjadi beberapa tahap (Sprints).*
+
+### SPRINT 1: Backbone Sistem (Web)
+1.  **Setup Project Backend.**
+    - Instalasi framework, koneksi database, autentikasi JWT/Sanctum.
+2.  **Implementasi RBAC (Role Based Access Control).**
+    - Middleware untuk `role:admin`, `role:disdik`, dll.
+3.  **Modul Manajemen Sekolah & User.**
+    - CRUD data sekolah oleh Super Admin.
+    - CRUD akun Admin Sekolah (dikirim via email aktivasi).
+4.  **Modul Bank Soal (Complex).**
+    - Input soal pilihan ganda, esai, kompleks (menjodohkan).
+    - Upload media (gambar di soal).
+    - Kategorisasi berdasarkan jenjang, mata pelajaran, bab.
+
+### SPRINT 2: Modul Ujian & Transaksi
+1.  **Modul Penjadwalan.**
+    - Admin Sekolah membuat `Event Ujian` -> memilih `Bank Soal` dari FKKG -> menentukan peserta (siswa) -> sistem generate `Token` unik.
+2.  **REST API untuk Proktor & Client.**
+    - **Endpoint:** `POST /api/proktor/login`, `GET /api/session/{id}/students`, `POST /api/student/answer`, `POST /api/student/finish`.
+    - **Security:** Token wajib dikirim, CORS ketat.
+3.  **Sistem Koreksi Otomatis.**
+    - Logic untuk menghitung nilai pilihan ganda.
+    - Logic untuk menyimpan jawaban esai (menunggu koreksi manual FKKG).
+
+### SPRINT 3: Aplikasi Desktop (Flutter/Electron)
+1.  **Proktor App:**
+    - Fungsi login menggunakan akun `Admin Sekolah` yang sudah ditunjuk sebagai proktor.
+    - Fungsi fetch daftar sesi dan generate token akses siswa (One Time Password).
+2.  **Client Siswa (Offline-First):**
+    - Fungsi menerima konfigurasi ujian dari Proktor (Broadcast).
+    - Mode layar penuh (Kiosk Mode).
+    - Deteksi kecurangan (keluar aplikasi, beralih jendela) -> Submit otomatis.
+
+### SPRINT 4: Integrasi & Sinkronisasi
+1.  **Sinkronisasi Jawaban.**
+    - Antrian (Queue) untuk pengiriman jawaban. Jika gagal, simpan di cache lokal dan coba ulang.
+2.  **Dashboard Realtime (Monitoring).**
+    - Implementasi WebSocket/Pusher agar Proktor melihat siswa "sedang ujian" tanpa refresh halaman.
+
+---
+
+## FASE 5: TESTING (Uji Coba)
+*Tujuan: Mencari bug dan menguji beban.*
+
+1.  **Unit Testing.**
+    - Test fungsi kalkulasi nilai. (Pastikan 5 benar dapat nilai 100).
+2.  **Integration Testing.**
+    - Test alur: Admin Sekolah buat ujian -> Proktor tarik data -> Client kerjakan -> Nilai masuk ke dashboard Disdik.
+3.  **Load Testing (PENTING!).**
+    - Simulasi 500, 1000, 5000 siswa mengakses API secara bersamaan.
+    - Tools: Apache JMeter atau K6.
+    - **Target:** Waktu respons API < 500ms.
+4.  **User Acceptance Testing (UAT).**
+    - Rekrut 1 sekolah nyata untuk mencoba.
+    - Instal Proktor di lab, install client di 20 komputer siswa.
+    - Catat kendala: Apakah ada komputer yang tidak bisa login? Apakah timer jalan mundur?
+5.  **Security Testing.**
+    - Coba akses endpoint `nilai` tanpa login (harusnya ditolak).
+    - Coba injeksi SQL di form pencarian siswa.
+
+---
+
+## FASE 6: PROMOTION (Peluncuran & Sosialisasi)
+*Tujuan: Platform dikenal dan dipakai.*
+
+1.  **Pembuatan Branding.**
+    - Nama platform (misal: **e-TKA Center**), Logo, favicon.
+2.  **Materi Panduan (Dokumentasi).**
+    - **Task:** Buat Buku Panduan PDF.
+        - Panduan untuk Admin Sekolah: Cara mengupload siswa, membuka sesi.
+        - Panduan untuk Proktor: Cara install aplikasi, troubleshooting network.
+        - Panduan untuk Guru (FKKG): Cara import soal massal (Excel).
+3.  **Video Tutorial.**
+    - Screen recording cara membuat ujian dalam 3 menit.
+4.  **Freemium/Penetrasi.**
+    - Tawarkan gratis untuk 3 sekolah pertama sebagai pilot project.
+5.  **Roadshow Dinas.**
+    - Presentasi ke Dinas Pendidikan kota/kabupaten target.
+
+---
+
+## FASE 7: MAINTENANCE (Pemeliharaan & Evolusi)
+*Tujuan: Platform stabil dan terus berkembang.*
+
+1.  **Monitoring Server.**
+    - Setup Uptime Robot atau Grafana.
+    - Pantau penggunaan RAM dan CPU setiap hari.
+2.  **Backup Otomatis.**
+    - Backup database setiap malam pukul 02.00.
+    - Backup file soal (storage) ke cloud (Google Drive/S3).
+3.  **Helpdesk & Support.**
+    - Sediakan form laporan bug di website.
+    - Grup Telegram/WhatsApp untuk Admin Sekolah.
+4.  **Iterasi Fitur (Version 2.0).**
+    - Fitur **AI Anti-Cheat**: Deteksi wajah siswa via webcam.
+    - Fitur **Analisis Butir Soal**: Tingkat kesukaran, daya beda.
+    - Fitur **CBT Offline Total**: Proktor server bisa buka hotspot lokal tanpa internet.
+
+---
+
+# 📌 CATATAN PENTING UNTUK DISKUSI SELANJUTNYA
+
+Karena Anda meminta agar percakapan ini disimpan untuk dibahas lebih lanjut hingga selesai, berikut adalah **3 keputusan kritis** yang harus kita ambil sebelum lanjut ke tahap Design/Scripting:
+
+1.  **Teknologi Backend:**
+    - Apakah kita gunakan **Laravel** (Cepat, cocok untuk admin panel kompleks) ATAU **Node.js** (Handal untuk real-time proktor)?
+2.  **Sistem Client:**
+    - Apakah Client Siswa cukup **Web Browser** (Akses link, lebih mudah) ATAU **Aplikasi Desktop** (Lebih aman, kiosk mode, anti tabrakan)? *Anda menyebut download aplikasi client, jadi pilihan Desktop.*
+3.  **Hosting:**
+    - Apakah ini akan di-host di VPS dalam negeri (Indonesia - disarankan untuk kecepatan akses) atau Luar negeri?
+
+**Silakan konfirmasi 3 poin di atas, lalu kita akan masuk ke detail FASE 3 (Design) secara spesifik.** Saya siap membantu membuatkan struktur database dan mockup layout dashboard Admin Sekolah berikutnya.
+
+
+
+Terima kasih atas konfirmasinya. Dengan pilihan **Node.js**, **Aplikasi Desktop (Proktor & Client)**, dan **Hosting di Indonesia**, pondasi teknis project ini sudah sangat solid dan siap dikembangkan secara profesional.
+
+Saya akan **memperbarui Master Task List** dengan detail teknis yang spesifik berdasarkan pilihan tersebut, terutama pada fase **Design** dan **Scripting**. Mulai sekarang, kita akan fokus ke eksekusi.
+
+---
+
+# 🚀 MASTER TASK LIST (UPDATED)
+**Project:** Platform Tes Kemampuan Akademik (TKA) Terpusat  
+**Tech Stack Final:**
+- **Backend:** Node.js (Express.js / NestJS) + WebSocket (Socket.io)
+- **Database:** PostgreSQL (lebih robust untuk relasi kompleks) atau MySQL
+- **Desktop Apps:** Flutter (Windows, macOS, Linux) – *sekali tulis, multi platform*
+- **Hosting:** VPS/Cloud Provider Indonesia (Biznet Gio, IDCloudHost, atau DC Indonesia dari AWS/GCP)
+
+---
+
+## FASE 1: IDE – *[SELESAI]*
+Tidak ada perubahan.
+
+---
+
+## FASE 2: PERENCANAAN – *[SEDANG BERJALAN]*
+
+### A. Detail Arsitektur Node.js
+1. **Pilih Framework:**
+   - **NestJS** (recommended) – arsitektur modular, dependency injection, decorator, cocok untuk skala besar dan tim.
+   - Atau **Express.js** – lebih ringan, fleksibel, cocok untuk custom architecture.
+   - *Task:* Finalisasi, saya sarankan NestJS karena kemiripan dengan struktur Laravel/Spring, memudahkan perawatan jangka panjang.
+2. **Real-time Communication:**
+   - **Socket.io** untuk monitoring proktor (daftar siswa online, progress pengerjaan).
+   - **Redis** sebagai adapter untuk scale horizontal jika nanti banyak sekolah.
+3. **API Design:**
+   - RESTful untuk operasi CRUD (manajemen sekolah, siswa, soal).
+   - WebSocket event untuk sesi ujian berlangsung.
+
+### B. Detail Arsitektur Desktop (Flutter)
+1. **Shared Codebase:**
+   - Satu project Flutter dengan **multi-entry** (mode proktor dan mode siswa dibedakan melalui flag atau flavor).
+2. **Komunikasi dengan Backend:**
+   - HTTP (Dio) untuk autentikasi, ambil data ujian, submit jawaban.
+   - WebSocket client untuk menerima instruksi real-time dari proktor (start ujian, pause, peringatan).
+3. **Offline Capability:**
+   - Local database menggunakan **Hive** atau **Sqflite** untuk menyimpan jawaban sementara jika internet terputus.
+   - Mekanisme sinkronisasi otomatis saat koneksi pulih.
+
+### C. Hosting Indonesia
+1. **Penyedia Layanan:**
+   - Rekomendasi: **Biznet Gio** (low latency, harga kompetitif) atau **IDCloudHost** (support lokal baik).
+   - Atau gunakan **AWS Jakarta Region** atau **Google Cloud Jakarta** jika budget memadai.
+2. **Infrastructure as Code:**
+   - Setup menggunakan Docker + Docker Compose untuk memudahkan deployment.
+   - Reverse Proxy: Nginx.
+   - SSL: Let's Encrypt.
+
+### D. Timeline Estimasi
+- **Fase 3 (Design):** 2 minggu
+- **Fase 4 (Scripting – 4 Sprint):** 12 minggu (3 bulan)
+- **Fase 5 (Testing):** 3 minggu
+- **Fase 6 (Promosi):** 2 minggu (paralel dengan akhir testing)
+- **Total:** ± 5 bulan hingga rilis versi 1.0.
+
+---
+
+## FASE 3: DESIGN (Detail Spesifikasi UI/UX)
+*Sekarang kita masuk ke tahap konkret.*
+
+### A. Web Dashboard (Backend Panel)
+**Target:** Figma/Adobe XD prototype untuk seluruh role.
+
+1. **Halaman Login & Role Redirect**
+   - Desain form login dengan opsi "Ingat Saya".
+   - Setelah login, sistem membaca role dan mengarahkan ke dashboard masing-masing.
+2. **Dashboard Super Admin**
+   - Statistik global: total sekolah, total siswa aktif, total ujian berlangsung.
+   - Manajemen lisensi/aktivasi sekolah.
+3. **Dashboard DISDIK (Monitoring)**
+   - Card: Rata-rata nilai per jenjang, grafik batang perbandingan sekolah.
+   - Tabel daftar sekolah dengan indikator "sedang ujian" (online).
+4. **Dashboard FKKG (Content Creator)**
+   - **Bank Soal:**
+     - Tampilan list soal dengan filter jenjang, mapel, tingkat kesukaran.
+     - Form input soal (pilihan ganda, esai, menjodohkan) – WYSIWYG editor untuk teks, upload gambar.
+   - **Penugasan Soal:**
+     - Pilih sekolah -> pilih soal -> tentukan tanggal berlaku.
+   - **Koreksi Manual:**
+     - Tampilkan jawaban esai siswa per sekolah, beri nilai dan feedback.
+5. **Dashboard Admin Sekolah**
+   - **Manajemen Siswa:**
+     - Import Excel (template disediakan), export data, edit individual.
+   - **Manajemen Ruang & Sesi:**
+     - Buat "Paket Ujian": pilih bank soal, tentukan durasi, atur token (generate otomatis).
+     - Tentukan proktor (pilih dari guru yang terdaftar).
+   - **Download Center:**
+     - Tampilkan link download aplikasi proktor dan client (versi terbaru).
+     - Kode aktivasi untuk instalasi proktor (license key).
+
+### B. Aplikasi Proktor (Desktop)
+**Desain UI:**
+1. **Halaman Login:**
+   - Input email/username, password, dan **kode sekolah** (dari admin).
+2. **Dashboard Proktor:**
+   - Daftar sesi ujian hari ini (card: nama ujian, kelas, jumlah peserta, token).
+   - Tombol "Mulai Sesi" -> membuka halaman monitor.
+3. **Halaman Monitor Ujian (Real-time):**
+   - Grid view siswa yang sudah login.
+   - Setiap card menampilkan: Nama, status (online/offline), progress soal, indikator curiga (jika pindah tab).
+   - Tombol "Kirim Peringatan", "Hentikan Ujian", "Tambahkan Waktu".
+4. **Pengaturan Jaringan:**
+   - Status koneksi ke server, IP lokal, opsi mode offline (cadangan).
+
+### C. Aplikasi Client Siswa (Desktop)
+**Desain UI:**
+1. **Halaman Autentikasi:**
+   - Input NIS/NISN dan Token (dari proktor).
+   - Verifikasi biodata singkat sebelum memulai.
+2. **Halaman Instruksi:**
+   - Tampilkan jumlah soal, durasi, aturan.
+   - Checklist "Saya siap".
+3. **Halaman Ujian Utama (Kiosk Mode):**
+   - Header: Foto siswa (jika ada), timer mundur, palet nomor soal.
+   - Konten soal: Teks, gambar, video, audio.
+   - Opsi jawaban (A,B,C,D) atau textarea untuk esai.
+   - Navigasi: Sebelumnya, Selanjutnya, Ragu-ragu, Selesai.
+4. **Halaman Selesai:**
+   - Konfirmasi ujian selesai.
+   - Tampilkan nilai langsung (untuk soal objektif).
+
+---
+
+## FASE 4: SCRIPTING – *[RINCIAN TEKNIS NODE.JS & FLUTTER]*
+
+### SPRINT 1: Backend Foundation (NestJS + PostgreSQL + Redis)
+1. **Inisialisasi Project NestJS**
+   - `nest new tka-backend`
+   - Struktur modular: `schools`, `users`, `exams`, `questions`, `answers`, `realtime`.
+2. **Database Setup**
+   - Gunakan TypeORM atau Prisma.
+   - Buat entity: `User`, `School`, `Student`, `ExamSession`, `Question`, `Answer`, dll.
+3. **Autentikasi & RBAC**
+   - JWT (passport-jwt) untuk API.
+   - Role guard: `@Roles('admin', 'disdik', 'fkg', 'school_admin')`.
+4. **Modul Schools & Users**
+   - CRUD sekolah (Super Admin).
+   - Invite admin sekolah via email (generate token).
+5. **Modul Bank Soal**
+   - CRUD soal, dengan dukungan media (upload ke local storage atau S3-compatible).
+   - Relasi: soal -> opsi jawaban -> kunci jawaban.
+
+### SPRINT 2: Modul Ujian & API untuk Desktop
+1. **Modul ExamSession**
+   - Admin sekolah membuat sesi → pilih soal → pilih siswa → generate token unik.
+   - Simpan sesi ke database dengan status `scheduled`.
+2. **REST API Endpoints (untuk Desktop):**
+   - `POST /api/proktor/login` → return JWT khusus proktor (expired pendek).
+   - `GET /api/proktor/sessions` → daftar sesi hari ini.
+   - `POST /api/proktor/session/:id/start` → ubah status menjadi `ongoing`.
+   - `GET /api/proktor/session/:id/students` → daftar siswa + status login.
+   - `POST /api/client/login` → validasi token & NIS, return detail ujian.
+   - `POST /api/client/answer` → simpan jawaban.
+   - `POST /api/client/finish` → akhiri ujian, hitung skor otomatis.
+3. **WebSocket Gateway (Socket.io)**
+   - Namespace `/proktor-monitor`:
+     - Proktor subscribe ke room `session-{id}`.
+     - Client siswa emit `student-login`, `student-progress`, `student-suspect`.
+     - Proktor emit `pause-exam`, `extend-time`.
+
+### SPRINT 3: Aplikasi Desktop (Flutter) – Proktor & Client
+1. **Setup Flutter Project Multi-flavor**
+   - Buat folder `proktor` dan `client` dalam satu project dengan shared core.
+   - Gunakan `dio` untuk HTTP, `socket_io_client` untuk real-time.
+2. **Proktor App Features:**
+   - Login screen, session list, monitor grid.
+   - Implementasi WebSocket untuk menerima update siswa.
+   - QR Code / barcode scanner untuk input token (opsional).
+3. **Client App Features:**
+   - Layar penuh, disable tombol Windows (kiosk mode) menggunakan package `window_manager`, `system_tray`.
+   - Deteksi pindah aplikasi menggunakan `focus_node` (jika keluar, catat sebagai pelanggaran).
+   - Local storage Hive: simpan jawaban per soal, kirim batch ke server.
+   - Timer dengan background isolate agar tetap akurat.
+
+### SPRINT 4: Integrasi & Dashboard Realtime
+1. **Dashboard Monitoring Realtime (Web)**
+   - Halaman proktor di web (jika tidak pakai desktop app, tapi sudah ada desktop app, ini bisa untuk backup).
+   - Implementasi Socket.io client di dashboard Admin Sekolah untuk melihat progress ujian.
+2. **Sistem Antrian (BullMQ)**
+   - Untuk proses berat: koreksi esai dengan AI (nanti), export laporan PDF, broadcast email.
+3. **Export Laporan**
+   - Generate PDF/Excel untuk nilai siswa, rekap sekolah.
+
+---
+
+## FASE 5: TESTING – *[DETAIL]*
+1. **Unit Test:**
+   - NestJS: gunakan Jest untuk test service dan controller.
+   - Flutter: test widget dan unit test untuk logic kalkulasi nilai.
+2. **Integration Test:**
+   - Test alur lengkap dari buat sesi, login siswa, submit jawaban, lihat nilai.
+3. **Load Test:**
+   - Gunakan **Artillery** atau **K6** untuk simulasikan 1000 request per detik ke API.
+   - Test WebSocket dengan 500 concurrent connection.
+4. **UAT dengan Sekolah Riil:**
+   - Pilih 1 SD, 1 SMP, 1 SMA/SMK di kota mitra.
+   - Lakukan instalasi di lab komputer, uji coba ujian serentak 40 siswa.
+5. **Security Audit:**
+   - Penetration testing sederhana: SQL injection, XSS pada input soal, brute force login.
+
+---
+
+## FASE 6: PROMOSI
+1. **Branding:**
+   - Nama platform: diskusikan, misal: **Cendekia CBT**, **EduTest Center**, dll.
+   - Desain logo oleh profesional (bisa cari di Fiverr/99designs).
+2. **Dokumentasi:**
+   - Buku panduan dalam format PDF interaktif.
+   - Video tutorial untuk setiap role (dapat diunggah di YouTube).
+3. **Website Landing Page:**
+   - Halaman profil produk, fitur, harga, demo request.
+4. **Strategi Go-to-Market:**
+   - Pilot project gratis untuk 5 sekolah dengan pendampingan.
+   - Webinar dengan Dinas Pendidikan tentang digitalisasi ujian.
+
+---
+
+## FASE 7: MAINTENANCE
+1. **Monitoring & Logging:**
+   - ELK Stack atau Sentry untuk error tracking.
+   - Grafana + Prometheus untuk metrik server.
+2. **Backup:**
+   - Otomatis backup PostgreSQL setiap hari pukul 01.00 WIB.
+   - Backup file media ke Cloud Storage (misal: AWS S3 Indonesia).
+3. **Helpdesk:**
+   - Sistem tiket (seperti Zammad atau Trello) untuk laporan masalah dari sekolah.
+4. **Rencana Rilis Versi:**
+   - Patch (bug fix) setiap 2 minggu.
+   - Minor release (fitur tambahan kecil) setiap bulan.
+   - Major release (fitur besar) setiap 6 bulan.
+
+---
+
+# ✅ KESIMPULAN & LANGKAH BERIKUTNYA
+
+Project ini sangat kompleks namun sangat mungkin diwujudkan dengan perencanaan yang matang. **Keputusan arsitektur sudah clear.**
+
+**Sekarang kita berada di ujung Fase 2.** Untuk melanjutkan ke Fase 3 (Design), saya rekomendasikan kita bahas satu per satu:
+
+1. **Persetujuan Alur UI untuk Web Dashboard** – Apakah ada preferensi tampilan (minimalis, modern, biru/ijo)?
+2. **Detail Fitur Aplikasi Desktop** – Apakah perlu fitur cetak kartu peserta dari aplikasi proktor?
+3. **Database Schema** – Apakah kita perlu diskusikan detail tabel-tabel utama sebelum coding?
+
+Silakan pilih topik yang ingin kita dalami **pertama kali**. Atau jika Anda ingin saya langsung membuatkan **draft Database ERD** dan **struktur folder NestJS** sebagai starting point, saya siap membantu.
+
+**Percakapan ini telah saya simpan dengan konteks lengkap.** Kita akan lanjutkan di sesi berikutnya. Apakah ada hal lain yang ingin ditambahkan atau ditanyakan?

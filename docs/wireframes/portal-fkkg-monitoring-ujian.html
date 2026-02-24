@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal FKKG - Monitoring Ujian</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .sidebar-item:hover {
+            background: linear-gradient(90deg, #3b82f6 0%, #1e40af 100%);
+        }
+        .monitoring-card {
+            transition: all 0.3s ease;
+        }
+        .monitoring-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.2);
+        }
+        .status-indicator {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .exam-status-active {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        }
+        .exam-status-completed {
+            background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <div class="bg-blue-600 rounded-lg w-10 h-10 flex items-center justify-center">
+                    <i class="fas fa-graduation-cap text-white"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold text-gray-800">Portal FKKG</h1>
+                    <p class="text-sm text-gray-600">Forum Komunikasi Guru dan Kepala Sekolah</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button class="text-gray-600 hover:text-blue-600">
+                    <i class="fas fa-bell text-xl"></i>
+                </button>
+                <div class="flex items-center space-x-2">
+                    <div class="bg-blue-100 rounded-full w-8 h-8 flex items-center justify-center">
+                        <i class="fas fa-user text-blue-600"></i>
+                    </div>
+                    <span class="text-gray-700 font-medium">Dr. Suryadi, M.Pd</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white shadow-sm min-h-screen">
+            <nav class="p-4 space-y-2">
+                <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:text-white transition">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:text-white transition">
+                    <i class="fas fa-upload"></i>
+                    <span>Upload Soal</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:text-white transition">
+                    <i class="fas fa-edit"></i>
+                    <span>Editor Soal</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:text-white transition">
+                    <i class="fas fa-eye"></i>
+                    <span>Review Jawaban</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg text-blue-600 bg-blue-50">
+                    <i class="fas fa-chart-line"></i>
+                    <span class="font-medium">Monitoring Ujian</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:text-white transition">
+                    <i class="fas fa-user"></i>
+                    <span>Profil</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-6">
+            <!-- Page Header -->
+            <div class="mb-6 flex items-center justify-between">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-800 mb-2">Monitoring Ujian</h1>
+                    <p class="text-gray-600">Pantau ujian aktif dan performa siswa secara real-time</p>
+                </div>
+                <div class="flex space-x-3">
+                    <select class="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option>Semua Sekolah</option>
+                        <option>SMA Negeri 1</option>
+                        <option>SMA Negeri 2</option>
+                        <option>SMA Negeri 3</option>
+                    </select>
+                    <select class="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option>Semua Mata Pelajaran</option>
+                        <option>Matematika</option>
+                        <option>Bahasa Indonesia</option>
+                        <option>Bahasa Inggris</option>
+                    </select>
+                    <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                        <i class="fas fa-sync-alt mr-2"></i>Refresh
+                    </button>
+                </div>
+            </div>
+
+            <!-- Real-time Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white rounded-xl p-6 shadow-sm monitoring-card">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <p class="text-gray-600 text-sm">Ujian Aktif</p>
+                            <p class="text-2xl font-bold text-gray-800">23</p>
+                        </div>
+                        <div class="bg-green-100 rounded-full p-3">
+                            <div class="status-indicator w-3 h-3 bg-green-500 rounded-full mx-auto mb-1"></div>
+                            <i class="fas fa-play-circle text-green-600 text-xl"></i>
+                        </div>
+                    </div>
+                    <p class="text-green-600 text-xs">+5 dari kemarin</p>
+                </div>
+                <div class="bg-white rounded-xl p-6 shadow-sm monitoring-card">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <p class="text-gray-600 text-sm">Siswa Aktif</p>
+                            <p class="text-2xl font-bold text-gray-800">1,847</p>
+                        </div>
+                        <div class="bg-blue-100 rounded-full p-3">
+                            <i class="fas fa-users text-blue-600 text-xl"></i>
+                        </div>
+                    </div>
+                    <p class="text-blue-600 text-xs">Sedang mengerjakan</p>
+                </div>
+                <div class="bg-white rounded-xl p-6 shadow-sm monitoring-card">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <p class="text-gray-600 text-sm">Rata-rata Progress</p>
+                            <p class="text-2xl font-bold text-gray-800">67%</p>
+                        </div>
+                        <div class="bg-yellow-100 rounded-full p-3">
+                            <i class="fas fa-chart-bar text-yellow-600 text-xl"></i>
+                        </div>
+                    </div>
+                    <p class="text-yellow-600 text-xs">Sedang berlangsung</p>
+                </div>
+                <div class="bg-white rounded-xl p-6 shadow-sm monitoring-card">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <p class="text-gray-600 text-sm">Selesai Hari Ini</p>
+                            <p class="text-2xl font-bold text-gray-800">892</p>
+                        </div>
+                        <div class="bg-purple-100 rounded-full p-3">
+                            <i class="fas fa-check-double text-purple-600 text-xl"></i>
+                        </div>
+                    </div>
+                    <p class="text-purple-600 text-xs">+234 dari kemarin</p>
+                </div>
+            </div>
+
+            <!-- Active Exams -->
+            <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-lg font-bold text-gray-800">Ujian Sedang Berlangsung</h3>
+                    <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Live</span>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Active Exam 1 -->
+                    <div class="exam-status-active text-white rounded-lg p-4">
+                        <div class="flex items-center justify-between mb-3">
+                            <h4 class="font-bold">Matematika - Kelas 12</h4>
+                            <div class="status-indicator w-2 h-2 bg-white rounded-full"></div>
+                        </div>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between">
+                                <span>SMA Negeri 1 Jakarta</span>
+                                <span class="font-medium">45 siswa</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Progress</span>
+                                <span class="font-medium">78%</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Sisa Waktu</span>
+                                <span class="font-medium">1h 23m</span>
+                            </div>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-white/20">
+                            <button class="bg-white text-green-600 px-3 py-1 rounded text-xs font-medium hover:bg-gray-100 transition w-full">
+                                Monitor Detail
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Active Exam 2 -->
+                    <div class="exam-status-active text-white rounded-lg p-4">
+                        <div class="flex items-center justify-between mb-3">
+                            <h4 class="font-bold">Bahasa Indonesia - Kelas 11</h4>
+                            <div class="status-indicator w-2 h-2 bg-white rounded-full"></div>
+                        </div>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between">
+                                <span>SMA Negeri 2 Bandung</span>
+                                <span class="font-medium">52 siswa</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Progress</span>
+                                <span class="font-medium">65%</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Sisa Waktu</span>
+                                <span class="font-medium">2h 15m</span>
+                            </div>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-white/20">
+                            <button class="bg-white text-green-600 px-3 py-1 rounded text-xs font-medium hover:bg-gray-100 transition w-full">
+                                Monitor Detail
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Active Exam 3 -->
+                    <div class="bg-yellow-500 text-white rounded-lg p-4">
+                        <div class="flex items-center justify-between mb-3">
+                            <h4 class="font-bold">Fisika - Kelas 12</h4>
+                            <div class="status-indicator w-2 h-2 bg-white rounded-full"></div>
+                        </div>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between">
+                                <span>SMA Negeri 3 Surabaya</span>
+                                <span class="font-medium">38 siswa</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Progress</span>
+                                <span class="font-medium">92%</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Sisa Waktu</span>
+                                <span class="font-medium">15m</span>
+                            </div>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-white/20">
+                            <button class="bg-white text-yellow-600 px-3 py-1 rounded text-xs font-medium hover:bg-gray-100 transition w-full">
+                                Monitor Detail
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- School Performance Monitoring -->
+            <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
+                <h3 class="text-lg font-bold text-gray-800 mb-6">Performa per Sekolah</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="border-b border-gray-200">
+                                <th class="text-left py-3 px-4 font-medium text-gray-700">Sekolah</th>
+                                <th class="text-left py-3 px-4 font-medium text-gray-700">Ujian Aktif</th>
+                                <th class="text-left py-3 px-4 font-medium text-gray-700">Siswa Aktif</th>
+                                <th class="text-left py-3 px-4 font-medium text-gray-700">Rata-rata Progress</th>
+                                <th class="text-left py-3 px-4 font-medium text-gray-700">Status</th>
+                                <th class="text-left py-3 px-4 font-medium text-gray-700">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-3 px-4 font-medium">SMA Negeri 1 Jakarta</td>
+                                <td class="py-3 px-4">3</td>
+                                <td class="py-3 px-4">145</td>
+                                <td class="py-3 px-4">
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-16 bg-gray-200 rounded-full h-2">
+                                            <div class="bg-green-500 h-2 rounded-full" style="width: 78%"></div>
+                                        </div>
+                                        <span class="text-sm font-medium">78%</span>
+                                    </div>
+                                </td>
+                                <td class="py-3 px-4">
+                                    <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Aktif</span>
+                                </td>
+                                <td class="py-3 px-4">
+                                    <button class="text-blue-600 hover:text-blue-700 text-sm">Detail</button>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-3 px-4 font-medium">SMA Negeri 2 Bandung</td>
+                                <td class="py-3 px-4">2</td>
+                                <td class="py-3 px-4">98</td>
+                                <td class="py-3 px-4">
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-16 bg-gray-200 rounded-full h-2">
+                                            <div class="bg-yellow-500 h-2 rounded-full" style="width: 65%"></div>
+                                        </div>
+                                        <span class="text-sm font-medium">65%</span>
+                                    </div>
+                                </td>
+                                <td class="py-3 px-4">
+                                    <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Aktif</span>
+                                </td>
+                                <td class="py-3 px-4">
+                                    <button class="text-blue-600 hover:text-blue-700 text-sm">Detail</button>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-3 px-4 font-medium">SMA Negeri 3 Surabaya</td>
+                                <td class="py-3 px-4">1</td>
+                                <td class="py-3 px-4">42</td>
+                                <td class="py-3 px-4">
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-16 bg-gray-200 rounded-full h-2">
+                                            <div class="bg-orange-500 h-2 rounded-full" style="width: 92%"></div>
+                                        </div>
+                                        <span class="text-sm font-medium">92%</span>
+                                    </div>
+                                </td>
+                                <td class="py-3 px-4">
+                                    <span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">Hampir Selesai</span>
+                                </td>
+                                <td class="py-3 px-4">
+                                    <button class="text-blue-600 hover:text-blue-700 text-sm">Detail</button>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-3 px-4 font-medium">SMA Negeri 4 Medan</td>
+                                <td class="py-3 px-4">0</td>
+                                <td class="py-3 px-4">0</td>
+                                <td class="py-3 px-4">
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-16 bg-gray-200 rounded-full h-2"></div>
+                                        <span class="text-sm font-medium text-gray-500">-</span>
+                                    </div>
+                                </td>
+                                <td class="py-3 px-4">
+                                    <span class="bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded-full">Tidak Aktif</span>
+                                </td>
+                                <td class="py-3 px-4">
+                                    <button class="text-blue-600 hover:text-blue-700 text-sm">Jadwalkan</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Real-time Alerts -->
+            <div class="bg-white rounded-xl shadow-sm p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-lg font-bold text-gray-800">Notifikasi Real-time</h3>
+                    <button class="text-blue-600 hover:text-blue-700 text-sm">
+                        <i class="fas fa-cog mr-1"></i>Pengaturan
+                    </button>
+                </div>
+                <div class="space-y-3">
+                    <div class="flex items-center space-x-3 p-3 bg-red-50 border border-red-200 rounded-lg">
+                        <div class="status-indicator w-2 h-2 bg-red-500 rounded-full"></div>
+                        <div class="flex-1">
+                            <p class="text-sm font-medium text-red-800">Kecurikan Terdeteksi</p>
+                            <p class="text-xs text-red-600">Siswa: Andi Wijaya (SMA Negeri 1 Jakarta) - Matematika</p>
+                        </div>
+                        <span class="text-xs text-red-600">2m lalu</span>
+                    </div>
+                    <div class="flex items-center space-x-3 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                        <div class="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                        <div class="flex-1">
+                            <p class="text-sm font-medium text-yellow-800">Waktu Hampir Habis</p>
+                            <p class="text-xs text-yellow-600">Ujian Fisika SMA Negeri 3 Surabaya - 15 menit tersisa</p>
+                        </div>
+                        <span class="text-xs text-yellow-600">5m lalu</span>
+                    </div>
+                    <div class="flex items-center space-x-3 p-3 bg-green-50 border border-green-200 rounded-lg">
+                        <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                        <div class="flex-1">
+                            <p class="text-sm font-medium text-green-800">Ujian Selesai</p>
+                            <p class="text-xs text-green-600">Bahasa Indonesia SMA Negeri 2 Bandung - 52 siswa</p>
+                        </div>
+                        <span class="text-xs text-green-600">15m lalu</span>
+                    </div>
+                    <div class="flex items-center space-x-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                        <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
+                        <div class="flex-1">
+                            <p class="text-sm font-medium text-blue-800">Siswa Baru Login</p>
+                            <p class="text-xs text-blue-600">Rina Marlina (SMA Negeri 1 Jakarta) - Matematika</p>
+                        </div>
+                        <span class="text-xs text-blue-600">1m lalu</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Auto refresh simulation
+        setInterval(() => {
+            const statusIndicators = document.querySelectorAll('.status-indicator');
+            statusIndicators.forEach(indicator => {
+                indicator.style.opacity = Math.random() > 0.5 ? '1' : '0.5';
+            });
+        }, 3000);
+
+        // Simulate real-time data updates
+        setInterval(() => {
+            const activeStudents = document.querySelector('.monitoring-card:nth-child(2) p.text-2xl');
+            const currentValue = parseInt(activeStudents.textContent.replace(',', ''));
+            const newValue = currentValue + Math.floor(Math.random() * 10) - 5;
+            activeStudents.textContent = newValue.toLocaleString();
+        }, 5000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal FKKG - Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .sidebar-item:hover {
+            background: linear-gradient(90deg, #3b82f6 0%, #1e40af 100%);
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.2);
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <div class="bg-blue-600 rounded-lg w-10 h-10 flex items-center justify-center">
+                    <i class="fas fa-graduation-cap text-white"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold text-gray-800">Portal FKKG</h1>
+                    <p class="text-sm text-gray-600">Forum Komunikasi Guru dan Kepala Sekolah</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button class="text-gray-600 hover:text-blue-600">
+                    <i class="fas fa-bell text-xl"></i>
+                </button>
+                <div class="flex items-center space-x-2">
+                    <div class="bg-blue-100 rounded-full w-8 h-8 flex items-center justify-center">
+                        <i class="fas fa-user text-blue-600"></i>
+                    </div>
+                    <span class="text-gray-700 font-medium">Dr. Suryadi, M.Pd</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white shadow-sm min-h-screen">
+            <nav class="p-4 space-y-2">
+                <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg text-blue-600 bg-blue-50">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span class="font-medium">Dashboard</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:text-white transition">
+                    <i class="fas fa-upload"></i>
+                    <span>Upload Soal</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:text-white transition">
+                    <i class="fas fa-edit"></i>
+                    <span>Editor Soal</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:text-white transition">
+                    <i class="fas fa-eye"></i>
+                    <span>Review Jawaban</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:text-white transition">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Monitoring Ujian</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:text-white transition">
+                    <i class="fas fa-user"></i>
+                    <span>Profil</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-6">
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white rounded-xl p-6 shadow-sm card-hover transition-all duration-200">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 text-sm">Total Soal</p>
+                            <p class="text-2xl font-bold text-gray-800">12,847</p>
+                            <p class="text-green-600 text-xs">+245 minggu ini</p>
+                        </div>
+                        <div class="bg-blue-100 rounded-full p-3">
+                            <i class="fas fa-question-circle text-blue-600 text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl p-6 shadow-sm card-hover transition-all duration-200">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 text-sm">Bank Soal</p>
+                            <p class="text-2xl font-bold text-gray-800">156</p>
+                            <p class="text-blue-600 text-xs">Aktif</p>
+                        </div>
+                        <div class="bg-green-100 rounded-full p-3">
+                            <i class="fas fa-database text-green-600 text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl p-6 shadow-sm card-hover transition-all duration-200">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 text-sm">Ujian Aktif</p>
+                            <p class="text-2xl font-bold text-gray-800">23</p>
+                            <p class="text-orange-600 text-xs">Perlu Review</p>
+                        </div>
+                        <div class="bg-orange-100 rounded-full p-3">
+                            <i class="fas fa-clock text-orange-600 text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl p-6 shadow-sm card-hover transition-all duration-200">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 text-sm">Kualitas Soal</p>
+                            <p class="text-2xl font-bold text-gray-800">87%</p>
+                            <p class="text-green-600 text-xs">Sangat Baik</p>
+                        </div>
+                        <div class="bg-purple-100 rounded-full p-3">
+                            <i class="fas fa-star text-purple-600 text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="bg-white rounded-xl p-6 shadow-sm mb-8">
+                <h3 class="text-lg font-bold text-gray-800 mb-4">Aksi Cepat</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <button class="gradient-bg text-white p-4 rounded-lg hover:shadow-lg transition duration-200">
+                        <i class="fas fa-upload text-2xl mb-2"></i>
+                        <p class="font-medium">Upload Soal Baru</p>
+                        <p class="text-xs opacity-90">Batch upload soal</p>
+                    </button>
+                    <button class="bg-green-600 text-white p-4 rounded-lg hover:bg-green-700 transition duration-200">
+                        <i class="fas fa-plus-circle text-2xl mb-2"></i>
+                        <p class="font-medium">Buat Soal Manual</p>
+                        <p class="text-xs opacity-90">Tambah soal satu per satu</p>
+                    </button>
+                    <button class="bg-purple-600 text-white p-4 rounded-lg hover:bg-purple-700 transition duration-200">
+                        <i class="fas fa-chart-bar text-2xl mb-2"></i>
+                        <p class="font-medium">Analisis Soal</p>
+                        <p class="text-xs opacity-90">Review kualitas soal</p>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Charts and Recent Activity -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Question Distribution Chart -->
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4">Distribusi Soal per Mata Pelajaran</h3>
+                    <canvas id="subjectChart" width="400" height="200"></canvas>
+                </div>
+
+                <!-- Recent Uploads -->
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4">Upload Terbaru</h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                            <div class="flex items-center space-x-3">
+                                <div class="bg-blue-100 rounded p-2">
+                                    <i class="fas fa-file-alt text-blue-600"></i>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-gray-800">Matematika - Kelas 12</p>
+                                    <p class="text-sm text-gray-600">150 soal - 2 jam lalu</p>
+                                </div>
+                            </div>
+                            <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Aktif</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                            <div class="flex items-center space-x-3">
+                                <div class="bg-green-100 rounded p-2">
+                                    <i class="fas fa-file-alt text-green-600"></i>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-gray-800">Bahasa Indonesia - Kelas 10</p>
+                                    <p class="text-sm text-gray-600">200 soal - 5 jam lalu</p>
+                                </div>
+                            </div>
+                            <span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded">Review</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                            <div class="flex items-center space-x-3">
+                                <div class="bg-purple-100 rounded p-2">
+                                    <i class="fas fa-file-alt text-purple-600"></i>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-gray-800">Fisika - Kelas 11</p>
+                                    <p class="text-sm text-gray-600">180 soal - 1 hari lalu</p>
+                                </div>
+                            </div>
+                            <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Aktif</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Subject Distribution Chart
+        const ctx = document.getElementById('subjectChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Matematika', 'Bahasa Indonesia', 'Bahasa Inggris', 'Fisika', 'Kimia', 'Biologi', 'Sejarah', 'Geografi'],
+                datasets: [{
+                    data: [2800, 2400, 1800, 1600, 1400, 1200, 1000, 847],
+                    backgroundColor: [
+                        '#3b82f6', '#10b981', '#f59e0b', '#ef4444',
+                        '#8b5cf6', '#06b6d4', '#84cc16', '#f97316'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

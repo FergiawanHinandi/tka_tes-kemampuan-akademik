@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Admin Sekolah - Data Siswa</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f59e0b 0%, #dc2626 100%);
+            min-height: 100vh;
+        }
+
+        .portal-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar - Same as dashboard */
+        .sidebar {
+            width: 280px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 2rem 0;
+        }
+
+        .sidebar-header {
+            padding: 0 2rem 2rem;
+            border-bottom: 1px solid rgba(245, 158, 11, 0.2);
+            margin-bottom: 2rem;
+        }
+
+        .portal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #f59e0b;
+            margin-bottom: 0.5rem;
+        }
+
+        .portal-subtitle {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        .school-info {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(245, 158, 11, 0.1);
+            border-radius: 0.5rem;
+            border-left: 4px solid #f59e0b;
+        }
+
+        .school-name {
+            font-weight: 600;
+            color: #92400e;
+            margin-bottom: 0.25rem;
+        }
+
+        .school-level {
+            font-size: 0.75rem;
+            color: #b45309;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 1rem 2rem;
+            color: #4b5563;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: rgba(245, 158, 11, 0.1);
+            color: #f59e0b;
+            border-left-color: #f59e0b;
+        }
+
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 1rem;
+            background: currentColor;
+            mask-size: contain;
+            mask-repeat: no-repeat;
+        }
+
+        .icon-dashboard { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z'/%3E%3C/svg%3E"); }
+        .icon-students { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z'/%3E%3C/svg%3E"); }
+        .icon-exam { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'/%3E%3C/svg%3E"); }
+        .icon-room { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4'/%3E%3C/svg%3E"); }
+        .icon-session { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z'/%3E%3C/svg%3E"); }
+        .icon-wave { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z'/%3E%3C/svg%3E"); }
+        .icon-download { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4'/%3E%3C/svg%3E"); }
+        .icon-report { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'/%3E%3C/svg%3E"); }
+        .icon-settings { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z'/%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M15 12a3 3 0 11-6 0 3 3 0 016 0z'/%3E%3C/svg%3E"); }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .content-header {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-top: 0.5rem;
+        }
+
+        .breadcrumb a {
+            color: #f59e0b;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        /* Filter Section */
+        .filter-section {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control {
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #f59e0b;
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+        }
+
+        .form-select {
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            background: white;
+            cursor: pointer;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-end;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #f59e0b 0%, #dc2626 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(245, 158, 11, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.9);
+            color: #4b5563;
+            border: 1px solid rgba(156, 163, 175, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #f59e0b;
+            border: 1px solid #f59e0b;
+        }
+
+        .btn-outline:hover {
+            background: #f59e0b;
+            color: white;
+        }
+
+        /* Import Section */
+        .import-section {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .upload-area {
+            border: 2px dashed #d1d5db;
+            border-radius: 1rem;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .upload-area:hover {
+            border-color: #f59e0b;
+            background: rgba(245, 158, 11, 0.05);
+        }
+
+        .upload-icon {
+            font-size: 2.5rem;
+            color: #9ca3af;
+            margin-bottom: 1rem;
+        }
+
+        .upload-text {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-subtext {
+            color: #6b7280;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+        }
+
+        /* Students Table */
+        .students-section {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .students-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .students-table th,
+        .students-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .students-table th {
+            background: rgba(245, 158, 11, 0.05);
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .students-table td {
+            color: #6b7280;
+        }
+
+        .student-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .student-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(245, 158, 11, 0.1);
+            color: #f59e0b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .student-name {
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .student-nis {
+            font-size: 0.75rem;
+            color: #9ca3af;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .status-badge.active {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+        }
+
+        .status-badge.inactive {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.75rem;
+        }
+
+        .btn-icon {
+            padding: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .portal-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                padding: 1rem 0;
+            }
+            
+            .main-content {
+                padding: 1rem;
+            }
+            
+            .header-top {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+            
+            .filter-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .section-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+            
+            .students-table {
+                font-size: 0.75rem;
+            }
+            
+            .students-table th,
+            .students-table td {
+                padding: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="portal-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="portal-title">Portal Admin Sekolah</div>
+                <div class="portal-subtitle">Manajemen Ujian TKA</div>
+                
+                <div class="school-info">
+                    <div class="school-name">SMA Negeri 1 Jakarta</div>
+                    <div class="school-level">Jenjang: SMA • NPSN: 20100123</div>
+                </div>
+            </div>
+            
+            <nav>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <span class="nav-icon icon-dashboard"></span>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link active">
+                            <span class="nav-icon icon-students"></span>
+                            Data Siswa
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <span class="nav-icon icon-exam"></span>
+                            Jadwal Ujian
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <span class="nav-icon icon-room"></span>
+                            Ruang Ujian
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <span class="nav-icon icon-session"></span>
+                            Sesi Ujian
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <span class="nav-icon icon-wave"></span>
+                            Gelombang Ujian
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <span class="nav-icon icon-download"></span>
+                            Download Center
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <span class="nav-icon icon-report"></span>
+                            Laporan Sekolah
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <span class="nav-icon icon-settings"></span>
+                            Pengaturan
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <div class="content-header">
+                <div class="header-top">
+                    <div>
+                        <h1 class="page-title">Data Siswa</h1>
+                        <nav class="breadcrumb">
+                            <a href="#">Dashboard</a>
+                            <span>/</span>
+                            <span>Data Siswa</span>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Import Section -->
+            <div class="import-section">
+                <h2 class="section-title">Import Data Siswa</h2>
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-icon">📁</div>
+                    <div class="upload-text">Drag & drop file Excel di sini</div>
+                    <div class="upload-subtext">atau klik untuk memilih file</div>
+                    <button class="btn btn-primary" style="margin-top: 1rem;">Pilih File</button>
+                    <input type="file" id="fileInput" accept=".xlsx,.xls" style="display: none;">
+                </div>
+                
+                <div style="margin-top: 1rem; padding: 1rem; background: rgba(245, 158, 11, 0.05); border-radius: 0.5rem; border-left: 4px solid #f59e0b;">
+                    <strong>Format file yang didukung:</strong> Excel (.xlsx, .xls) dengan kolom: NIS, Nama Lengkap, Kelas, Jurusan, Email, No HP
+                </div>
+            </div>
+
+            <!-- Filter Section -->
+            <div class="filter-section">
+                <h2 class="section-title">Filter Data Siswa</h2>
+                <div class="filter-grid">
+                    <div class="form-group">
+                        <label class="form-label">Kelas</label>
+                        <select class="form-select">
+                            <option>Semua Kelas</option>
+                            <option>X IPA 1</option>
+                            <option>X IPA 2</option>
+                            <option>X IPS 1</option>
+                            <option>XI IPA 1</option>
+                            <option>XI IPA 2</option>
+                            <option>XI IPS 1</option>
+                            <option>XII IPA 1</option>
+                            <option>XII IPA 2</option>
+                            <option>XII IPS 1</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Jurusan</label>
+                        <select class="form-select">
+                            <option>Semua Jurusan</option>
+                            <option>IPA</option>
+                            <option>IPS</option>
+                            <option>Bahasa</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Status</label>
+                        <select class="form-select">
+                            <option>Semua Status</option>
+                            <option>Aktif</option>
+                            <option>Non Aktif</option>
+                            <option>Lulus</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Cari Siswa</label>
+                        <input type="text" class="form-control" placeholder="Nama atau NIS">
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-primary">Terapkan Filter</button>
+                    <button class="btn btn-secondary">Reset Filter</button>
+                    <button class="btn btn-outline">Export Data</button>
+                </div>
+            </div>
+
+            <!-- Students Table -->
+            <div class="students-section">
+                <div class="section-header">
+                    <h2 class="section-title">Daftar Siswa</h2>
+                    <div class="action-buttons">
+                        <button class="btn btn-primary btn-small">Tambah Siswa</button>
+                        <button class="btn btn-outline btn-small">Import Massal</button>
+                    </div>
+                </div>
+
+                <div class="students-table-container">
+                    <table class="students-table">
+                        <thead>
+                            <tr>
+                                <th>NIS</th>
+                                <th>Nama Siswa</th>
+                                <th>Kelas</th>
+                                <th>Jurusan</th>
+                                <th>Email</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>202312001</td>
+                                <td>
+                                    <div class="student-info">
+                                        <div class="student-avatar">AD</div>
+                                        <div>
+                                            <div class="student-name">Andi Pratama</div>
+                                            <div class="student-nis">NIS: 202312001</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>XII IPA 1</td>
+                                <td>IPA</td>
+                                <td>andi.pratama@email.com</td>
+                                <td><span class="status-badge active">✓ Aktif</span></td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn btn-primary btn-icon" title="Edit">✏️</button>
+                                        <button class="btn btn-secondary btn-icon" title="Detail">👁️</button>
+                                        <button class="btn btn-outline btn-icon" title="Nonaktif">❌</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>202312002</td>
+                                <td>
+                                    <div class="student-info">
+                                        <div class="student-avatar">BS</div>
+                                        <div>
+                                            <div class="student-name">Budi Santoso</div>
+                                            <div class="student-nis">NIS: 202312002</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>XII IPA 1</td>
+                                <td>IPA</td>
+                                <td>budi.santoso@email.com</td>
+                                <td><span class="status-badge active">✓ Aktif</span></td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn btn-primary btn-icon" title="Edit">✏️</button>
+                                        <button class="btn btn-secondary btn-icon" title="Detail">👁️</button>
+                                        <button class="btn btn-outline btn-icon" title="Nonaktif">❌</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>202312003</td>
+                                <td>
+                                    <div class="student-info">
+                                        <div class="student-avatar">CW</div>
+                                        <div>
+                                            <div class="student-name">Citra Wulandari</div>
+                                            <div class="student-nis">NIS: 202312003</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>XII IPA 2</td>
+                                <td>IPA</td>
+                                <td>citra.wulandari@email.com</td>
+                                <td><span class="status-badge active">✓ Aktif</span></td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn btn-primary btn-icon" title="Edit">✏️</button>
+                                        <button class="btn btn-secondary btn-icon" title="Detail">👁️</button>
+                                        <button class="btn btn-outline btn-icon" title="Nonaktif">❌</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>202212045</td>
+                                <td>
+                                    <div class="student-info">
+                                        <div class="student-avatar">DS</div>
+                                        <div>
+                                            <div class="student-name">Dewi Sartika</div>
+                                            <div class="student-nis">NIS: 202212045</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>XI IPS 1</td>
+                                <td>IPS</td>
+                                <td>dewi.sartika@email.com</td>
+                                <td><span class="status-badge inactive">✗ Non Aktif</span></td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn btn-primary btn-icon" title="Edit">✏️</button>
+                                        <button class="btn btn-secondary btn-icon" title="Detail">👁️</button>
+                                        <button class="btn btn-outline btn-icon" title="Aktifkan">✓</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>202112078</td>
+                                <td>
+                                    <div class="student-info">
+                                        <div class="student-avatar">ER</div>
+                                        <div>
+                                            <div class="student-name">Eko Rahmadi</div>
+                                            <div class="student-nis">NIS: 202112078</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>X Bahasa 1</td>
+                                <td>Bahasa</td>
+                                <td>eko.rahmadi@email.com</td>
+                                <td><span class="status-badge active">✓ Aktif</span></td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn btn-primary btn-icon" title="Edit">✏️</button>
+                                        <button class="btn btn-secondary btn-icon" title="Detail">👁️</button>
+                                        <button class="btn btn-outline btn-icon" title="Nonaktif">❌</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Pagination -->
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 2rem;">
+                    <div style="font-size: 0.875rem; color: #6b7280;">
+                        Menampilkan 1-5 dari 1,247 siswa
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn btn-secondary btn-small" disabled>Sebelumnya</button>
+                        <button class="btn btn-primary btn-small">1</button>
+                        <button class="btn btn-secondary btn-small">2</button>
+                        <button class="btn btn-secondary btn-small">3</button>
+                        <button class="btn btn-secondary btn-small">4</button>
+                        <button class="btn btn-secondary btn-small">5</button>
+                        <button class="btn btn-secondary btn-small">Selanjutnya</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // File upload functionality
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+
+        uploadArea.addEventListener('click', () => fileInput.click());
+
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = '#f59e0b';
+            uploadArea.style.background = 'rgba(245, 158, 11, 0.1)';
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.style.borderColor = '#d1d5db';
+            uploadArea.style.background = 'rgba(255, 255, 255, 0.5)';
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = '#d1d5db';
+            uploadArea.style.background = 'rgba(255, 255, 255, 0.5)';
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                alert(`File ${files[0].name} siap untuk diupload!`);
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                alert(`File ${e.target.files[0].name} dipilih!`);
+            }
+        });
+
+        // Action buttons
+        document.querySelectorAll('.btn-icon').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const action = this.getAttribute('title');
+                const studentName = this.closest('tr').querySelector('.student-name').textContent;
+                alert(`${action} untuk ${studentName}`);
+            });
+        });
+    </script>
+</body>
+</html>

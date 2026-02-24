@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal FKKG - Tambah Bank Soal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .sidebar-item:hover {
+            background: linear-gradient(90deg, #3b82f6 0%, #1e40af 100%);
+        }
+        .step-indicator {
+            transition: all 0.3s ease;
+        }
+        .step-indicator.active {
+            background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+            color: white;
+        }
+        .step-indicator.completed {
+            background: #10b981;
+            color: white;
+        }
+        .form-section {
+            display: none;
+        }
+        .form-section.active {
+            display: block;
+        }
+        .tag-input {
+            display: inline-flex;
+            align-items: center;
+            background: #e0e7ff;
+            color: #3730a3;
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.375rem;
+            margin: 0.25rem;
+            font-size: 0.875rem;
+        }
+        .tag-input .remove {
+            margin-left: 0.5rem;
+            cursor: pointer;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <div class="bg-blue-600 rounded-lg w-10 h-10 flex items-center justify-center">
+                    <i class="fas fa-graduation-cap text-white"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold text-gray-800">Portal FKKG</h1>
+                    <p class="text-sm text-gray-600">Forum Komunikasi Guru dan Kepala Sekolah</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button class="text-gray-600 hover:text-blue-600">
+                    <i class="fas fa-bell text-xl"></i>
+                </button>
+                <div class="flex items-center space-x-2">
+                    <div class="bg-blue-100 rounded-full w-8 h-8 flex items-center justify-center">
+                        <i class="fas fa-user text-blue-600"></i>
+                    </div>
+                    <span class="text-gray-700 font-medium">Dr. Suryadi, M.Pd</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white shadow-sm min-h-screen">
+            <nav class="p-4 space-y-2">
+                <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:text-white transition">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:text-white transition">
+                    <i class="fas fa-upload"></i>
+                    <span>Upload Soal</span>
+                </a>
+                <div class="sidebar-item bg-blue-50 text-blue-600 rounded-lg p-3">
+                    <div class="flex items-center space-x-3 mb-2">
+                        <i class="fas fa-database"></i>
+                        <span class="font-medium">Bank Soal</span>
+                    </div>
+                    <div class="ml-6 space-y-1 text-sm">
+                        <a href="#" class="block py-1 text-gray-600 hover:text-blue-600">• List Bank Soal</a>
+                        <a href="#" class="block py-1 text-blue-600 hover:text-blue-800">• Tambah Bank</a>
+                        <a href="#" class="block py-1 text-gray-600 hover:text-blue-600">• Import Soal</a>
+                        <a href="#" class="block py-1 text-gray-600 hover:text-blue-600">• Preview Soal</a>
+                    </div>
+                </div>
+                <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:text-white transition">
+                    <i class="fas fa-edit"></i>
+                    <span>Editor Soal</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:text-white transition">
+                    <i class="fas fa-eye"></i>
+                    <span>Review Jawaban</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:text-white transition">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Monitoring Ujian</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:text-white transition">
+                    <i class="fas fa-user"></i>
+                    <span>Profil</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-6">
+            <!-- Page Header -->
+            <div class="mb-6">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-800 mb-2">Tambah Bank Soal Baru</h1>
+                        <p class="text-gray-600">Buat bank soal baru dengan konfigurasi lengkap</p>
+                    </div>
+                    <button class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition">
+                        <i class="fas fa-times mr-2"></i>Batal
+                    </button>
+                </div>
+
+                <!-- Progress Steps -->
+                <div class="flex items-center justify-center mb-8">
+                    <div class="flex items-center space-x-4">
+                        <div class="step-indicator active w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm">1</div>
+                        <div class="text-sm font-medium text-blue-600">Informasi Dasar</div>
+                        <div class="w-16 h-1 bg-gray-200 rounded"></div>
+                        <div class="step-indicator w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm bg-gray-200 text-gray-600">2</div>
+                        <div class="text-sm text-gray-600">Konfigurasi Soal</div>
+                        <div class="w-16 h-1 bg-gray-200 rounded"></div>
+                        <div class="step-indicator w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm bg-gray-200 text-gray-600">3</div>
+                        <div class="text-sm text-gray-600">Review & Simpan</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Content -->
+            <div class="bg-white rounded-xl shadow-sm p-8">
+                <!-- Step 1: Basic Information -->
+                <div class="form-section active" id="step1">
+                    <h3 class="text-lg font-bold text-gray-800 mb-6">Informasi Dasar Bank Soal</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Nama Bank Soal *</label>
+                            <input type="text" placeholder="Contoh: Matematika SMA Kelas 12 - Semester 1" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <p class="text-xs text-gray-500 mt-1">Nama yang deskriptif untuk memudahkan identifikasi</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Kode Bank Soal *</label>
+                            <input type="text" placeholder="Contoh: MTK-SMA-12-S1-2024" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <p class="text-xs text-gray-500 mt-1">Kode unik untuk identifikasi sistem</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Jenjang Pendidikan *</label>
+                            <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="">Pilih Jenjang</option>
+                                <option value="sd">SD (Sekolah Dasar)</option>
+                                <option value="smp">SMP (Sekolah Menengah Pertama)</option>
+                                <option value="sma">SMA (Sekolah Menengah Atas)</option>
+                                <option value="smk">SMK (Sekolah Menengah Kejuruan)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Kelas *</label>
+                            <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="">Pilih Kelas</option>
+                                <option value="10">Kelas 10</option>
+                                <option value="11">Kelas 11</option>
+                                <option value="12">Kelas 12</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Mata Pelajaran *</label>
+                            <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="">Pilih Mata Pelajaran</option>
+                                <option value="mtk">Matematika</option>
+                                <option value="bin">Bahasa Indonesia</option>
+                                <option value="bing">Bahasa Inggris</option>
+                                <option value="fis">Fisika</option>
+                                <option value="kim">Kimia</option>
+                                <option value="bio">Biologi</option>
+                                <option value="eko">Ekonomi</option>
+                                <option value="sos">Sosiologi</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Semester *</label>
+                            <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="">Pilih Semester</option>
+                                <option value="1">Semester 1 (Ganjil)</option>
+                                <option value="2">Semester 2 (Genap)</option>
+                            </select>
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Deskripsi</label>
+                            <textarea rows="3" placeholder="Deskripsikan bank soal ini..." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                            <p class="text-xs text-gray-500 mt-1">Maksimal 500 karakter</p>
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Tag/Label</label>
+                            <div class="border border-gray-300 rounded-lg p-3">
+                                <div id="tagContainer">
+                                    <span class="tag-input">Ujian Nasional<span class="remove">×</span></span>
+                                    <span class="tag-input">Sekolah Menengah<span class="remove">×</span></span>
+                                </div>
+                                <input type="text" id="tagInput" placeholder="Tambah tag..." class="mt-2 w-full border-0 focus:outline-none">
+                            </div>
+                            <p class="text-xs text-gray-500 mt-1">Tekan Enter untuk menambah tag</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Question Configuration -->
+                <div class="form-section" id="step2">
+                    <h3 class="text-lg font-bold text-gray-800 mb-6">Konfigurasi Soal</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Jenis Soal *</label>
+                            <div class="space-y-2">
+                                <label class="flex items-center">
+                                    <input type="checkbox" checked class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                    <span class="ml-2 text-sm">Pilihan Ganda</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                    <span class="ml-2 text-sm">Essay/Uraian</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                    <span class="ml-2 text-sm">Benar/Salah</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                    <span class="ml-2 text-sm">Menjodohkan</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Tingkat Kesulitan Default</label>
+                            <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="">Campuran (Random)</option>
+                                <option value="easy">Mudah (0.0 - 0.3)</option>
+                                <option value="medium">Sedang (0.3 - 0.7)</option>
+                                <option value="hard">Sulit (0.7 - 1.0)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Jumlah Soal per Topik</label>
+                            <input type="number" value="25" min="1" max="100" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <p class="text-xs text-gray-500 mt-1">Jumlah soal default per topik/bab</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Bobot Nilai Default</label>
+                            <input type="number" value="1" min="0.1" max="10" step="0.1" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <p class="text-xs text-gray-500 mt-1">Bobot nilai per soal</p>
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Topik/Bab</label>
+                            <div class="border border-gray-300 rounded-lg p-4">
+                                <div class="flex space-x-2 mb-3">
+                                    <input type="text" placeholder="Nama topik/bab..." class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <input type="number" placeholder="Jumlah soal" min="1" class="w-24 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                                <div class="space-y-2">
+                                    <div class="flex items-center justify-between p-2 bg-gray-50 rounded">
+                                        <span class="text-sm">Bab 1: Persamaan dan Fungsi Kuadrat</span>
+                                        <span class="text-sm text-gray-600">25 soal</span>
+                                    </div>
+                                    <div class="flex items-center justify-between p-2 bg-gray-50 rounded">
+                                        <span class="text-sm">Bab 2: Trigonometri</span>
+                                        <span class="text-sm text-gray-600">30 soal</span>
+                                    </div>
+                                    <div class="flex items-center justify-between p-2 bg-gray-50 rounded">
+                                        <span class="text-sm">Bab 3: Limit dan Turunan</span>
+                                        <span class="text-sm text-gray-600">20 soal</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Pengaturan Validasi</label>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="space-y-2">
+                                    <label class="flex items-center">
+                                        <input type="checkbox" checked class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                        <span class="ml-2 text-sm">Validasi jawaban unik</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" checked class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                        <span class="ml-2 text-sm">Validasi kunci jawaban</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" checked class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                        <span class="ml-2 text-sm">Validasi tingkat kesulitan</span>
+                                    </label>
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="flex items-center">
+                                        <input type="checkbox" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                        <span class="ml-2 text-sm">Wajib ada soal dengan gambar</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                        <span class="ml-2 text-sm">Wajib ada soal audio</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" checked class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                        <span class="ml-2 text-sm">Analisis kualitas otomatis</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Review & Save -->
+                <div class="form-section" id="step3">
+                    <h3 class="text-lg font-bold text-gray-800 mb-6">Review & Konfirmasi</h3>
+                    <div class="bg-gray-50 rounded-lg p-6 mb-6">
+                        <h4 class="font-bold text-gray-800 mb-4">Ringkasan Bank Soal</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-sm text-gray-600 mb-1">Nama Bank Soal</p>
+                                <p class="font-medium text-gray-800">Matematika - SMA Kelas 12 - Semester 1</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600 mb-1">Kode Bank Soal</p>
+                                <p class="font-medium text-gray-800">MTK-SMA-12-S1-2024</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600 mb-1">Jenjang & Kelas</p>
+                                <p class="font-medium text-gray-800">SMA - Kelas 12</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600 mb-1">Mata Pelajaran</p>
+                                <p class="font-medium text-gray-800">Matematika</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600 mb-1">Jenis Soal</p>
+                                <p class="font-medium text-gray-800">Pilihan Ganda, Essay</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600 mb-1">Jumlah Topik</p>
+                                <p class="font-medium text-gray-800">3 Topik</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600 mb-1">Total Soal (Estimasi)</p>
+                                <p class="font-medium text-gray-800">75 Soal</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600 mb-1">Status</p>
+                                <span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">Draft</span>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <p class="text-sm text-gray-600 mb-1">Deskripsi</p>
+                            <p class="text-gray-800">Bank soal matematika untuk kelas 12 semester 1 mencakup materi persamaan kuadrat, trigonometri, dan limit turunan.</p>
+                        </div>
+                        <div class="mt-4">
+                            <p class="text-sm text-gray-600 mb-1">Tag/Label</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">Ujian Nasional</span>
+                                <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">Sekolah Menengah</span>
+                                <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">Matematika Lanjut</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                        <div class="flex items-start space-x-3">
+                            <i class="fas fa-info-circle text-blue-600 mt-1"></i>
+                            <div>
+                                <p class="font-medium text-blue-800 mb-1">Informasi Penting</p>
+                                <ul class="text-sm text-blue-700 space-y-1">
+                                    <li>• Bank soal akan dibuat dalam status DRAFT</li>
+                                    <li>• Anda dapat menambahkan soal setelah bank soal dibuat</li>
+                                    <li>• Bank soal perlu diaktifkan sebelum dapat digunakan dalam ujian</li>
+                                    <li>• Semua validasi akan dijalankan saat mengaktifkan bank soal</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="flex justify-between pt-6 border-t border-gray-200">
+                    <button id="prevBtn" class="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition disabled:opacity-50" disabled>
+                        <i class="fas fa-chevron-left mr-2"></i>Sebelumnya
+                    </button>
+                    <div class="flex space-x-3">
+                        <button class="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition">
+                            Simpan Draft
+                        </button>
+                        <button id="nextBtn" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                            Selanjutnya<i class="fas fa-chevron-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        const totalSteps = 3;
+
+        function showStep(step) {
+            // Hide all sections
+            document.querySelectorAll('.form-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show current section
+            document.getElementById(`step${step}`).classList.add('active');
+            
+            // Update step indicators
+            document.querySelectorAll('.step-indicator').forEach((indicator, index) => {
+                if (index + 1 < step) {
+                    indicator.classList.add('completed');
+                    indicator.classList.remove('active');
+                    indicator.innerHTML = '<i class="fas fa-check"></i>';
+                } else if (index + 1 === step) {
+                    indicator.classList.add('active');
+                    indicator.classList.remove('completed');
+                    indicator.innerHTML = step;
+                } else {
+                    indicator.classList.remove('active', 'completed');
+                    indicator.innerHTML = index + 1;
+                }
+            });
+            
+            // Update navigation buttons
+            document.getElementById('prevBtn').disabled = step === 1;
+            const nextBtn = document.getElementById('nextBtn');
+            if (step === totalSteps) {
+                nextBtn.innerHTML = 'Buat Bank Soal<i class="fas fa-check ml-2"></i>';
+                nextBtn.classList.add('bg-green-600', 'hover:bg-green-700');
+                nextBtn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+            } else {
+                nextBtn.innerHTML = 'Selanjutnya<i class="fas fa-chevron-right ml-2"></i>';
+                nextBtn.classList.remove('bg-green-600', 'hover:bg-green-700');
+                nextBtn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+            }
+        }
+
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            if (currentStep < totalSteps) {
+                currentStep++;
+                showStep(currentStep);
+            } else {
+                // Submit form
+                alert('Bank soal berhasil dibuat!');
+            }
+        });
+
+        document.getElementById('prevBtn').addEventListener('click', () => {
+            if (currentStep > 1) {
+                currentStep--;
+                showStep(currentStep);
+            }
+        });
+
+        // Tag input functionality
+        const tagInput = document.getElementById('tagInput');
+        const tagContainer = document.getElementById('tagContainer');
+
+        tagInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const tagValue = tagInput.value.trim();
+                if (tagValue && tagValue.length > 0) {
+                    const tag = document.createElement('span');
+                    tag.className = 'tag-input';
+                    tag.innerHTML = `${tagValue}<span class="remove">×</span>`;
+                    tagContainer.appendChild(tag);
+                    tagInput.value = '';
+                    
+                    // Add remove functionality
+                    tag.querySelector('.remove').addEventListener('click', () => {
+                        tag.remove();
+                    });
+                }
+            }
+        });
+
+        // Remove existing tags
+        document.querySelectorAll('.tag-input .remove').forEach(removeBtn => {
+            removeBtn.addEventListener('click', (e) => {
+                e.target.parentElement.remove();
+            });
+        });
+    </script>
+</body>
+</html>

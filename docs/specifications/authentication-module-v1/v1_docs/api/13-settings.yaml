@@ -1,0 +1,40 @@
+# ============================================================
+# SETTINGS & SYSTEM ENDPOINTS
+# Access: SUPER_ADMIN
+# ============================================================
+
+# --- App Settings ---
+GET    /settings
+  # Query: ?group=general
+GET    /settings/:key
+PUT    /settings/:key
+  # Body: { value: "..." }
+
+# --- App Releases (Proktor & Client download) ---
+GET    /releases
+  # Query: ?appType=PROKTOR&platform=WINDOWS
+GET    /releases/latest
+  # Query: ?appType=CLIENT_SISWA&platform=WINDOWS
+  # Untuk auto-update check
+POST   /releases
+  # Body: multipart/form-data { appType, platform, version,
+  #        file, releaseNotes?, isMandatory? }
+  # Access: SUPER_ADMIN
+
+# --- Academic Years ---
+GET    /academic-years
+POST   /academic-years
+PUT    /academic-years/:id
+PUT    /academic-years/:id/set-current
+
+# --- Subjects ---
+GET    /subjects
+  # Query: ?level=SD&search=xxx
+POST   /subjects
+PUT    /subjects/:id
+DELETE /subjects/:id
+
+# --- Audit Logs ---
+GET    /audit-logs
+  # Query: ?userId=xxx&action=LOGIN&entity=exams
+  #        &startDate=xxx&endDate=xxx&page=1&perPage=50

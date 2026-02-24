@@ -1,0 +1,82 @@
+# ============================================================
+# EXAM MANAGEMENT ENDPOINTS
+# Access: ADMIN_SEKOLAH (own school), ADMIN_FKKG (monitoring),
+#         ADMIN_DISDIK (read), SUPER_ADMIN (all)
+# ============================================================
+
+# --- Exams ---
+GET    /exams
+  # Query: ?page=1&perPage=20&schoolId=xxx&status=SCHEDULED
+  #        &questionBankId=xxx&search=xxx
+
+POST   /exams
+  # Body: { title, schoolId, questionBankId, duration, totalQuestions,
+  #         passingScore?, shuffleQuestions?, shuffleOptions?,
+  #         showResult?, scheduledStartAt?, scheduledEndAt?,
+  #         instructions? }
+  # Access: ADMIN_SEKOLAH
+
+GET    /exams/:id
+  # Response: exam detail + waves + sessions + rooms stats
+
+PUT    /exams/:id
+  # Only when status = DRAFT
+  # Access: ADMIN_SEKOLAH
+
+DELETE /exams/:id
+  # Only when status = DRAFT
+  # Access: ADMIN_SEKOLAH
+
+PUT    /exams/:id/status
+  # Body: { status: "SCHEDULED" | "CANCELLED" }
+  # Access: ADMIN_SEKOLAH
+
+# --- Exam Waves ---
+GET    /exams/:examId/waves
+
+POST   /exams/:examId/waves
+  # Body: { name, waveNumber, startDate, endDate }
+
+PUT    /exams/:examId/waves/:id
+
+DELETE /exams/:examId/waves/:id
+
+# --- Exam Sessions ---
+GET    /exams/:examId/sessions
+  # Query: ?waveId=xxx&status=WAITING
+
+POST   /exams/:examId/sessions
+  # Body: { name, sessionNumber, waveId?, startTime, endTime }
+
+PUT    /exams/:examId/sessions/:id
+
+DELETE /exams/:examId/sessions/:id
+
+# --- Exam Rooms ---
+GET    /exam-rooms
+  # Query: ?schoolId=xxx
+
+POST   /exam-rooms
+  # Body: { schoolId, name, capacity }
+
+PUT    /exam-rooms/:id
+
+DELETE /exam-rooms/:id
+
+# --- Student-Room-Session Mapping ---
+GET    /exams/:examId/sessions/:sessionId/students
+  # Daftar siswa di sesi ini beserta ruangannya
+
+POST   /exams/:examId/sessions/:sessionId/assign-students
+  # Body: { assignments: [{ studentId, roomId, seatNumber? }] }
+
+POST   /exams/:examId/sessions/:sessionId/auto-assign
+  # Auto-assign siswa ke ruangan berdasarkan kapasitas
+  # Body: { studentIds: [...], roomIds: [...] }
+
+DELETE /exams/:examId/sessions/:sessionId/students/:studentId
+  # Remove siswa dari sesi
+
+POST   /exams/:examId/sessions/:sessionId/generate-tokens
+  # Generate token login untuk semua siswa di sesi ini
+  # Response: { tokens: [{ studentId, token, studentName }] }

@@ -1,0 +1,42 @@
+tka-ujian/
+├── 📄 package.json                  # Root package.json (workspaces)
+├── 📄 turbo.json                    # Turborepo config
+├── 📄 .gitignore
+├── 📄 .env.example
+├── 📄 .eslintrc.js
+├── 📄 .prettierrc
+├── 📄 docker-compose.yml            # PostgreSQL, Redis, MinIO
+├── 📄 docker-compose.prod.yml
+├── 📄 README.md
+│
+├── 📁 apps/
+│   ├── 📁 api/                      # Backend NestJS
+│   ├── 📁 web/                      # Frontend Next.js
+│   ├── 📁 proktor/                  # Desktop Electron (Proktor)
+│   └── 📁 client-siswa/             # Desktop Electron (Client Siswa)
+│
+├── 📁 packages/
+│   ├── 📁 shared-types/             # TypeScript types (shared)
+│   ├── 📁 shared-utils/             # Utility functions (shared)
+│   ├── 📁 shared-validators/        # Zod schemas (shared)
+│   ├── 📁 ui/                       # Shared UI components
+│   ├── 📁 eslint-config/            # Shared ESLint config
+│   └── 📁 tsconfig/                 # Shared TypeScript config
+│
+├── 📁 docs/
+│   ├── 📁 api/                      # API documentation
+│   ├── 📁 architecture/             # Architecture diagrams
+│   ├── 📁 deployment/               # Deployment guides
+│   └── 📁 user-manual/              # User manuals per role
+│
+├── 📁 scripts/
+│   ├── 📄 setup.sh                  # Initial setup script
+│   ├── 📄 seed.ts                   # Database seeding
+│   └── 📄 generate-keys.sh          # Generate RSA keys for JWT
+│
+└── 📁 .github/
+    └── 📁 workflows/
+        ├── 📄 ci.yml                # CI pipeline
+        ├── 📄 deploy-api.yml        # Deploy backend
+        ├── 📄 deploy-web.yml        # Deploy frontend
+        └── 📄 build-desktop.yml     # Build Electron apps

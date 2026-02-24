@@ -1,0 +1,52 @@
+# ============================================================
+# WEBSOCKET EVENTS (Socket.io)
+# Namespace: /exam
+# ============================================================
+
+# --- Connection ---
+# Client connects with: io("/exam", { auth: { token: "jwt..." } })
+
+# === PROKTOR EVENTS (emit & listen) ===
+
+# Proktor emits:
+proctor:join-session        # { sessionId }
+proctor:start-exam          # { sessionId }
+proctor:pause-exam          # { sessionId }
+proctor:resume-exam         # { sessionId }
+proctor:end-exam            # { sessionId }
+proctor:extend-time         # { sessionId, additionalMinutes }
+proctor:force-submit        # { sessionId, studentId }
+proctor:kick-student        # { sessionId, studentId, reason }
+proctor:send-message        # { sessionId, message } (broadcast ke siswa)
+
+# Proktor listens:
+student:connected           # { studentId, name, seatNumber }
+student:disconnected        # { studentId, name }
+student:progress-update     # { studentId, answered, total }
+student:submitted           # { studentId, name, submittedAt }
+student:alert               # { studentId, type, message }
+                            # types: FOCUS_LOST, FULLSCREEN_EXIT,
+                            #        SUSPICIOUS_PROCESS, RECONNECTED
+session:statistics          # { online, offline, submitted, progress }
+
+# === STUDENT EVENTS (emit & listen) ===
+
+# Student emits:
+student:join-session        # { sessionId, token }
+student:heartbeat           # { sessionId } (setiap 10 detik)
+student:answer-saved        # { questionId, optionId/answerText }
+student:submit-exam         # { sessionId }
+student:focus-lost          # { sessionId } (tab switch/minimize)
+student:focus-gained        # { sessionId }
+student:fullscreen-exit     # { sessionId }
+
+# Student listens:
+exam:started                # { startedAt, duration }
+exam:paused                 # { pausedAt }
+exam:resumed                # { resumedAt, remainingTime }
+exam:ended                  # { endedAt, reason }
+exam:time-extended          # { additionalMinutes, newEndTime }
+exam:force-submitted        # { reason }
+exam:kicked                 # { reason }
+exam:message                # { from: "Proktor", message }
+exam:time-warning           # { remainingMinutes: 5 }

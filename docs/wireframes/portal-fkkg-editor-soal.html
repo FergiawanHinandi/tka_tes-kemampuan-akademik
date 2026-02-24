@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal FKKG - Editor Soal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .sidebar-item:hover {
+            background: linear-gradient(90deg, #3b82f6 0%, #1e40af 100%);
+        }
+        .question-card {
+            transition: all 0.3s ease;
+        }
+        .question-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.2);
+        }
+        .option-input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        .rich-editor {
+            min-height: 120px;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            transition: all 0.3s ease;
+        }
+        .rich-editor:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            outline: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <div class="bg-blue-600 rounded-lg w-10 h-10 flex items-center justify-center">
+                    <i class="fas fa-graduation-cap text-white"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold text-gray-800">Portal FKKG</h1>
+                    <p class="text-sm text-gray-600">Forum Komunikasi Guru dan Kepala Sekolah</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button class="text-gray-600 hover:text-blue-600">
+                    <i class="fas fa-bell text-xl"></i>
+                </button>
+                <div class="flex items-center space-x-2">
+                    <div class="bg-blue-100 rounded-full w-8 h-8 flex items-center justify-center">
+                        <i class="fas fa-user text-blue-600"></i>
+                    </div>
+                    <span class="text-gray-700 font-medium">Dr. Suryadi, M.Pd</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white shadow-sm min-h-screen">
+            <nav class="p-4 space-y-2">
+                <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:text-white transition">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:text-white transition">
+                    <i class="fas fa-upload"></i>
+                    <span>Upload Soal</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg text-blue-600 bg-blue-50">
+                    <i class="fas fa-edit"></i>
+                    <span class="font-medium">Editor Soal</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:text-white transition">
+                    <i class="fas fa-eye"></i>
+                    <span>Review Jawaban</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:text-white transition">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Monitoring Ujian</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:text-white transition">
+                    <i class="fas fa-user"></i>
+                    <span>Profil</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-6">
+            <!-- Page Header -->
+            <div class="mb-6 flex items-center justify-between">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-800 mb-2">Editor Soal</h1>
+                    <p class="text-gray-600">Buat dan edit soal ujian dengan editor interaktif</p>
+                </div>
+                <div class="flex space-x-3">
+                    <button class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition">
+                        <i class="fas fa-save mr-2"></i>Simpan Draft
+                    </button>
+                    <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                        <i class="fas fa-plus mr-2"></i>Tambah Soal
+                    </button>
+                </div>
+            </div>
+
+            <!-- Question Metadata -->
+            <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+                <h2 class="text-lg font-bold text-gray-800 mb-4">Informasi Soal</h2>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Mata Pelajaran</label>
+                        <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option>Matematika</option>
+                            <option>Bahasa Indonesia</option>
+                            <option>Bahasa Inggris</option>
+                            <option>Fisika</option>
+                            <option>Kimia</option>
+                            <option>Biologi</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Jenjang Kelas</label>
+                        <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option>SMA - Kelas 10</option>
+                            <option>SMA - Kelas 11</option>
+                            <option>SMA - Kelas 12</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Tingkat Kesulitan</label>
+                        <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option>Mudah</option>
+                            <option>Sedang</option>
+                            <option>Sulit</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Bobot Nilai</label>
+                        <input type="number" value="1" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question Editor -->
+            <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+                <h2 class="text-lg font-bold text-gray-800 mb-4">Pertanyaan</h2>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Teks Soal</label>
+                    <div class="rich-editor" contenteditable="true">
+                        <p>Ketik pertanyaan di sini...</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Gambar (Opsional)</label>
+                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
+                            <i class="fas fa-image text-gray-400 text-2xl mb-2"></i>
+                            <p class="text-sm text-gray-600">Klik untuk upload gambar</p>
+                            <p class="text-xs text-gray-500">Maks. 2MB, format JPG/PNG</p>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Audio (Opsional)</label>
+                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
+                            <i class="fas fa-music text-gray-400 text-2xl mb-2"></i>
+                            <p class="text-sm text-gray-600">Klik untuk upload audio</p>
+                            <p class="text-xs text-gray-500">Maks. 5MB, format MP3/WAV</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Answer Options -->
+            <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+                <h2 class="text-lg font-bold text-gray-800 mb-4">Pilihan Jawaban</h2>
+                <div class="space-y-4">
+                    <!-- Option A -->
+                    <div class="flex items-center space-x-4 p-4 border border-gray-200 rounded-lg">
+                        <div class="flex items-center space-x-2">
+                            <input type="radio" name="correct_answer" value="A" class="text-blue-600">
+                            <span class="font-bold text-gray-700">A</span>
+                        </div>
+                        <input type="text" placeholder="Jawaban A" class="flex-1 option-input px-3 py-2 border border-gray-300 rounded-lg focus:outline-none">
+                        <button class="text-red-600 hover:text-red-700">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+
+                    <!-- Option B -->
+                    <div class="flex items-center space-x-4 p-4 border border-gray-200 rounded-lg">
+                        <div class="flex items-center space-x-2">
+                            <input type="radio" name="correct_answer" value="B" class="text-blue-600">
+                            <span class="font-bold text-gray-700">B</span>
+                        </div>
+                        <input type="text" placeholder="Jawaban B" class="flex-1 option-input px-3 py-2 border border-gray-300 rounded-lg focus:outline-none">
+                        <button class="text-red-600 hover:text-red-700">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+
+                    <!-- Option C -->
+                    <div class="flex items-center space-x-4 p-4 border border-gray-200 rounded-lg">
+                        <div class="flex items-center space-x-2">
+                            <input type="radio" name="correct_answer" value="C" class="text-blue-600">
+                            <span class="font-bold text-gray-700">C</span>
+                        </div>
+                        <input type="text" placeholder="Jawaban C" class="flex-1 option-input px-3 py-2 border border-gray-300 rounded-lg focus:outline-none">
+                        <button class="text-red-600 hover:text-red-700">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+
+                    <!-- Option D -->
+                    <div class="flex items-center space-x-4 p-4 border border-gray-200 rounded-lg bg-blue-50 border-blue-200">
+                        <div class="flex items-center space-x-2">
+                            <input type="radio" name="correct_answer" value="D" class="text-blue-600" checked>
+                            <span class="font-bold text-blue-700">D</span>
+                        </div>
+                        <input type="text" placeholder="Jawaban D (Jawaban Benar)" value="4" class="flex-1 option-input px-3 py-2 border border-blue-300 rounded-lg focus:outline-none">
+                        <button class="text-red-600 hover:text-red-700">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <button class="flex items-center space-x-2 text-blue-600 hover:text-blue-700">
+                        <i class="fas fa-plus"></i>
+                        <span>Tambah Pilihan Jawaban</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Question Analysis -->
+            <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+                <h2 class="text-lg font-bold text-gray-800 mb-4">Analisis Soal</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="text-center p-4 bg-blue-50 rounded-lg">
+                        <i class="fas fa-clock text-blue-600 text-2xl mb-2"></i>
+                        <p class="text-sm text-gray-600">Estimasi Waktu</p>
+                        <p class="font-bold text-blue-600">2 menit</p>
+                    </div>
+                    <div class="text-center p-4 bg-green-50 rounded-lg">
+                        <i class="fas fa-brain text-green-600 text-2xl mb-2"></i>
+                        <p class="text-sm text-gray-600">Tingkat Kognitif</p>
+                        <p class="font-bold text-green-600">Aplikasi</p>
+                    </div>
+                    <div class="text-center p-4 bg-purple-50 rounded-lg">
+                        <i class="fas fa-chart-line text-purple-600 text-2xl mb-2"></i>
+                        <p class="text-sm text-gray-600">Kualitas Prediksi</p>
+                        <p class="font-bold text-purple-600">85%</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex justify-end space-x-4">
+                <button class="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition">
+                    <i class="fas fa-eye mr-2"></i>Preview
+                </button>
+                <button class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">
+                    <i class="fas fa-check mr-2"></i>Simpan Soal
+                </button>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

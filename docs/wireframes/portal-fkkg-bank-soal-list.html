@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal FKKG - Bank Soal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .sidebar-item:hover {
+            background: linear-gradient(90deg, #3b82f6 0%, #1e40af 100%);
+        }
+        .bank-card {
+            transition: all 0.3s ease;
+        }
+        .bank-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.2);
+        }
+        .status-badge {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.375rem;
+        }
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+        .progress-ring-circle {
+            transition: stroke-dasharray 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <div class="bg-blue-600 rounded-lg w-10 h-10 flex items-center justify-center">
+                    <i class="fas fa-graduation-cap text-white"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold text-gray-800">Portal FKKG</h1>
+                    <p class="text-sm text-gray-600">Forum Komunikasi Guru dan Kepala Sekolah</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button class="text-gray-600 hover:text-blue-600">
+                    <i class="fas fa-bell text-xl"></i>
+                </button>
+                <div class="flex items-center space-x-2">
+                    <div class="bg-blue-100 rounded-full w-8 h-8 flex items-center justify-center">
+                        <i class="fas fa-user text-blue-600"></i>
+                    </div>
+                    <span class="text-gray-700 font-medium">Dr. Suryadi, M.Pd</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white shadow-sm min-h-screen">
+            <nav class="p-4 space-y-2">
+                <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:text-white transition">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:text-white transition">
+                    <i class="fas fa-upload"></i>
+                    <span>Upload Soal</span>
+                </a>
+                <div class="sidebar-item bg-blue-50 text-blue-600 rounded-lg p-3">
+                    <div class="flex items-center space-x-3 mb-2">
+                        <i class="fas fa-database"></i>
+                        <span class="font-medium">Bank Soal</span>
+                    </div>
+                    <div class="ml-6 space-y-1 text-sm">
+                        <a href="#" class="block py-1 text-blue-600 hover:text-blue-800">• List Bank Soal</a>
+                        <a href="#" class="block py-1 text-gray-600 hover:text-blue-600">• Tambah Bank</a>
+                        <a href="#" class="block py-1 text-gray-600 hover:text-blue-600">• Import Soal</a>
+                        <a href="#" class="block py-1 text-gray-600 hover:text-blue-600">• Preview Soal</a>
+                    </div>
+                </div>
+                <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:text-white transition">
+                    <i class="fas fa-edit"></i>
+                    <span>Editor Soal</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:text-white transition">
+                    <i class="fas fa-eye"></i>
+                    <span>Review Jawaban</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:text-white transition">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Monitoring Ujian</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:text-white transition">
+                    <i class="fas fa-user"></i>
+                    <span>Profil</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-6">
+            <!-- Page Header -->
+            <div class="mb-6 flex items-center justify-between">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-800 mb-2">Bank Soal</h1>
+                    <p class="text-gray-600">Kelola bank soal per jenjang dan mata pelajaran</p>
+                </div>
+                <div class="flex space-x-3">
+                    <button class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition">
+                        <i class="fas fa-download mr-2"></i>Export
+                    </button>
+                    <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                        <i class="fas fa-plus mr-2"></i>Tambah Bank Soal
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filter and Search -->
+            <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Jenjang</label>
+                        <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option>Semua Jenjang</option>
+                            <option>SD</option>
+                            <option>SMP</option>
+                            <option>SMA</option>
+                            <option>SMK</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Mata Pelajaran</label>
+                        <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option>Semua Mapel</option>
+                            <option>Matematika</option>
+                            <option>Bahasa Indonesia</option>
+                            <option>Bahasa Inggris</option>
+                            <option>IPA</option>
+                            <option>IPS</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                        <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option>Semua Status</option>
+                            <option>Aktif</option>
+                            <option>Draft</option>
+                            <option>Nonaktif</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Cari Bank Soal</label>
+                        <div class="relative">
+                            <input type="text" placeholder="Nama bank soal..." class="w-full px-3 py-2 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistics Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white rounded-xl p-6 shadow-sm bank-card">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <p class="text-gray-600 text-sm">Total Bank Soal</p>
+                            <p class="text-2xl font-bold text-gray-800">156</p>
+                        </div>
+                        <div class="bg-blue-100 rounded-full p-3">
+                            <i class="fas fa-database text-blue-600 text-xl"></i>
+                        </div>
+                    </div>
+                    <p class="text-green-600 text-xs">+12 minggu ini</p>
+                </div>
+                <div class="bg-white rounded-xl p-6 shadow-sm bank-card">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <p class="text-gray-600 text-sm">Bank Soal Aktif</p>
+                            <p class="text-2xl font-bold text-gray-800">134</p>
+                        </div>
+                        <div class="bg-green-100 rounded-full p-3">
+                            <i class="fas fa-check-circle text-green-600 text-xl"></i>
+                        </div>
+                    </div>
+                    <p class="text-blue-600 text-xs">86% dari total</p>
+                </div>
+                <div class="bg-white rounded-xl p-6 shadow-sm bank-card">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <p class="text-gray-600 text-sm">Total Soal</p>
+                            <p class="text-2xl font-bold text-gray-800">12,847</p>
+                        </div>
+                        <div class="bg-purple-100 rounded-full p-3">
+                            <i class="fas fa-question-circle text-purple-600 text-xl"></i>
+                        </div>
+                    </div>
+                    <p class="text-purple-600 text-xs">Rata-rata 82 soal/bank</p>
+                </div>
+                <div class="bg-white rounded-xl p-6 shadow-sm bank-card">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <p class="text-gray-600 text-sm">Kualitas Rata-rata</p>
+                            <p class="text-2xl font-bold text-gray-800">87%</p>
+                        </div>
+                        <div class="bg-yellow-100 rounded-full p-3">
+                            <i class="fas fa-star text-yellow-600 text-xl"></i>
+                        </div>
+                    </div>
+                    <p class="text-yellow-600 text-xs">Sangat Baik</p>
+                </div>
+            </div>
+
+            <!-- Bank Soal List -->
+            <div class="bg-white rounded-xl shadow-sm p-6">
+                <h3 class="text-lg font-bold text-gray-800 mb-6">Daftar Bank Soal</h3>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Bank Soal 1 -->
+                    <div class="bank-card border border-gray-200 rounded-lg p-6">
+                        <div class="flex items-start justify-between mb-4">
+                            <div>
+                                <h4 class="font-bold text-gray-800 mb-1">Matematika - SMA Kelas 12</h4>
+                                <p class="text-sm text-gray-600">Kode: MTK-SMA-12-2024</p>
+                            </div>
+                            <span class="status-badge bg-green-100 text-green-800">Aktif</span>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div class="text-center p-3 bg-blue-50 rounded-lg">
+                                <p class="text-2xl font-bold text-blue-600">245</p>
+                                <p class="text-xs text-gray-600">Total Soal</p>
+                            </div>
+                            <div class="text-center p-3 bg-green-50 rounded-lg">
+                                <p class="text-2xl font-bold text-green-600">89%</p>
+                                <p class="text-xs text-gray-600">Kualitas</p>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2 mb-4">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-600">Tingkat Kesulitan</span>
+                                <span class="font-medium">Sedang</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-600">Terakhir Update</span>
+                                <span class="font-medium">2 hari lalu</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-600">Dibuat oleh</span>
+                                <span class="font-medium">Dr. Suryadi</span>
+                            </div>
+                        </div>
+
+                        <div class="flex space-x-2">
+                            <button class="flex-1 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-sm">
+                                <i class="fas fa-eye mr-1"></i>Lihat
+                            </button>
+                            <button class="flex-1 px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition text-sm">
+                                <i class="fas fa-edit mr-1"></i>Edit
+                            </button>
+                            <button class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition text-sm">
+                                <i class="fas fa-download"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Bank Soal 2 -->
+                    <div class="bank-card border border-gray-200 rounded-lg p-6">
+                        <div class="flex items-start justify-between mb-4">
+                            <div>
+                                <h4 class="font-bold text-gray-800 mb-1">Bahasa Indonesia - SMA Kelas 11</h4>
+                                <p class="text-sm text-gray-600">Kode: BIN-SMA-11-2024</p>
+                            </div>
+                            <span class="status-badge bg-green-100 text-green-800">Aktif</span>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div class="text-center p-3 bg-blue-50 rounded-lg">
+                                <p class="text-2xl font-bold text-blue-600">198</p>
+                                <p class="text-xs text-gray-600">Total Soal</p>
+                            </div>
+                            <div class="text-center p-3 bg-green-50 rounded-lg">
+                                <p class="text-2xl font-bold text-green-600">92%</p>
+                                <p class="text-xs text-gray-600">Kualitas</p>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2 mb-4">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-600">Tingkat Kesulitan</span>
+                                <span class="font-medium">Mudah-Sedang</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-600">Terakhir Update</span>
+                                <span class="font-medium">1 minggu lalu</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-600">Dibuat oleh</span>
+                                <span class="font-medium">Dra. Ani Susanti</span>
+                            </div>
+                        </div>
+
+                        <div class="flex space-x-2">
+                            <button class="flex-1 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-sm">
+                                <i class="fas fa-eye mr-1"></i>Lihat
+                            </button>
+                            <button class="flex-1 px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition text-sm">
+                                <i class="fas fa-edit mr-1"></i>Edit
+                            </button>
+                            <button class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition text-sm">
+                                <i class="fas fa-download"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Bank Soal 3 -->
+                    <div class="bank-card border border-gray-200 rounded-lg p-6">
+                        <div class="flex items-start justify-between mb-4">
+                            <div>
+                                <h4 class="font-bold text-gray-800 mb-1">Fisika - SMA Kelas 12</h4>
+                                <p class="text-sm text-gray-600">Kode: FIS-SMA-12-2024</p>
+                            </div>
+                            <span class="status-badge bg-yellow-100 text-yellow-800">Draft</span>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div class="text-center p-3 bg-blue-50 rounded-lg">
+                                <p class="text-2xl font-bold text-blue-600">156</p>
+                                <p class="text-xs text-gray-600">Total Soal</p>
+                            </div>
+                            <div class="text-center p-3 bg-yellow-50 rounded-lg">
+                                <p class="text-2xl font-bold text-yellow-600">73%</p>
+                                <p class="text-xs text-gray-600">Kualitas</p>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2 mb-4">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-600">Tingkat Kesulitan</span>
+                                <span class="font-medium">Sulit</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-600">Terakhir Update</span>
+                                <span class="font-medium">3 hari lalu</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-600">Dibuat oleh</span>
+                                <span class="font-medium">Prof. Budi</span>
+                            </div>
+                        </div>
+
+                        <div class="flex space-x-2">
+                            <button class="flex-1 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-sm">
+                                <i class="fas fa-eye mr-1"></i>Lihat
+                            </button>
+                            <button class="flex-1 px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition text-sm">
+                                <i class="fas fa-edit mr-1"></i>Edit
+                            </button>
+                            <button class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition text-sm">
+                                <i class="fas fa-download"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Bank Soal 4 -->
+                    <div class="bank-card border border-gray-200 rounded-lg p-6">
+                        <div class="flex items-start justify-between mb-4">
+                            <div>
+                                <h4 class="font-bold text-gray-800 mb-1">Kimia - SMA Kelas 11</h4>
+                                <p class="text-sm text-gray-600">Kode: KIM-SMA-11-2024</p>
+                            </div>
+                            <span class="status-badge bg-green-100 text-green-800">Aktif</span>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div class="text-center p-3 bg-blue-50 rounded-lg">
+                                <p class="text-2xl font-bold text-blue-600">189</p>
+                                <p class="text-xs text-gray-600">Total Soal</p>
+                            </div>
+                            <div class="text-center p-3 bg-green-50 rounded-lg">
+                                <p class="text-2xl font-bold text-green-600">85%</p>
+                                <p class="text-xs text-gray-600">Kualitas</p>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2 mb-4">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-600">Tingkat Kesulitan</span>
+                                <span class="font-medium">Sedang-Sulit</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-600">Terakhir Update</span>
+                                <span class="font-medium">5 hari lalu</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-600">Dibuat oleh</span>
+                                <span class="font-medium">Dr. Citra Lestari</span>
+                            </div>
+                        </div>
+
+                        <div class="flex space-x-2">
+                            <button class="flex-1 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-sm">
+                                <i class="fas fa-eye mr-1"></i>Lihat
+                            </button>
+                            <button class="flex-1 px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition text-sm">
+                                <i class="fas fa-edit mr-1"></i>Edit
+                            </button>
+                            <button class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition text-sm">
+                                <i class="fas fa-download"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <div class="flex items-center justify-between mt-8">
+                    <p class="text-sm text-gray-600">Menampilkan 4 dari 156 bank soal</p>
+                    <div class="flex space-x-2">
+                        <button class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition text-sm">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button class="px-3 py-2 bg-blue-600 text-white rounded-lg text-sm">1</button>
+                        <button class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition text-sm">2</button>
+                        <button class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition text-sm">3</button>
+                        <button class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition text-sm">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

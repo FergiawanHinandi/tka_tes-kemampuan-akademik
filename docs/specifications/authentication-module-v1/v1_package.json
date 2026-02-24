@@ -1,0 +1,54 @@
+{
+  "name": "tka-ujian",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Platform Tes Kemampuan Akademik - Monorepo",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "turbo dev",
+    "dev:api": "turbo dev --filter=@tka/api",
+    "dev:web": "turbo dev --filter=@tka/web",
+    "dev:proktor": "turbo dev --filter=@tka/proktor",
+    "dev:client": "turbo dev --filter=@tka/client-siswa",
+    "build": "turbo build",
+    "build:api": "turbo build --filter=@tka/api",
+    "build:web": "turbo build --filter=@tka/web",
+    "build:proktor": "turbo build --filter=@tka/proktor",
+    "build:client": "turbo build --filter=@tka/client-siswa",
+    "lint": "turbo lint",
+    "test": "turbo test",
+    "test:e2e": "turbo test:e2e",
+    "db:migrate": "turbo db:migrate --filter=@tka/api",
+    "db:seed": "turbo db:seed --filter=@tka/api",
+    "db:studio": "turbo db:studio --filter=@tka/api",
+    "db:reset": "turbo db:reset --filter=@tka/api",
+    "clean": "turbo clean",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "setup": "bash scripts/setup.sh",
+    "generate:keys": "bash scripts/generate-keys.sh"
+  },
+  "devDependencies": {
+    "turbo": "^2.4.0",
+    "prettier": "^3.4.0",
+    "husky": "^9.1.0",
+    "lint-staged": "^15.3.0",
+    "commitlint": "^19.6.0",
+    "@commitlint/config-conventional": "^19.6.0"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md}": [
+      "prettier --write"
+    ]
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  }
+}
