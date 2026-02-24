@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # TKA Tes Kemampuan Akademik Monorepo
 
 Monorepo untuk sistem Tes Kemampuan Akademik (TKA), mencakup backend API, portal web, aplikasi desktop, paket bersama, dan dokumentasi arsitektur.
@@ -86,3 +87,7 @@ Lihat indeks: `docs/README.md`.
 
 Panduan kontribusi:
 - `CONTRIBUTING.md`
+=======
+# tka_tes-kemampuan-akademik
+TKA adalah platform yang di rancang untuk mendukung kemampuan akademik siswa sebelum mengikuti TKA kemendikbudristek yang sesungguhnya
+>>>>>>> 145d0cb2745df24be77f814665b00810fe93d3fe
