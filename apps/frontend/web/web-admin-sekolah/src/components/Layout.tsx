@@ -11,7 +11,9 @@ import {
   Search,
   User as UserIcon,
   Home,
-  Monitor
+  Monitor,
+  Activity,
+  BellRing,
 } from 'lucide-react';
 
 interface LayoutProps {
@@ -24,6 +26,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const navItems = [
     { name: 'Dashboard', path: '/', icon: <LayoutDashboard size={20} /> },
     { name: 'Monitoring', path: '/monitoring', icon: <Activity size={20} /> },
+    { name: 'Notifikasi Push', path: '/notifications', icon: <BellRing size={20} /> },
     { name: 'Data Siswa', path: '/students', icon: <Users size={20} /> },
     { name: 'Ruang Ujian', path: '/rooms', icon: <Home size={20} /> },
     { name: 'Pengaturan Ujian', path: '/settings', icon: <Settings size={20} /> },

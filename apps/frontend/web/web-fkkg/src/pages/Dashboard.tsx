@@ -8,7 +8,8 @@ import {
   TrendingUp, 
   Plus, 
   Search,
-  MoreHorizontal
+  MoreHorizontal,
+  Upload,
 } from 'lucide-react';
 
 const Dashboard: React.FC = () => {

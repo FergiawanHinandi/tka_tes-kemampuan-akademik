@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
 import AuditLog from './pages/Monitoring/AuditLog';
+import Notifications from './pages/Notifications';
 
 function App() {
   return (
@@ -20,6 +21,14 @@ function App() {
           element={
             <Layout>
               <AuditLog />
+            </Layout>
+          }
+        />
+        <Route
+          path="/notifications"
+          element={
+            <Layout>
+              <Notifications />
             </Layout>
           }
         />

@@ -3,7 +3,6 @@ import { Link, useLocation } from 'react-router-dom';
 import { 
   LayoutDashboard, 
   Upload, 
-  Edit3, 
   Eye, 
   BarChart3, 
   User as UserIcon,

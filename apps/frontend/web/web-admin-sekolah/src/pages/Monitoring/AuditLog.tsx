@@ -7,7 +7,6 @@ import {
   Clock, 
   Shield, 
   User,
-  MoreVertical,
   ArrowRight,
   Send,
   X

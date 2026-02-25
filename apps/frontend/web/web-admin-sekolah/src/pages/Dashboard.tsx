@@ -4,7 +4,6 @@ import {
   ClipboardCheck, 
   Home, 
   Calendar, 
-  ArrowUpRight, 
   Plus,
   Monitor,
   Activity,

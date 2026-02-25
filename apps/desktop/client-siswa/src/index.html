@@ -43,12 +43,24 @@
                     <p id="connectionStatus" class="text-[10px] font-black uppercase tracking-tighter text-emerald-500 flex items-center gap-1 justify-end">
                         <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span> TERHUBUNG KE SERVER
                     </p>
+                    <div class="mt-1 flex items-center gap-2 justify-end">
+                        <span id="syncStatusBadge" class="px-2 py-0.5 rounded-full border text-[9px] font-black uppercase tracking-wider text-amber-200 bg-amber-500/20 border-amber-500/50">
+                            Belum sinkron
+                        </span>
+                        <p id="syncStatus" class="text-[10px] font-bold text-slate-400">Sinkron terakhir: belum pernah | Antrean lokal: 0</p>
+                    </div>
                 </div>
+                <button id="manualSyncBtn" class="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all">
+                    Sinkron
+                </button>
                 <div class="w-10 h-10 bg-slate-700 rounded-xl flex items-center justify-center border border-slate-600">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                 </div>
             </div>
         </header>
+        <div id="offlineBanner" class="hidden items-center justify-center px-6 py-2 bg-amber-500/20 border-b border-amber-400/40 text-amber-100 text-[11px] font-black uppercase tracking-wider">
+            Anda sedang offline. Jawaban disimpan di cache lokal dan akan disinkronkan otomatis saat koneksi kembali.
+        </div>
 
         <!-- Main Exam Area -->
         <main class="flex-1 flex overflow-hidden">

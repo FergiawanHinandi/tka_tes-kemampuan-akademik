@@ -2,9 +2,7 @@ import React, { useState } from 'react';
 import { 
   FileText, 
   CheckCircle2, 
-  AlertCircle, 
   User, 
-  ArrowRight,
   Save,
   MessageSquare
 } from 'lucide-react';
